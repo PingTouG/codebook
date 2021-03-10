@@ -6,6 +6,9 @@
     <a href="./">
       <img class="logo" src="/assets/images/logo.png" alt="code book logo" />
     </a>
+    <a class="github" href="https://github.com/PingTouG" target="_blank">
+      <i class="iconfont icon-github" />
+    </a>
     <i class="iconfont icon-menu" />
   </header>
   <main>
@@ -32,6 +35,14 @@
     object-fit: cover;
   }
 
+  .github {
+    color: var(--tc-primary);
+  }
+
+  .icon-github {
+    font-size: 1.5rem;
+  }
+
   .icon-menu {
     display: none;
     font-size: 1.25rem;
@@ -48,6 +59,10 @@
 
     .icon-menu {
       display: block;
+    }
+
+    .icon-github {
+      display: none;
     }
   }
 </style>
