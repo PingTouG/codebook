@@ -1152,6 +1152,10 @@ function get_current_component() {
   return current_component;
 }
 
+function onMount(fn) {
+  get_current_component().$$.on_mount.push(fn);
+}
+
 function afterUpdate(fn) {
   get_current_component().$$.after_update.push(fn);
 }
@@ -1667,12 +1671,15 @@ var file$1 = "src\\routes\\_layout.svelte";
 function create_fragment$2(ctx) {
   var section;
   var header;
-  var a;
+  var a0;
   var img;
   var img_src_value;
   var t0;
-  var i;
+  var a1;
+  var i0;
   var t1;
+  var i1;
+  var t2;
   var main;
   var current;
   var default_slot_template =
@@ -1685,11 +1692,14 @@ function create_fragment$2(ctx) {
     c: function create() {
       section = element("section");
       header = element("header");
-      a = element("a");
+      a0 = element("a");
       img = element("img");
       t0 = space();
-      i = element("i");
+      a1 = element("a");
+      i0 = element("i");
       t1 = space();
+      i1 = element("i");
+      t2 = space();
       main = element("main");
       if (default_slot) default_slot.c();
       this.h();
@@ -1703,23 +1713,35 @@ function create_fragment$2(ctx) {
         class: true
       });
       var header_nodes = children(header);
-      a = claim_element(header_nodes, "A", {
+      a0 = claim_element(header_nodes, "A", {
         href: true
       });
-      var a_nodes = children(a);
-      img = claim_element(a_nodes, "IMG", {
+      var a0_nodes = children(a0);
+      img = claim_element(a0_nodes, "IMG", {
         class: true,
         src: true,
         alt: true
       });
-      a_nodes.forEach(detach_dev);
+      a0_nodes.forEach(detach_dev);
       t0 = claim_space(header_nodes);
-      i = claim_element(header_nodes, "I", {
+      a1 = claim_element(header_nodes, "A", {
+        class: true,
+        href: true,
+        target: true
+      });
+      var a1_nodes = children(a1);
+      i0 = claim_element(a1_nodes, "I", {
         class: true
       });
-      children(i).forEach(detach_dev);
+      children(i0).forEach(detach_dev);
+      a1_nodes.forEach(detach_dev);
+      t1 = claim_space(header_nodes);
+      i1 = claim_element(header_nodes, "I", {
+        class: true
+      });
+      children(i1).forEach(detach_dev);
       header_nodes.forEach(detach_dev);
-      t1 = claim_space(section_nodes);
+      t2 = claim_space(section_nodes);
       main = claim_element(section_nodes, "MAIN", {});
       var main_nodes = children(main);
       if (default_slot) default_slot.l(main_nodes);
@@ -1728,28 +1750,37 @@ function create_fragment$2(ctx) {
       this.h();
     },
     h: function hydrate() {
-      attr_dev(img, "class", "logo svelte-xcxo6w");
+      attr_dev(img, "class", "logo svelte-106231a");
       if (img.src !== (img_src_value = "/assets/images/logo.png")) attr_dev(img, "src", img_src_value);
       attr_dev(img, "alt", "code book logo");
       add_location(img, file$1, 5, 6, 74);
-      attr_dev(a, "href", "./");
-      add_location(a, file$1, 4, 4, 54);
-      attr_dev(i, "class", "iconfont icon-menu svelte-xcxo6w");
-      add_location(i, file$1, 7, 4, 159);
-      attr_dev(header, "class", "svelte-xcxo6w");
+      attr_dev(a0, "href", "./");
+      add_location(a0, file$1, 4, 4, 54);
+      attr_dev(i0, "class", "iconfont icon-github svelte-106231a");
+      add_location(i0, file$1, 8, 6, 235);
+      attr_dev(a1, "class", "github svelte-106231a");
+      attr_dev(a1, "href", "https://github.com/PingTouG");
+      attr_dev(a1, "target", "_blank");
+      add_location(a1, file$1, 7, 4, 159);
+      attr_dev(i1, "class", "iconfont icon-menu svelte-106231a");
+      add_location(i1, file$1, 10, 4, 283);
+      attr_dev(header, "class", "svelte-106231a");
       add_location(header, file$1, 3, 2, 41);
-      add_location(main, file$1, 9, 2, 206);
-      attr_dev(section, "class", "svelte-xcxo6w");
+      add_location(main, file$1, 12, 2, 330);
+      attr_dev(section, "class", "svelte-106231a");
       add_location(section, file$1, 2, 0, 29);
     },
     m: function mount(target, anchor) {
       insert_dev(target, section, anchor);
       append_dev(section, header);
-      append_dev(header, a);
-      append_dev(a, img);
+      append_dev(header, a0);
+      append_dev(a0, img);
       append_dev(header, t0);
-      append_dev(header, i);
-      append_dev(section, t1);
+      append_dev(header, a1);
+      append_dev(a1, i0);
+      append_dev(header, t1);
+      append_dev(header, i1);
+      append_dev(section, t2);
       append_dev(section, main);
 
       if (default_slot) {
@@ -2932,15 +2963,15 @@ var App = /*#__PURE__*/function (_SvelteComponentDev) {
 var ignore = [/^\/book\/([^/]+?)\.json$/];
 var components = [{
   js: function js() {
-    return Promise.all([import('./index.60449759.js'), __inject_styles(["client-fc3c0ad0.css","index-b5cfcbad.css"])]).then(function(x) { return x[0]; });
+    return Promise.all([import('./index.24741c72.js'), __inject_styles(["client-5747e773.css","index-245b6e80.css"])]).then(function(x) { return x[0]; });
   }
 }, {
   js: function js() {
-    return Promise.all([import('./_layout.bc51a70e.js'), __inject_styles(["client-fc3c0ad0.css"])]).then(function(x) { return x[0]; });
+    return Promise.all([import('./_layout.912ed52c.js'), __inject_styles(["client-5747e773.css"])]).then(function(x) { return x[0]; });
   }
 }, {
   js: function js() {
-    return Promise.all([import('./[page].7b257436.js'), __inject_styles(["client-fc3c0ad0.css"])]).then(function(x) { return x[0]; });
+    return Promise.all([import('./[page].68b05ac0.js'), __inject_styles(["client-5747e773.css"])]).then(function(x) { return x[0]; });
   }
 }];
 var routes = function (d) {
@@ -3852,6 +3883,6 @@ start$1({
     target: document.querySelector('#sapper'),
 });
 
-export { transition_out as A, regenerator as B, _createClass as C, set_data_dev as D, SvelteComponentDev as S, _inherits as _, _getPrototypeOf as a, _possibleConstructorReturn as b, _classCallCheck as c, _assertThisInitialized as d, dispatch_dev as e, space as f, element as g, detach_dev as h, init$1 as i, claim_space as j, claim_element as k, children as l, claim_text as m, add_location as n, attr_dev as o, insert_dev as p, query_selector_all as q, append_dev as r, safe_not_equal as s, text as t, noop as u, validate_slots as v, create_slot as w, _slicedToArray as x, update_slot as y, transition_in as z };
+export { create_component as A, query_selector_all as B, claim_component as C, mount_component as D, transition_in as E, transition_out as F, destroy_component as G, create_slot as H, update_slot as I, regenerator as J, SvelteComponentDev as S, _inherits as _, _getPrototypeOf as a, _possibleConstructorReturn as b, _classCallCheck as c, _assertThisInitialized as d, dispatch_dev as e, _createClass as f, space as g, element as h, init$1 as i, claim_space as j, claim_element as k, children as l, claim_text as m, detach_dev as n, onMount as o, attr_dev as p, add_location as q, insert_dev as r, safe_not_equal as s, text as t, append_dev as u, validate_slots as v, _slicedToArray as w, set_data_dev as x, noop as y, binding_callbacks as z };
 
 import __inject_styles from './inject_styles.fe622066.js';
