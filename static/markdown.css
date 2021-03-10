@@ -1,0 +1,54 @@
+@import './xcode.css';
+
+.md .title {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  font-weight: 500;
+}
+
+.md h2,
+.md h3 {
+  font-weight: 500;
+  margin: 2rem 0 1rem;
+}
+
+.md * {
+  margin-bottom: 0.5rem;
+  line-height: 1.5;
+}
+
+.md a {
+  color: var(--color-primary);
+}
+
+.md a:hover {
+  text-decoration: underline;
+}
+
+.md code[class*='language-'] {
+  display: block;
+  width: 100%;
+  padding: 1rem;
+  background-color: var(--background-color-base);
+  font-size: 0.75rem;
+  border: 1px solid var(--border-color-extra-light);
+  border-radius: 0.25rem;
+  overflow-y: hidden;
+}
+
+.md code[class*='language-']:hover {
+  overflow-y: auto;
+}
+
+.md p {
+  line-height: 1.5;
+}
+
+.md blockquote {
+  background-color: var(--background-color-base);
+  color: var(--color-text-placeholder);
+  border: 1px solid var(--border-color-extra-light);
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+  border-left: 0.425rem solid var(--color-primary);
+}
