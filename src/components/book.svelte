@@ -1,8 +1,10 @@
 <script lang="ts">
   import { onMount } from 'svelte'
+  import { goto } from '@sapper/app'
 
   export let title: string
-  export let author: string = 'PingTouG'
+  export let author: string = 'CodeBook'
+  export let url: string
   let book: Element
   let style: string
 
@@ -17,7 +19,7 @@
 </script>
 
 <svelte:body onresize={resetSize} />
-<div class="book" bind:this={book} {style}>
+<div class="book" bind:this={book} {style} on:click={() => goto(url)}>
   <h1 class="title">{title}</h1>
   <h5 class="author">By @ {author}</h5>
 </div>

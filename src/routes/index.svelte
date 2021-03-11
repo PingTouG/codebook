@@ -1,5 +1,18 @@
+<script context="module" lang="ts">
+  export async function preload() {
+    const res = await this.fetch(`index.json`)
+    if (res.status === 200) {
+      const { books } = await res.json()
+      return { books }
+    } else {
+      this.error(404, 'Not Found')
+    }
+  }
+</script>
+
 <script lang="ts">
   import Book from '../components/book.svelte'
+  export let books: Array<string>
 </script>
 
 <svelte:head>
@@ -8,21 +21,11 @@
 
 <div class="home">
   <div class="book__list">
-    <div class="book__item">
-      <Book a-item title="JavaScript" />
-    </div>
-    <div class="book__item">
-      <Book a-item title="Vue" />
-    </div>
-    <div class="book__item">
-      <Book a-item title="React" />
-    </div>
-    <div class="book__item">
-      <Book a-item title="Svelte" />
-    </div>
-    <div class="book__item">
-      <Book a-item title="Deno" />
-    </div>
+    {#each books as book, index (`${book}_${index}`)}
+      <div class="book__item">
+        <Book title={book} url={`book/${book}`} />
+      </div>
+    {/each}
   </div>
 </div>
 

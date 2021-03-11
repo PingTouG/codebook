@@ -1,6 +1,3 @@
-<script lang="ts">
-</script>
-
 <section>
   <header>
     <a href="./">
@@ -9,7 +6,6 @@
     <a class="github" href="https://github.com/PingTouG" target="_blank">
       <i class="iconfont icon-github" />
     </a>
-    <i class="iconfont icon-menu" />
   </header>
   <main>
     <slot />
@@ -28,6 +24,7 @@
     justify-content: space-between;
     padding: 0.75rem 1.5rem;
     border-bottom: 1px solid var(--bc-lighter);
+    background-color: var(--c-white);
   }
 
   .logo {
@@ -43,11 +40,6 @@
     font-size: 1.5rem;
   }
 
-  .icon-menu {
-    display: none;
-    font-size: 1.25rem;
-  }
-
   @media only screen and (max-width: 600px) {
     section {
       width: 100%;
@@ -55,14 +47,6 @@
 
     .logo {
       width: 6rem;
-    }
-
-    .icon-menu {
-      display: block;
-    }
-
-    .icon-github {
-      display: none;
     }
   }
 </style>
