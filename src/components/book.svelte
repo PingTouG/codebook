@@ -26,13 +26,22 @@
   .book {
     height: 100%;
     width: 100%;
-    background: var(--c-gray-10);
+    background: var(--c-white);
+    border-left: 5px solid var(--c-black);
+    border-top: 6px double var(--c-black);
+    border-right: 4px double var(--c-black);
+    border-bottom: 6px double var(--c-black);
     border-radius: 0px 0.5rem 0.5rem 0;
-    color: var(--c-gray-2);
     font-family: 'Montserrat', sans-serif;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .book:hover {
+    transform: scale(1.05);
   }
 
   .title {

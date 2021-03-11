@@ -40,14 +40,6 @@
     gap: var(--gap);
   }
 
-  .book__item {
-    transition: all 0.3s;
-    cursor: pointer;
-  }
-  .book__item:hover {
-    transform: scale(1.05);
-  }
-
   @media only screen and (max-width: 600px) {
     .book__list {
       grid-template-columns: repeat(2, calc(calc(100% - var(--gap)) / 2));

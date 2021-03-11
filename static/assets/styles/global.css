@@ -1,4 +1,4 @@
 @import './reset.css';
 @import './markdown.css';
 @import './vars.css';
-@import './assets/iconfont/iconfont.css';
+@import '../iconfont/iconfont.css';
