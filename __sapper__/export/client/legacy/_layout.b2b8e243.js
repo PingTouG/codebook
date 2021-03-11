@@ -1,9 +1,9 @@
-import { _ as _inherits, a as _getPrototypeOf, b as _possibleConstructorReturn, c as _classCallCheck, i as init, d as _assertThisInitialized, e as dispatch_dev, S as SvelteComponentDev, H as create_slot, s as safe_not_equal, h as element, k as claim_element, l as children, n as detach_dev, q as add_location, r as insert_dev, u as append_dev, w as _slicedToArray, I as update_slot, E as transition_in, F as transition_out, v as validate_slots } from './client.cb43e4d9.js';
+import { _ as _inherits, a as _getPrototypeOf, b as _possibleConstructorReturn, c as _classCallCheck, i as init, d as _assertThisInitialized, e as dispatch_dev, S as SvelteComponentDev, Q as create_slot, s as safe_not_equal, j as element, l as claim_element, m as children, p as detach_dev, r as add_location, u as insert_dev, w as append_dev, y as _slicedToArray, R as update_slot, I as transition_in, J as transition_out, v as validate_slots } from './client.9da8ae88.js';
 
 function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-var file = "src\\routes\\book\\_layout.svelte";
+var file = "src\\routes\\article\\_layout.svelte";
 
 function create_fragment(ctx) {
   var section;
@@ -33,7 +33,7 @@ function create_fragment(ctx) {
       this.h();
     },
     h: function hydrate() {
-      add_location(main, file, 1, 2, 12);
+      add_location(main, file, 1, 2, 13);
       add_location(section, file, 0, 0, 0);
     },
     m: function mount(target, anchor) {

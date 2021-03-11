@@ -1078,6 +1078,13 @@ function empty() {
   return text('');
 }
 
+function listen(node, event, handler, options) {
+  node.addEventListener(event, handler, options);
+  return function () {
+    return node.removeEventListener(event, handler, options);
+  };
+}
+
 function attr(node, attribute, value) {
   if (value == null) node.removeAttribute(attribute);else if (node.getAttribute(attribute) !== value) node.setAttribute(attribute, value);
 }
@@ -1285,6 +1292,113 @@ function transition_out(block, local, detach, callback) {
 }
 
 var globals = typeof window !== 'undefined' ? window : typeof globalThis !== 'undefined' ? globalThis : global;
+
+function destroy_block(block, lookup) {
+  block.d(1);
+  lookup.delete(block.key);
+}
+
+function outro_and_destroy_block(block, lookup) {
+  transition_out(block, 1, 1, function () {
+    lookup.delete(block.key);
+  });
+}
+
+function update_keyed_each(old_blocks, dirty, get_key, dynamic, ctx, list, lookup, node, destroy, create_each_block, next, get_context) {
+  var o = old_blocks.length;
+  var n = list.length;
+  var i = o;
+  var old_indexes = {};
+
+  while (i--) {
+    old_indexes[old_blocks[i].key] = i;
+  }
+
+  var new_blocks = [];
+  var new_lookup = new Map();
+  var deltas = new Map();
+  i = n;
+
+  while (i--) {
+    var child_ctx = get_context(ctx, list, i);
+    var key = get_key(child_ctx);
+    var block = lookup.get(key);
+
+    if (!block) {
+      block = create_each_block(key, child_ctx);
+      block.c();
+    } else if (dynamic) {
+      block.p(child_ctx, dirty);
+    }
+
+    new_lookup.set(key, new_blocks[i] = block);
+    if (key in old_indexes) deltas.set(key, Math.abs(i - old_indexes[key]));
+  }
+
+  var will_move = new Set();
+  var did_move = new Set();
+
+  function insert(block) {
+    transition_in(block, 1);
+    block.m(node, next);
+    lookup.set(block.key, block);
+    next = block.first;
+    n--;
+  }
+
+  while (o && n) {
+    var new_block = new_blocks[n - 1];
+    var old_block = old_blocks[o - 1];
+    var new_key = new_block.key;
+    var old_key = old_block.key;
+
+    if (new_block === old_block) {
+      // do nothing
+      next = new_block.first;
+      o--;
+      n--;
+    } else if (!new_lookup.has(old_key)) {
+      // remove old block
+      destroy(old_block, lookup);
+      o--;
+    } else if (!lookup.has(new_key) || will_move.has(new_key)) {
+      insert(new_block);
+    } else if (did_move.has(old_key)) {
+      o--;
+    } else if (deltas.get(new_key) > deltas.get(old_key)) {
+      did_move.add(new_key);
+      insert(new_block);
+    } else {
+      will_move.add(old_key);
+      o--;
+    }
+  }
+
+  while (o--) {
+    var _old_block = old_blocks[o];
+    if (!new_lookup.has(_old_block.key)) destroy(_old_block, lookup);
+  }
+
+  while (n) {
+    insert(new_blocks[n - 1]);
+  }
+
+  return new_blocks;
+}
+
+function validate_each_keys(ctx, list, get_context, get_key) {
+  var keys = new Set();
+
+  for (var i = 0; i < list.length; i++) {
+    var key = get_key(get_context(ctx, list, i));
+
+    if (keys.has(key)) {
+      throw new Error('Cannot have duplicate keys in a keyed each');
+    }
+
+    keys.add(key);
+  }
+}
 
 function get_spread_update(levels, updates) {
   var update = {};
@@ -1517,6 +1631,28 @@ function detach_dev(node) {
   detach(node);
 }
 
+function listen_dev(node, event, handler, options, has_prevent_default, has_stop_propagation) {
+  var modifiers = options === true ? ['capture'] : options ? Array.from(Object.keys(options)) : [];
+  if (has_prevent_default) modifiers.push('preventDefault');
+  if (has_stop_propagation) modifiers.push('stopPropagation');
+  dispatch_dev('SvelteDOMAddEventListener', {
+    node: node,
+    event: event,
+    handler: handler,
+    modifiers: modifiers
+  });
+  var dispose = listen(node, event, handler, options);
+  return function () {
+    dispatch_dev('SvelteDOMRemoveEventListener', {
+      node: node,
+      event: event,
+      handler: handler,
+      modifiers: modifiers
+    });
+    dispose();
+  };
+}
+
 function attr_dev(node, attribute, value) {
   attr(node, attribute, value);
   if (value == null) dispatch_dev('SvelteDOMRemoveAttribute', {
@@ -1537,6 +1673,18 @@ function set_data_dev(text, data) {
     data: data
   });
   text.data = data;
+}
+
+function validate_each_argument(arg) {
+  if (typeof arg !== 'string' && !(arg && _typeof(arg) === 'object' && 'length' in arg)) {
+    var msg = '{#each} only iterates over array-like objects.';
+
+    if (typeof Symbol === 'function' && arg && Symbol.iterator in arg) {
+      msg += ' You can use a spread to convert this iterable into an array.';
+    }
+
+    throw new Error(msg);
+  }
 }
 
 function validate_slots(name, slot, keys) {
@@ -1676,10 +1824,8 @@ function create_fragment$2(ctx) {
   var img_src_value;
   var t0;
   var a1;
-  var i0;
+  var i;
   var t1;
-  var i1;
-  var t2;
   var main;
   var current;
   var default_slot_template =
@@ -1696,10 +1842,8 @@ function create_fragment$2(ctx) {
       img = element("img");
       t0 = space();
       a1 = element("a");
-      i0 = element("i");
+      i = element("i");
       t1 = space();
-      i1 = element("i");
-      t2 = space();
       main = element("main");
       if (default_slot) default_slot.c();
       this.h();
@@ -1730,18 +1874,13 @@ function create_fragment$2(ctx) {
         target: true
       });
       var a1_nodes = children(a1);
-      i0 = claim_element(a1_nodes, "I", {
+      i = claim_element(a1_nodes, "I", {
         class: true
       });
-      children(i0).forEach(detach_dev);
+      children(i).forEach(detach_dev);
       a1_nodes.forEach(detach_dev);
-      t1 = claim_space(header_nodes);
-      i1 = claim_element(header_nodes, "I", {
-        class: true
-      });
-      children(i1).forEach(detach_dev);
       header_nodes.forEach(detach_dev);
-      t2 = claim_space(section_nodes);
+      t1 = claim_space(section_nodes);
       main = claim_element(section_nodes, "MAIN", {});
       var main_nodes = children(main);
       if (default_slot) default_slot.l(main_nodes);
@@ -1750,25 +1889,23 @@ function create_fragment$2(ctx) {
       this.h();
     },
     h: function hydrate() {
-      attr_dev(img, "class", "logo svelte-106231a");
+      attr_dev(img, "class", "logo svelte-1fwwt9n");
       if (img.src !== (img_src_value = "/assets/images/logo.png")) attr_dev(img, "src", img_src_value);
       attr_dev(img, "alt", "code book logo");
-      add_location(img, file$1, 5, 6, 74);
+      add_location(img, file$1, 3, 6, 45);
       attr_dev(a0, "href", "./");
-      add_location(a0, file$1, 4, 4, 54);
-      attr_dev(i0, "class", "iconfont icon-github svelte-106231a");
-      add_location(i0, file$1, 8, 6, 235);
-      attr_dev(a1, "class", "github svelte-106231a");
+      add_location(a0, file$1, 2, 4, 25);
+      attr_dev(i, "class", "iconfont icon-github svelte-1fwwt9n");
+      add_location(i, file$1, 6, 6, 206);
+      attr_dev(a1, "class", "github svelte-1fwwt9n");
       attr_dev(a1, "href", "https://github.com/PingTouG");
       attr_dev(a1, "target", "_blank");
-      add_location(a1, file$1, 7, 4, 159);
-      attr_dev(i1, "class", "iconfont icon-menu svelte-106231a");
-      add_location(i1, file$1, 10, 4, 283);
-      attr_dev(header, "class", "svelte-106231a");
-      add_location(header, file$1, 3, 2, 41);
-      add_location(main, file$1, 12, 2, 330);
-      attr_dev(section, "class", "svelte-106231a");
-      add_location(section, file$1, 2, 0, 29);
+      add_location(a1, file$1, 5, 4, 130);
+      attr_dev(header, "class", "svelte-1fwwt9n");
+      add_location(header, file$1, 1, 2, 12);
+      add_location(main, file$1, 9, 2, 264);
+      attr_dev(section, "class", "svelte-1fwwt9n");
+      add_location(section, file$1, 0, 0, 0);
     },
     m: function mount(target, anchor) {
       insert_dev(target, section, anchor);
@@ -1777,10 +1914,8 @@ function create_fragment$2(ctx) {
       append_dev(a0, img);
       append_dev(header, t0);
       append_dev(header, a1);
-      append_dev(a1, i0);
-      append_dev(header, t1);
-      append_dev(header, i1);
-      append_dev(section, t2);
+      append_dev(a1, i);
+      append_dev(section, t1);
       append_dev(section, main);
 
       if (default_slot) {
@@ -2960,18 +3095,26 @@ var App = /*#__PURE__*/function (_SvelteComponentDev) {
 }(SvelteComponentDev);
 
 // This file is generated by Sapper — do not edit it!
-var ignore = [/^\/book\/([^/]+?)\.json$/];
+var ignore = [/^\/index\.json$/, /^\/article\/(.+)\.json$/, /^\/book\/([^/]+?)\.json$/];
 var components = [{
   js: function js() {
-    return Promise.all([import('./index.c12a1fa9.js'), __inject_styles(["client-5747e773.css","index-3f1f4066.css"])]).then(function(x) { return x[0]; });
+    return Promise.all([import('./index.d0ff4e18.js'), __inject_styles(["client-46a3e907.css","index-3f1f4066.css"])]).then(function(x) { return x[0]; });
   }
 }, {
   js: function js() {
-    return Promise.all([import('./_layout.96444576.js'), __inject_styles(["client-5747e773.css"])]).then(function(x) { return x[0]; });
+    return Promise.all([import('./_layout.b2b8e243.js'), __inject_styles(["client-46a3e907.css"])]).then(function(x) { return x[0]; });
   }
 }, {
   js: function js() {
-    return Promise.all([import('./[page].9a615ced.js'), __inject_styles(["client-5747e773.css"])]).then(function(x) { return x[0]; });
+    return Promise.all([import('./[...slug].6f182dcc.js'), __inject_styles(["client-46a3e907.css","[...slug]-304e65e2.css"])]).then(function(x) { return x[0]; });
+  }
+}, {
+  js: function js() {
+    return Promise.all([import('./_layout.b0559533.js'), __inject_styles(["client-46a3e907.css"])]).then(function(x) { return x[0]; });
+  }
+}, {
+  js: function js() {
+    return Promise.all([import('./[book].9f3cc508.js'), __inject_styles(["client-46a3e907.css","[book]-4cbe181f.css"])]).then(function(x) { return x[0]; });
   }
 }];
 var routes = function (d) {
@@ -2982,15 +3125,28 @@ var routes = function (d) {
       i: 0
     }]
   }, {
-    // book/[page].svelte
-    pattern: /^\/book\/([^/]+?)\/?$/,
+    // article/[...slug].svelte
+    pattern: /^\/article\/(.+)\/?$/,
     parts: [{
       i: 1
     }, {
       i: 2,
       params: function params(match) {
         return {
-          page: d(match[1])
+          slug: d(match[1]).split('/')
+        };
+      }
+    }]
+  }, {
+    // book/[book].svelte
+    pattern: /^\/book\/([^/]+?)\/?$/,
+    parts: [{
+      i: 3
+    }, {
+      i: 4,
+      params: function params(match) {
+        return {
+          book: d(match[1])
         };
       }
     }]
@@ -3883,6 +4039,6 @@ start$1({
     target: document.querySelector('#sapper'),
 });
 
-export { create_component as A, query_selector_all as B, claim_component as C, mount_component as D, transition_in as E, transition_out as F, destroy_component as G, create_slot as H, update_slot as I, regenerator as J, SvelteComponentDev as S, _inherits as _, _getPrototypeOf as a, _possibleConstructorReturn as b, _classCallCheck as c, _assertThisInitialized as d, dispatch_dev as e, _createClass as f, space as g, element as h, init$1 as i, claim_space as j, claim_element as k, children as l, claim_text as m, detach_dev as n, onMount as o, attr_dev as p, add_location as q, insert_dev as r, safe_not_equal as s, text as t, append_dev as u, validate_slots as v, _slicedToArray as w, set_data_dev as x, noop as y, binding_callbacks as z };
+export { noop as A, binding_callbacks as B, regenerator as C, validate_each_argument as D, validate_each_keys as E, create_component as F, claim_component as G, mount_component as H, transition_in as I, transition_out as J, destroy_component as K, query_selector_all as L, update_keyed_each as M, check_outros as N, group_outros as O, outro_and_destroy_block as P, create_slot as Q, update_slot as R, SvelteComponentDev as S, destroy_block as T, _inherits as _, _getPrototypeOf as a, _possibleConstructorReturn as b, _classCallCheck as c, _assertThisInitialized as d, dispatch_dev as e, _createClass as f, goto as g, space as h, init$1 as i, element as j, claim_space as k, claim_element as l, children as m, claim_text as n, onMount as o, detach_dev as p, attr_dev as q, add_location as r, safe_not_equal as s, text as t, insert_dev as u, validate_slots as v, append_dev as w, listen_dev as x, _slicedToArray as y, set_data_dev as z };
 
 import __inject_styles from './inject_styles.fe622066.js';
