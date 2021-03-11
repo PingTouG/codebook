@@ -87,7 +87,7 @@
   /* 基础白色 */
   --c-white: #ffffff;
   /* 基础黑色 */
-  -c-black: #000000;
+  --c-black: #000000;
   /* 基础背景色 */
   --bg-base: var(--c-gray-2);
 

@@ -2963,15 +2963,15 @@ var App = /*#__PURE__*/function (_SvelteComponentDev) {
 var ignore = [/^\/book\/([^/]+?)\.json$/];
 var components = [{
   js: function js() {
-    return Promise.all([import('./index.24741c72.js'), __inject_styles(["client-5747e773.css","index-245b6e80.css"])]).then(function(x) { return x[0]; });
+    return Promise.all([import('./index.c12a1fa9.js'), __inject_styles(["client-5747e773.css","index-3f1f4066.css"])]).then(function(x) { return x[0]; });
   }
 }, {
   js: function js() {
-    return Promise.all([import('./_layout.912ed52c.js'), __inject_styles(["client-5747e773.css"])]).then(function(x) { return x[0]; });
+    return Promise.all([import('./_layout.96444576.js'), __inject_styles(["client-5747e773.css"])]).then(function(x) { return x[0]; });
   }
 }, {
   js: function js() {
-    return Promise.all([import('./[page].68b05ac0.js'), __inject_styles(["client-5747e773.css"])]).then(function(x) { return x[0]; });
+    return Promise.all([import('./[page].9a615ced.js'), __inject_styles(["client-5747e773.css"])]).then(function(x) { return x[0]; });
   }
 }];
 var routes = function (d) {
