@@ -45,9 +45,6 @@
 
   .list {
     margin-top: 0.875rem;
-    background-color: #fff;
-    border-radius: 6px;
-    padding: 1.5rem;
   }
 
   .link {
@@ -56,7 +53,9 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    padding: 0.875rem;
+    padding: 1.5rem;
+    background-color: #fff;
+    border-radius: 6px;
     color: var(--c-gray-7);
 
     &:hover {
