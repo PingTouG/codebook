@@ -23,7 +23,7 @@
 <h1 class="category">{category}</h1>
 <ul class="list">
   {#each articles as art (art.id)}
-    <li>
+    <li class="item">
       <a class="link" href={`article/${category}/${art.id}`}>{art.title}</a>
     </li>
   {/each}
@@ -61,6 +61,23 @@
     &:hover {
       text-decoration: underline;
       color: var(--tc-primary);
+    }
+  }
+
+  @media only screen and (max-width: 600px) {
+    .category {
+      padding: 0.125rem;
+      min-width: 6rem;
+      border-radius: 6px;
+      text-align: center;
+      margin-left: 0.75rem;
+    }
+    .item {
+      padding: 0 0.75rem;
+    }
+    .link {
+      margin: 0 auto;
+      padding: 0.875rem;
     }
   }
 </style>

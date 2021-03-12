@@ -1,7 +1,6 @@
 @import './xcode.css';
 
 .md {
-  margin-top: 1.5rem;
   background-color: var(--c-white);
   padding: 1.5rem;
   border-radius: 4px;
@@ -26,6 +25,7 @@
 
 .md a {
   color: var(--color-primary);
+  word-break: break-all;
 }
 
 .md a:hover {
