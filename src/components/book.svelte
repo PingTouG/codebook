@@ -25,7 +25,7 @@
 
 <style>
   .book {
-    height: 100%;
+    height: 0;
     width: 100%;
     background-color: var(--c-white);
     color: var(--tc-main);
