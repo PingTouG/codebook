@@ -1,4 +1,4 @@
-import { _ as _inherits, a as _getPrototypeOf, b as _possibleConstructorReturn, c as _classCallCheck, i as init, s as safe_not_equal, d as _assertThisInitialized, e as dispatch_dev, f as _createClass, S as SvelteComponentDev, v as validate_slots, o as onMount, g as goto, h as space, j as element, t as text, k as claim_space, l as claim_element, m as children, n as claim_text, p as detach_dev, q as attr_dev, r as add_location, u as insert_dev, w as append_dev, x as listen_dev, y as _slicedToArray, z as set_data_dev, A as noop, B as binding_callbacks, C as regenerator, D as validate_each_argument, E as validate_each_keys, F as create_component, G as claim_component, H as mount_component, I as transition_in, J as transition_out, K as destroy_component, L as query_selector_all, M as update_keyed_each, N as check_outros, O as group_outros, P as outro_and_destroy_block } from './client.9da8ae88.js';
+import { _ as _inherits, a as _getPrototypeOf, b as _possibleConstructorReturn, c as _classCallCheck, i as init, s as safe_not_equal, d as _assertThisInitialized, e as dispatch_dev, f as _createClass, S as SvelteComponentDev, v as validate_slots, o as onMount, g as space, h as element, t as text, j as claim_space, k as claim_element, l as children, m as claim_text, n as detach_dev, p as attr_dev, q as add_location, r as insert_dev, u as append_dev, w as _slicedToArray, x as set_data_dev, y as noop, z as binding_callbacks, A as regenerator, B as validate_each_argument, C as validate_each_keys, D as create_component, E as claim_component, F as mount_component, G as transition_in, H as transition_out, I as destroy_component, J as query_selector_all, K as update_keyed_each, L as check_outros, M as group_outros, N as outro_and_destroy_block } from './client.7cbb7be9.js';
 
 function _createSuper$1(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$1(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
@@ -7,19 +7,17 @@ var file$1 = "src\\components\\book.svelte";
 
 function create_fragment$1(ctx) {
   var t0;
-  var div;
+  var a;
   var h1;
   var t1;
   var t2;
   var h5;
   var t3;
   var t4;
-  var mounted;
-  var dispose;
   var block = {
     c: function create() {
       t0 = space();
-      div = element("div");
+      a = element("a");
       h1 = element("h1");
       t1 = text(
       /*title*/
@@ -34,12 +32,13 @@ function create_fragment$1(ctx) {
     },
     l: function claim(nodes) {
       t0 = claim_space(nodes);
-      div = claim_element(nodes, "DIV", {
+      a = claim_element(nodes, "A", {
         class: true,
-        style: true
+        style: true,
+        href: true
       });
-      var div_nodes = children(div);
-      h1 = claim_element(div_nodes, "H1", {
+      var a_nodes = children(a);
+      h1 = claim_element(a_nodes, "H1", {
         class: true
       });
       var h1_nodes = children(h1);
@@ -47,8 +46,8 @@ function create_fragment$1(ctx) {
       /*title*/
       ctx[0]);
       h1_nodes.forEach(detach_dev);
-      t2 = claim_space(div_nodes);
-      h5 = claim_element(div_nodes, "H5", {
+      t2 = claim_space(a_nodes);
+      h5 = claim_element(a_nodes, "H5", {
         class: true
       });
       var h5_nodes = children(h5);
@@ -57,39 +56,35 @@ function create_fragment$1(ctx) {
       /*author*/
       ctx[1]);
       h5_nodes.forEach(detach_dev);
-      div_nodes.forEach(detach_dev);
+      a_nodes.forEach(detach_dev);
       this.h();
     },
     h: function hydrate() {
-      attr_dev(h1, "class", "title svelte-b7gn6w");
-      add_location(h1, file$1, 18, 2, 490);
-      attr_dev(h5, "class", "author svelte-b7gn6w");
-      add_location(h5, file$1, 19, 2, 524);
-      attr_dev(div, "class", "book svelte-b7gn6w");
-      attr_dev(div, "style",
+      attr_dev(h1, "class", "title svelte-1mjmv63");
+      add_location(h1, file$1, 17, 2, 435);
+      attr_dev(h5, "class", "author svelte-1mjmv63");
+      add_location(h5, file$1, 18, 2, 469);
+      attr_dev(a, "class", "book svelte-1mjmv63");
+      attr_dev(a, "style",
       /*style*/
       ctx[4]);
-      add_location(div, file$1, 17, 0, 416);
+      attr_dev(a, "href",
+      /*url*/
+      ctx[2]);
+      add_location(a, file$1, 16, 0, 379);
     },
     m: function mount(target, anchor) {
       insert_dev(target, t0, anchor);
-      insert_dev(target, div, anchor);
-      append_dev(div, h1);
+      insert_dev(target, a, anchor);
+      append_dev(a, h1);
       append_dev(h1, t1);
-      append_dev(div, t2);
-      append_dev(div, h5);
+      append_dev(a, t2);
+      append_dev(a, h5);
       append_dev(h5, t3);
       append_dev(h5, t4);
-      /*div_binding*/
+      /*a_binding*/
 
-      ctx[5](div);
-
-      if (!mounted) {
-        dispose = listen_dev(div, "click",
-        /*click_handler*/
-        ctx[6], false, false, false);
-        mounted = true;
-      }
+      ctx[5](a);
     },
     p: function update(ctx, _ref) {
       var _ref2 = _slicedToArray(_ref, 1),
@@ -109,21 +104,27 @@ function create_fragment$1(ctx) {
       if (dirty &
       /*style*/
       16) {
-        attr_dev(div, "style",
+        attr_dev(a, "style",
         /*style*/
         ctx[4]);
+      }
+
+      if (dirty &
+      /*url*/
+      4) {
+        attr_dev(a, "href",
+        /*url*/
+        ctx[2]);
       }
     },
     i: noop,
     o: noop,
     d: function destroy(detaching) {
       if (detaching) detach_dev(t0);
-      if (detaching) detach_dev(div);
-      /*div_binding*/
+      if (detaching) detach_dev(a);
+      /*a_binding*/
 
       ctx[5](null);
-      mounted = false;
-      dispose();
     }
   };
   dispatch_dev("SvelteRegisterBlock", {
@@ -161,16 +162,12 @@ function instance$1($$self, $$props, $$invalidate) {
     if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console.warn("<Book> was created with unknown prop '".concat(key, "'"));
   });
 
-  function div_binding($$value) {
+  function a_binding($$value) {
     binding_callbacks[$$value ? "unshift" : "push"](function () {
       book = $$value;
       $$invalidate(3, book);
     });
   }
-
-  var click_handler = function click_handler() {
-    return goto(url);
-  };
 
   $$self.$$set = function ($$props) {
     if ("title" in $$props) $$invalidate(0, title = $$props.title);
@@ -181,7 +178,6 @@ function instance$1($$self, $$props, $$invalidate) {
   $$self.$capture_state = function () {
     return {
       onMount: onMount,
-      goto: goto,
       title: title,
       author: author,
       url: url,
@@ -203,7 +199,7 @@ function instance$1($$self, $$props, $$invalidate) {
     $$self.$inject_state($$props.$$inject);
   }
 
-  return [title, author, url, book, style, div_binding, click_handler];
+  return [title, author, url, book, style, a_binding];
 }
 
 var Book = /*#__PURE__*/function (_SvelteComponentDev) {

@@ -1078,13 +1078,6 @@ function empty() {
   return text('');
 }
 
-function listen(node, event, handler, options) {
-  node.addEventListener(event, handler, options);
-  return function () {
-    return node.removeEventListener(event, handler, options);
-  };
-}
-
 function attr(node, attribute, value) {
   if (value == null) node.removeAttribute(attribute);else if (node.getAttribute(attribute) !== value) node.setAttribute(attribute, value);
 }
@@ -1629,28 +1622,6 @@ function detach_dev(node) {
     node: node
   });
   detach(node);
-}
-
-function listen_dev(node, event, handler, options, has_prevent_default, has_stop_propagation) {
-  var modifiers = options === true ? ['capture'] : options ? Array.from(Object.keys(options)) : [];
-  if (has_prevent_default) modifiers.push('preventDefault');
-  if (has_stop_propagation) modifiers.push('stopPropagation');
-  dispatch_dev('SvelteDOMAddEventListener', {
-    node: node,
-    event: event,
-    handler: handler,
-    modifiers: modifiers
-  });
-  var dispose = listen(node, event, handler, options);
-  return function () {
-    dispatch_dev('SvelteDOMRemoveEventListener', {
-      node: node,
-      event: event,
-      handler: handler,
-      modifiers: modifiers
-    });
-    dispose();
-  };
 }
 
 function attr_dev(node, attribute, value) {
@@ -3098,23 +3069,23 @@ var App = /*#__PURE__*/function (_SvelteComponentDev) {
 var ignore = [/^\/index\.json$/, /^\/article\/(.+)\.json$/, /^\/book\/([^/]+?)\.json$/];
 var components = [{
   js: function js() {
-    return Promise.all([import('./index.d0ff4e18.js'), __inject_styles(["client-46a3e907.css","index-3f1f4066.css"])]).then(function(x) { return x[0]; });
+    return Promise.all([import('./index.acca4203.js'), __inject_styles(["client-46a3e907.css","index-b9efa1c4.css"])]).then(function(x) { return x[0]; });
   }
 }, {
   js: function js() {
-    return Promise.all([import('./_layout.b2b8e243.js'), __inject_styles(["client-46a3e907.css"])]).then(function(x) { return x[0]; });
+    return Promise.all([import('./_layout.6b3f93b8.js'), __inject_styles(["client-46a3e907.css"])]).then(function(x) { return x[0]; });
   }
 }, {
   js: function js() {
-    return Promise.all([import('./[...slug].6f182dcc.js'), __inject_styles(["client-46a3e907.css","[...slug]-304e65e2.css"])]).then(function(x) { return x[0]; });
+    return Promise.all([import('./[...slug].9c16678c.js'), __inject_styles(["client-46a3e907.css","[...slug]-304e65e2.css"])]).then(function(x) { return x[0]; });
   }
 }, {
   js: function js() {
-    return Promise.all([import('./_layout.b0559533.js'), __inject_styles(["client-46a3e907.css"])]).then(function(x) { return x[0]; });
+    return Promise.all([import('./_layout.02d858b4.js'), __inject_styles(["client-46a3e907.css"])]).then(function(x) { return x[0]; });
   }
 }, {
   js: function js() {
-    return Promise.all([import('./[book].9f3cc508.js'), __inject_styles(["client-46a3e907.css","[book]-4cbe181f.css"])]).then(function(x) { return x[0]; });
+    return Promise.all([import('./[book].d91af172.js'), __inject_styles(["client-46a3e907.css","[book]-4cbe181f.css"])]).then(function(x) { return x[0]; });
   }
 }];
 var routes = function (d) {
@@ -4039,6 +4010,6 @@ start$1({
     target: document.querySelector('#sapper'),
 });
 
-export { noop as A, binding_callbacks as B, regenerator as C, validate_each_argument as D, validate_each_keys as E, create_component as F, claim_component as G, mount_component as H, transition_in as I, transition_out as J, destroy_component as K, query_selector_all as L, update_keyed_each as M, check_outros as N, group_outros as O, outro_and_destroy_block as P, create_slot as Q, update_slot as R, SvelteComponentDev as S, destroy_block as T, _inherits as _, _getPrototypeOf as a, _possibleConstructorReturn as b, _classCallCheck as c, _assertThisInitialized as d, dispatch_dev as e, _createClass as f, goto as g, space as h, init$1 as i, element as j, claim_space as k, claim_element as l, children as m, claim_text as n, onMount as o, detach_dev as p, attr_dev as q, add_location as r, safe_not_equal as s, text as t, insert_dev as u, validate_slots as v, append_dev as w, listen_dev as x, _slicedToArray as y, set_data_dev as z };
+export { regenerator as A, validate_each_argument as B, validate_each_keys as C, create_component as D, claim_component as E, mount_component as F, transition_in as G, transition_out as H, destroy_component as I, query_selector_all as J, update_keyed_each as K, check_outros as L, group_outros as M, outro_and_destroy_block as N, create_slot as O, update_slot as P, destroy_block as Q, SvelteComponentDev as S, _inherits as _, _getPrototypeOf as a, _possibleConstructorReturn as b, _classCallCheck as c, _assertThisInitialized as d, dispatch_dev as e, _createClass as f, space as g, element as h, init$1 as i, claim_space as j, claim_element as k, children as l, claim_text as m, detach_dev as n, onMount as o, attr_dev as p, add_location as q, insert_dev as r, safe_not_equal as s, text as t, append_dev as u, validate_slots as v, _slicedToArray as w, set_data_dev as x, noop as y, binding_callbacks as z };
 
 import __inject_styles from './inject_styles.fe622066.js';
