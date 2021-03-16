@@ -331,9 +331,15 @@ h1, h2, h3, h4, h5, h6 {
 
 .md a {
   color: var(--c-primary);
+  word-break: break-all;
 }
 
 .md a:hover {
   color: var(--c-primary);
   text-decoration: underline;
+}
+
+.md p code {
+  background-color: var(--c-gray-1);
+  font-weight: 500;
 }
