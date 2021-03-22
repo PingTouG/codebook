@@ -1,25 +1,74 @@
 @import './xcode.css';
 
-
 /* 内外边距通常让各个浏览器样式的表现位置不同 */
-dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, textarea, p, blockquote, th, td, hr, button, article, aside, details, figcaption, figure, footer, header, menu, nav, section {
+dl,
+dt,
+dd,
+ul,
+ol,
+li,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+pre,
+code,
+form,
+fieldset,
+legend,
+input,
+textarea,
+p,
+blockquote,
+th,
+td,
+hr,
+button,
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+menu,
+nav,
+section {
   margin: 0;
   padding: 0;
 }
 
 /* 重设 HTML5 标签, IE 需要在 js 中 createElement(TAG) */
-article, aside, details, figcaption, figure, footer, header, menu, nav, section {
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+menu,
+nav,
+section {
   display: block;
 }
 
 /* HTML5 媒体文件跟 img 保持一致 */
-audio, canvas, video {
+audio,
+canvas,
+video {
   display: inline-block;
 }
 
 /* 要注意表单元素并不继承父级 font 的问题 */
-body, button, input, select, textarea {
-  font: 300 1em/1.8 PingFang SC, Lantinghei SC, Microsoft Yahei, Hiragino Sans GB, Microsoft Sans Serif, WenQuanYi Micro Hei, sans-serif;
+body,
+button,
+input,
+select,
+textarea {
+  font: 300 1em/1.8 PingFang SC, Lantinghei SC, Microsoft Yahei,
+    Hiragino Sans GB, Microsoft Sans Serif, WenQuanYi Micro Hei, sans-serif;
 }
 
 button::-moz-focus-inner,
@@ -35,7 +84,8 @@ table {
 }
 
 /* 去除默认边框 */
-fieldset, img {
+fieldset,
+img {
   border: 0;
 }
 
@@ -46,17 +96,18 @@ blockquote {
   font-weight: 400;
   border-left: 2px solid var(--c-primary);
   padding-left: 1em;
-  margin: 1em 3em 1em 2em;
+  margin: 1em 0;
 }
 
-@media only screen and ( max-width: 640px ) {
+@media only screen and (max-width: 640px) {
   blockquote {
     margin: 1em 0;
   }
 }
 
 /* Firefox 以外，元素没有下划线，需添加 */
-acronym, abbr {
+acronym,
+abbr {
   border-bottom: 1px dotted;
   font-variant: normal;
   text-decoration: none;
@@ -72,33 +123,45 @@ del {
   text-decoration: line-through;
 }
 
-address, caption, cite, code, dfn, em, th, var {
+address,
+caption,
+cite,
+code,
+dfn,
+em,
+th,
+var {
   font-style: normal;
   font-weight: 400;
 }
 
 /* 去掉列表前的标识, li 会继承，大部分网站通常用列表来很多内容，所以应该当去 */
-ul, ol {
+ul,
+ol {
   list-style: none;
 }
 
 /* 对齐是排版最重要的因素, 别让什么都居中 */
-caption, th {
+caption,
+th {
   text-align: left;
 }
 
-q:before, q:after {
+q:before,
+q:after {
   content: '';
 }
 
 /* 统一上标和下标 */
-sub, sup {
+sub,
+sup {
   font-size: 75%;
   line-height: 0;
   position: relative;
 }
 
-:root sub, :root sup {
+:root sub,
+:root sup {
   vertical-align: baseline; /* for ie9 and other modern browsers */
 }
 
@@ -111,7 +174,8 @@ sub {
 }
 
 /* 默认不显示下划线，保持页面简洁 */
-ins, a {
+ins,
+a {
   text-decoration: none;
 }
 
@@ -121,7 +185,8 @@ ins, a {
  * 被放弃的是 4，之前一直搞错 http://www.w3.org/TR/html401/appendix/changes.html#idx-deprecated
  * 一篇关于 <u> 标签的很好文章：http://html5doctor.com/u-element/
  */
-u, .md-u {
+u,
+.md-u {
   text-decoration: underline;
 }
 
@@ -134,7 +199,9 @@ mark {
 }
 
 /* 代码片断 */
-pre, code, pre tt {
+pre,
+code,
+pre tt {
   font-family: Courier, 'Courier New', monospace;
 }
 
@@ -168,7 +235,8 @@ figcaption {
   color: #888;
 }
 
-strong, b {
+strong,
+b {
   font-weight: bold;
   color: #000;
 }
@@ -178,8 +246,9 @@ strong, b {
   cursor: move;
 }
 
-.clearfix:before, .clearfix:after {
-  content: "";
+.clearfix:before,
+.clearfix:after {
+  content: '';
   display: table;
 }
 
@@ -192,7 +261,9 @@ strong, b {
 }
 
 /* 强制文本换行 */
-.textwrap, .textwrap td, .textwrap th {
+.textwrap,
+.textwrap td,
+.textwrap th {
   word-wrap: break-word;
   word-break: break-all;
 }
@@ -207,79 +278,131 @@ strong, b {
 }
 
 /* 保证块/段落之间的空白隔行 */
-.md p, .md pre, .md ul, .md ol, .md dl, .md form, .md hr, .md table,
-.md-p, .md-pre, .md-ul, .md-ol, .md-dl, .md-form, .md-hr, .md-table, blockquote {
-  margin-bottom: 1.2em
+.md p,
+.md pre,
+.md ul,
+.md ol,
+.md dl,
+.md form,
+.md hr,
+.md table,
+.md-p,
+.md-pre,
+.md-ul,
+.md-ol,
+.md-dl,
+.md-form,
+.md-hr,
+.md-table,
+blockquote {
+  margin-bottom: 1.2em;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: PingFang SC, Verdana, Helvetica Neue, Microsoft Yahei, Hiragino Sans GB, Microsoft Sans Serif, WenQuanYi Micro Hei, sans-serif;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: PingFang SC, Verdana, Helvetica Neue, Microsoft Yahei,
+    Hiragino Sans GB, Microsoft Sans Serif, WenQuanYi Micro Hei, sans-serif;
   font-weight: 100;
   color: #000;
   line-height: 1.35;
 }
 
 /* 标题应该更贴紧内容，并与其他块区分，margin 值要相应做优化 */
-.md h1, .md h2, .md h3, .md h4, .md h5, .md h6,
-.md-h1, .md-h2, .md-h3, .md-h4, .md-h5, .md-h6 {
+.md h1,
+.md h2,
+.md h3,
+.md h4,
+.md h5,
+.md h6,
+.md-h1,
+.md-h2,
+.md-h3,
+.md-h4,
+.md-h5,
+.md-h6 {
   margin-top: 1.2em;
   margin-bottom: 0.6em;
   line-height: 1.35;
 }
 
-.md h1, .md-h1 {
+.md h1,
+.md-h1 {
   font-size: 2em;
 }
 
-.md h2, .md-h2 {
+.md h2,
+.md-h2 {
   font-size: 1.8em;
 }
 
-.md h3, .md-h3 {
+.md h3,
+.md-h3 {
   font-size: 1.6em;
 }
 
-.md h4, .md-h4 {
+.md h4,
+.md-h4 {
   font-size: 1.4em;
 }
 
-.md h5, .md h6, .md-h5, .md-h6 {
+.md h5,
+.md h6,
+.md-h5,
+.md-h6 {
   font-size: 1.2em;
 }
 
 /* 在文章中，应该还原 ul 和 ol 的样式 */
-.md ul, .md-ul {
+.md ul,
+.md-ul {
   margin-left: 1.3em;
   list-style: disc;
 }
 
-.md ol, .md-ol {
+.md ol,
+.md-ol {
   list-style: decimal;
   margin-left: 1.9em;
 }
 
-.md li ul, .md li ol, .md-ul ul, .md-ul ol, .md-ol ul, .md-ol ol {
+.md li ul,
+.md li ol,
+.md-ul ul,
+.md-ul ol,
+.md-ol ul,
+.md-ol ol {
   margin-bottom: 0.8em;
   margin-left: 2em;
 }
 
-.md li ul, .md-ul ul, .md-ol ul {
+.md li ul,
+.md-ul ul,
+.md-ol ul {
   list-style: circle;
 }
 
 /* 同 ul/ol，在文章中应用 table 基本格式 */
-.md table th, .md table td, .md-table th, .md-table td, .md table caption {
+.md table th,
+.md table td,
+.md-table th,
+.md-table td,
+.md table caption {
   border: 1px solid #ddd;
   padding: 0.5em 1em;
   color: #666;
-  
 }
 
-.md table th, .md-table th {
+.md table th,
+.md-table th {
   background: #fbfbfb;
 }
 
-.md table thead th, .md-table thead th {
+.md table thead th,
+.md-table thead th {
   background: #f1f1f1;
 }
 
@@ -288,12 +411,16 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* 去除 webkit 中 input 和 textarea 的默认样式  */
-.md-input, .md-textarea {
+.md-input,
+.md-textarea {
   -webkit-appearance: none;
   border-radius: 0;
 }
 
-.md-em, .md em, legend, caption {
+.md-em,
+.md em,
+legend,
+caption {
   color: #000;
   font-weight: inherit;
 }
@@ -310,7 +437,7 @@ h1, h2, h3, h4, h5, h6 {
   width: 100%;
   overflow: hidden;
   white-space: nowrap;
-  content: "・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・";
+  content: '・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・';
 }
 
 /* Responsive images */
@@ -318,7 +445,7 @@ h1, h2, h3, h4, h5, h6 {
   max-width: 100%;
 }
 
-.md{
+.md {
   margin-top: 1.5rem;
   background-color: var(--c-white);
   padding: 1.5rem;
