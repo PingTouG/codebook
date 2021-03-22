@@ -1,6 +1,11 @@
 export function dateFormat(date,fmt = 'YYYY-mm-dd HH:MM:SS') {
     let ret;
-    const dateTime = new Date(date)
+    
+    let dateTime = new Date(date)
+    const timeDiff = 1000 * 60 * 60 * 8
+    const timeStamp = dateTime.getTime()
+    dateTime = new Date(timeStamp - timeDiff)
+    
     const opt = {
         "Y+": dateTime.getFullYear().toString(),        // 年
         "m+": (dateTime.getMonth() + 1).toString(),     // 月
