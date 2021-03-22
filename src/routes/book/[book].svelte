@@ -12,6 +12,8 @@
 </script>
 
 <script>
+  import { dateFormat } from '../../utils'
+
   export let category
   export let articles
 </script>
@@ -23,8 +25,11 @@
 <h1 class="category">{category}</h1>
 <ul class="list">
   {#each articles as art (art.id)}
-    <li class="item">
-      <a class="link" href={`article/${category}/${art.id}`}>{art.title}</a>
+    <li>
+      <a class="item" href={`article/${category}/${art.id}`}>
+        <div class="title">{art.title}</div>
+        <div class="time">{dateFormat(art.time)}</div>
+      </a>
     </li>
   {/each}
 </ul>
@@ -44,24 +49,38 @@
   }
 
   .list {
-    margin-top: 0.875rem;
+    margin-top: 1.5rem;
   }
 
-  .link {
-    display: inline-block;
+  .item {
+    padding: 1.5rem;
+    background-color: #fff;
+    border-radius: 6px;
+    margin-bottom: 0.75rem;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .title {
     width: 100%;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    padding: 1.5rem;
-    background-color: #fff;
-    border-radius: 6px;
     color: var(--c-gray-7);
 
     &:hover {
       text-decoration: underline;
       color: var(--tc-primary);
     }
+  }
+
+  .time {
+    font-size: 0.75rem;
+    color: var(--c-gray-5);
+    flex: 0 0 auto;
+    margin-left: 0.5rem;
   }
 
   @media only screen and (max-width: 600px) {
@@ -73,11 +92,13 @@
       margin-left: 0.75rem;
     }
     .item {
-      padding: 0 0.75rem;
-    }
-    .link {
-      margin: 0 auto;
       padding: 0.875rem;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .time {
+      margin-left: 0;
+      margin-top: 0.5rem;
     }
   }
 </style>
