@@ -465,7 +465,7 @@ caption {
   text-decoration: underline;
 }
 
-.md p code {
-  background-color: var(--c-gray-1);
+.md code {
+  background-color: var(--c-gray-2);
   font-weight: 500;
 }
