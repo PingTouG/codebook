@@ -446,7 +446,6 @@ caption {
 }
 
 .md {
-  margin-top: 1.5rem;
   background-color: var(--c-white);
   padding: 1.5rem;
   border-radius: 4px;
@@ -466,7 +465,7 @@ caption {
   text-decoration: underline;
 }
 
-.md p code {
-  background-color: var(--c-gray-1);
+.md code {
+  background-color: var(--c-gray-2);
   font-weight: 500;
 }
