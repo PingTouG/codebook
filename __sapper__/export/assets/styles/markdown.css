@@ -296,6 +296,7 @@ b {
 .md-table,
 blockquote {
   margin-bottom: 1.2em;
+  word-break: break-all;
 }
 
 h1,
