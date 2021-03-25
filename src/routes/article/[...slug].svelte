@@ -45,6 +45,7 @@
     justify-content: center;
     color: var(--c-gray-6);
     font-size: 12px;
+    margin-bottom: 0.75rem;
   }
 
   .author {
