@@ -11,7 +11,7 @@
 </script>
 
 <script lang="ts">
-  import Book from '../components/book.svelte'
+  import Book from '../components/Book.svelte'
   export let books: Array<string>
 </script>
 

@@ -1,3 +1,7 @@
+<script lang="ts">
+  import BackTop from '../components/BackTop.svelte'
+</script>
+
 <section>
   <header>
     <a href="./">
@@ -10,6 +14,7 @@
   <main>
     <slot />
   </main>
+  <BackTop />
 </section>
 
 <style>
