@@ -6,17 +6,18 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="theme-color" content="#333333" />
 		<link rel="stylesheet" href="/assets/styles/global.css" />
-		<title>CodeBook | 有质感的编程</title>
+		<title>CODE BOOK | svelteKit</title>
 
 		
 
 		<link rel="modulepreload" href="/./_app/start-6746794e.js">
 		<link rel="modulepreload" href="/./_app/chunks/vendor-45e65315.js">
 		<link rel="modulepreload" href="/./_app/pages/__layout.svelte-8acf4ad9.js">
-		<link rel="modulepreload" href="/./_app/pages/index.svelte-eadf08c2.js">
+		<link rel="modulepreload" href="/./_app/pages/book/[book].svelte-62cef935.js">
+		<link rel="modulepreload" href="/./_app/chunks/utils-a81d5505.js">
 		<link rel="stylesheet" href="/./_app/assets/start-a8cd1609.css">
 		<link rel="stylesheet" href="/./_app/assets/pages/__layout.svelte-a4a81e86.css">
-		<link rel="stylesheet" href="/./_app/assets/pages/index.svelte-7d6f489d.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/book/[book].svelte-79bc60a1.css">
 
 		<script type="module">
 			import { start } from "/./_app/start-6746794e.js";
@@ -33,13 +34,13 @@
 					error: null,
 					nodes: [
 						import("/./_app/pages/__layout.svelte-8acf4ad9.js"),
-						import("/./_app/pages/index.svelte-eadf08c2.js")
+						import("/./_app/pages/book/[book].svelte-62cef935.js")
 					],
 					page: {
 						host: location.host, // TODO this is redundant
-						path: "/",
+						path: "/book/svelteKit",
 						query: new URLSearchParams(""),
-						params: {}
+						params: {"book":"svelteKit"}
 					}
 				}
 			});
@@ -53,24 +54,11 @@
 <a class="github svelte-jbk32v" href="https://github.com/PingTouG" target="_blank"><i class="iconfont icon-github svelte-jbk32v"></i></a></header>
 	<main>
 
-<div class="home svelte-cm60r9"><div class="book__list svelte-cm60r9"><div class="book__item">
-<a class="book svelte-1q5ewvx" href="/book/lisp"><h1 class="title svelte-1q5ewvx">lisp</h1>
-  <h5 class="author svelte-1q5ewvx">By @ CodeBook</h5>
-</a>
-	</div><div class="book__item">
-<a class="book svelte-1q5ewvx" href="/book/react"><h1 class="title svelte-1q5ewvx">react</h1>
-  <h5 class="author svelte-1q5ewvx">By @ CodeBook</h5>
-</a>
-	</div><div class="book__item">
-<a class="book svelte-1q5ewvx" href="/book/svelte"><h1 class="title svelte-1q5ewvx">svelte</h1>
-  <h5 class="author svelte-1q5ewvx">By @ CodeBook</h5>
-</a>
-	</div><div class="book__item">
-<a class="book svelte-1q5ewvx" href="/book/svelteKit"><h1 class="title svelte-1q5ewvx">svelteKit</h1>
-  <h5 class="author svelte-1q5ewvx">By @ CodeBook</h5>
-</a>
-	</div></div>
-</div></main>
+<h1 class="category svelte-54pt4f">svelteKit</h1>
+<ul class="list svelte-54pt4f"><li><a class="item svelte-54pt4f" href="/article/svelteKit/20210524165910"><div class="title svelte-54pt4f">什么是SvelteKit</div>
+		<div class="time svelte-54pt4f">2021-05-24 16:59:55</div></a>
+</li>
+</ul></main>
 	
 <div class="back-top svelte-9c9s8u" style="bottom: 5rem;right: 0.625rem;display: none"><i class="iconfont icon-back-top"></i>
 </div>
@@ -78,7 +66,7 @@
 
 
 
-	<script type="svelte-data" url="index.json">{"status":200,"statusText":"","headers":{"content-type":"application/json"},"body":"[\"lisp\",\"react\",\"svelte\",\"svelteKit\"]"}</script>
+	<script type="svelte-data" url="svelteKit.json">{"status":200,"statusText":"","headers":{"content-type":"application/json"},"body":"[{\"id\":\"20210524165910\",\"title\":\"什么是SvelteKit\",\"slug\":\"svelte kit\",\"time\":\"2021-05-24T16:59:55.000Z\",\"author\":\"PingTouG\"}]"}</script>
 </div>
 	</body>
 </html>
