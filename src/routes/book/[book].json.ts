@@ -1,8 +1,11 @@
-import send from '@polka/send'
 import { loadMarkdownDir } from '../../markdown'
+import type { RequestHandler } from '@sveltejs/kit';
+import type { Article } from '$lib/types';
 
-export function get({ params: { book } }, res) {
+export const get: RequestHandler<Array<Article>> = async ({params:{book}}) => {
 	const articles = loadMarkdownDir(book)
-	const json = JSON.stringify({articles})
-	send(res, 200, json , { 'Content-Type': 'application/json' })
-}
+
+	return {
+		body: articles
+	};
+};

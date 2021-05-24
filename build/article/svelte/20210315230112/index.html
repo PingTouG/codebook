@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" content="#333333" />
+		<link rel="stylesheet" href="/assets/styles/global.css" />
+		<title>一分钟了解Svelte</title>
+
+		
+
+		<link rel="modulepreload" href="/./_app/start-6746794e.js">
+		<link rel="modulepreload" href="/./_app/chunks/vendor-45e65315.js">
+		<link rel="modulepreload" href="/./_app/pages/__layout.svelte-8acf4ad9.js">
+		<link rel="modulepreload" href="/./_app/pages/article/__layout.svelte-1ef8bf43.js">
+		<link rel="modulepreload" href="/./_app/pages/article/[category]/[id].svelte-9b359b35.js">
+		<link rel="modulepreload" href="/./_app/chunks/utils-a81d5505.js">
+		<link rel="stylesheet" href="/./_app/assets/start-a8cd1609.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/__layout.svelte-a4a81e86.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/article/__layout.svelte-1448dd73.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/article/[category]/[id].svelte-7f79f039.css">
+
+		<script type="module">
+			import { start } from "/./_app/start-6746794e.js";
+			start({
+				target: document.querySelector("#svelte"),
+				paths: {"base":"","assets":"/."},
+				session: {},
+				host: location.host,
+				route: true,
+				spa: false,
+				trailing_slash: "never",
+				hydrate: {
+					status: 200,
+					error: null,
+					nodes: [
+						import("/./_app/pages/__layout.svelte-8acf4ad9.js"),
+						import("/./_app/pages/article/__layout.svelte-1ef8bf43.js"),
+						import("/./_app/pages/article/[category]/[id].svelte-9b359b35.js")
+					],
+					page: {
+						host: location.host, // TODO this is redundant
+						path: "/article/svelte/20210315230112",
+						query: new URLSearchParams(""),
+						params: {"category":"svelte","id":"20210315230112"}
+					}
+				}
+			});
+		</script>
+	</head>
+	<body>
+		<div id="svelte">
+
+
+<section class="svelte-jbk32v"><header class="svelte-jbk32v"><a href="/"><img class="logo svelte-jbk32v" src="/assets/images/logo.png" alt="code book logo"></a>
+<a class="github svelte-jbk32v" href="https://github.com/PingTouG" target="_blank"><i class="iconfont icon-github svelte-jbk32v"></i></a></header>
+	<main><section><main class="svelte-1fbldbu">
+
+<section class="md"><h1 class="title">一分钟了解Svelte</h1>
+  <div class="info svelte-1vg5uky"><div class="author svelte-1vg5uky">作者：PingTouG</div>
+    <div class="time">时间：2021-03-15 23:01:12</div></div>
+
+  <div class="md-content"><p>如今主流的前端框架(<code>React</code>、<code>Vue</code>)都是在浏览器中完成大部分的工作（<code>runtime</code>），并且借助于<code>virtual DOM(虚拟DOM)</code>和<code>Diff算法</code>来实现局部更新。所以对于<code>React</code>或<code>Vue</code>来说不可避免的需要引入<code>runtime code</code>以及<code>virtual DOM</code>所带来的性能损耗。而 <code>Svelte</code>则是使用了一个全新的方式来构建用户界面。</p>
+<h2 id="svelte-三大特点">Svelte 三大特点</h2>
+<ul>
+<li>Write less code(更少的编码)</li>
+<li>No virtual DOM(无虚拟 DOM)</li>
+<li>Truly reactive(真正的响应式)</li>
+</ul>
+<h3 id="write-less-code">Write less code</h3>
+<p>相对于<code>React</code>、<code>Vue</code>，<code>Svelte</code>在编写代码时可通过少量的代码来完成相同的事情。比如：<code>一个简单的计数器</code></p>
+<p><code>React</code></p>
+<pre><code class="language-react"><span class="hljs-keyword">import</span> React,{ useState } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> () =&gt; {
+    <span class="hljs-keyword">const</span> [count,setCount] = useState(<span class="hljs-number">0</span>)
+    <span class="hljs-keyword">const</span> onAdd = <span class="hljs-function">() =&gt;</span> setCount(count+<span class="hljs-number">1</span>)
+
+    <span class="hljs-keyword">return</span> (
+        <span class="xml"><span class="hljs-tag">&lt;&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>{count}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{onAdd}</span>&gt;</span>+1<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+        <span class="hljs-tag">&lt;/&gt;</span></span>
+    )
+}
+</code></pre>
+<p><code>Vue2</code></p>
+<pre><code class="language-vue"><span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">template</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span></span><span class="hljs-template-variable">{{ <span class="hljs-name">count</span> }}</span><span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">button</span> @<span class="hljs-attr">click</span>=<span class="hljs-string">&quot;onAdd&quot;</span>&gt;</span>+1<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> {
+  <span class="hljs-function"><span class="hljs-title">data</span>(<span class="hljs-params"></span>)</span> {
+    <span class="hljs-keyword">return</span> {
+      <span class="hljs-attr">count</span>: <span class="hljs-number">0</span>,
+    }
+  },
+  <span class="hljs-attr">methods</span>: {
+    <span class="hljs-function"><span class="hljs-title">onAdd</span>(<span class="hljs-params"></span>)</span> {
+      <span class="hljs-built_in">this</span>.count++
+    },
+  },
+}
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span>
+</code></pre>
+<p><code>Vue3</code></p>
+<pre><code class="language-vue"><span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">template</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span></span><span class="hljs-template-variable">{{<span class="hljs-name">count</span>}}</span><span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">button</span> @<span class="hljs-attr">click</span>=<span class="hljs-string">&quot;onAdd&quot;</span>&gt;</span>+1<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+<span class="hljs-keyword">import</span> { ref } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> {
+    <span class="hljs-function"><span class="hljs-title">setup</span>(<span class="hljs-params"></span>)</span>{
+        <span class="hljs-keyword">const</span> count = ref(<span class="hljs-number">0</span>)
+        <span class="hljs-keyword">const</span> onAdd = <span class="hljs-function">() =&gt;</span> count.value++
+
+        <span class="hljs-keyword">return</span> {
+            count,
+            onAdd
+        }
+    }
+}
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span>
+</code></pre>
+<p><code>Vue3 script setup rfc</code></p>
+<pre><code class="language-vue"><span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">template</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span></span><span class="hljs-template-variable">{{<span class="hljs-name">count</span>}}</span><span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">button</span> @<span class="hljs-attr">click</span>=<span class="hljs-string">&quot;onAdd&quot;</span>&gt;</span>+1<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">setup</span>&gt;</span><span class="javascript">
+<span class="hljs-keyword">import</span> { ref } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span>
+
+<span class="hljs-keyword">const</span> count = ref(<span class="hljs-number">0</span>)
+<span class="hljs-keyword">const</span> onAdd = <span class="hljs-function">() =&gt;</span> count.value++
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span>
+</code></pre>
+<p><code>Svelte</code></p>
+<pre><code class="language-svelte"><span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+    <span class="hljs-keyword">let</span> count = <span class="hljs-number">0</span>
+    <span class="hljs-keyword">const</span> onAdd = <span class="hljs-function">() =&gt;</span> count++
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span></span><span class="hljs-template-variable">{count}</span><span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">on:click</span>=</span></span><span class="hljs-template-variable">{onAdd}</span><span class="xml"><span class="hljs-tag">&gt;</span>+1<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></span>
+</code></pre>
+<p>上述分别列举了在<code>React</code>,<code>Vue2</code>,<code>Vue3</code>,<code>Vue3 script setup rfc</code>，<code>Svelte</code>中的实现一个简单的计数器，从中可以看出，仅当<code>Vue3</code>使用了<code>script setup</code>的提案后相对于其他实现足够精简了，但对比<code>Svelte</code>来说还不够精简，在<a href="https://svelte.dev/blog/write-less-code">此文</a>中有官方列举的例子。</p>
+<h3 id="no-virtual-dom">No virtual DOM</h3>
+<p><code>Svelte</code>没有<code>虚拟DOM</code>，也不存在<code>runtime code</code>，<code>Svelte</code>的魔法发生在构建时，即<code>Svelte</code>是一个编译器，在编译过程中注入所需的魔法代码。在<a href="https://svelte.dev/blog/virtual-dom-is-pure-overhead">此文</a>中有详细内容来说明此特点。</p>
+<h3 id="truky-reactive">Truky reactive</h3>
+<p><code>Svelte</code>中实现了真正的响应式，省去了响应式使用代理或访问器的开销和复杂性，仅仅一个变量便可实现拥有响应式。在上述<code>一个简单的计数器</code>的例子中可以看出，只是定义了一个变量<code>count</code>,然后<code>count++</code>便可以自动更新视图，可谓是惊喜。<a href="https://svelte.dev/blog/svelte-3-rethinking-reactivity">此文</a>有一个简短的介绍。</p>
+<h2 id="快速上手">快速上手</h2>
+<p>快速创建项目</p>
+<pre><code class="language-bash">npx degit sveltejs/template <span class="hljs-keyword">my</span>-svelte-project
+<span class="hljs-comment"># or download and extract</span>
+cd <span class="hljs-keyword">my</span>-svelte-project
+<span class="hljs-comment"># to use  run:</span>
+<span class="hljs-comment"># node scripts/setupTypeScript.js</span>
+
+npm install
+npm <span class="hljs-built_in">run</span> dev
+</code></pre>
+<h3 id="基础知识">基础知识</h3>
+<p><code>Svelte</code>文件是以<code>.svelte</code>为后缀，文件中可以书写<code>HTML</code>、<code>JavaScript</code>、<code>Css</code>，每个<code>Svelte</code>文件都是一个组件。</p>
+<h4 id="展示数据">展示数据</h4>
+<p><code>Svelte</code>通过<code>{}</code>来插入<code>JavaScript</code>变量，在<code>{}</code>中可以放置任何<code>JavaScript</code>代码，如：<code>name.toUpperCase()</code>。<code>{}</code>只能插入纯文本，如果需要插入<code>HTML</code>需要使用<code>{@html }</code>。<code>Svelte</code>还提供了一个调试 API：<code>{@debug val1,var2...}</code>，每当特定的值发生改变时都会记录这些变量的值，如果打开了调试控制台，则会暂停代码执行（打断点）。</p>
+<blockquote>
+<p>注意：在<code>Svelte</code>中<code>style</code>的样式只对当前组件生效，如需全局影响，需要使用<code>:global()</code>。</p>
+</blockquote>
+<pre><code class="language-svelte"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+    <span class="hljs-keyword">export</span> <span class="hljs-keyword">let</span> name
+    <span class="hljs-keyword">let</span> html = <span class="hljs-string">&#x27;&lt;h1&gt;这是一个H1&lt;/h1&gt;&#x27;</span>
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>Hello {name}<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>{@html html}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="css">
+<span class="hljs-selector-tag">h1</span>{
+    <span class="hljs-attribute">color</span>: <span class="hljs-number">#ff3e00</span>;
+}
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+</code></pre>
+<h4 id="动态属性">动态属性</h4>
+<p>如果一个<code>HTML</code>元素需要动态绑定属性的话，可通过<code>{}</code>来绑定，如果绑定的值和属性名一样，可以简写为<code>{变量名}</code>，如：<code>&lt;img src={src} /&gt; 简写： &lt;img {src} /&gt;</code>。</p>
+<pre><code class="language-svelte"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+    <span class="hljs-keyword">let</span> src = <span class="hljs-string">&#x27;https://codebook.vercel.app/assets/images/logo.png&#x27;</span>
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">{src}</span>&gt;</span>
+</code></pre>
+<p>通过简单的了解，可以发现<code>Svelte</code>还是和<code>React</code>和<code>Vue</code>有很多相似的地方，但是要记住一个关键性的区别：</p>
+<blockquote>
+<p><code>Svelte</code>在<code>构建/编译阶段</code>将应用程序转换为理想的<code>JavaScript</code>应用，而不是在<code>运行阶段</code>解释应用程序的代码。这意味着不需要为框架所消耗的性能付出成本，并且在应用程序首次加载时没有额外损失。同时，<code>Svelte</code>还可以将组件作为独立的包发布并应用到任何地方且不会带来额外的开销。</p>
+</blockquote>
+</div>
+</section></main>
+</section></main>
+	
+<div class="back-top svelte-9c9s8u" style="bottom: 5rem;right: 0.625rem;display: none"><i class="iconfont icon-back-top"></i>
+</div>
+</section>
+
+
+
+	<script type="svelte-data" url="20210315230112.json">{"status":200,"statusText":"","headers":{"content-type":"text/plain;charset=UTF-8"},"body":"{\"title\":\"一分钟了解Svelte\",\"slug\":\"svelte\",\"time\":\"2021-03-15T23:01:12.000Z\",\"author\":\"PingTouG\",\"html\":\"\u003Cp\u003E如今主流的前端框架(\u003Ccode\u003EReact\u003C\u002Fcode\u003E、\u003Ccode\u003EVue\u003C\u002Fcode\u003E)都是在浏览器中完成大部分的工作（\u003Ccode\u003Eruntime\u003C\u002Fcode\u003E），并且借助于\u003Ccode\u003Evirtual DOM(虚拟DOM)\u003C\u002Fcode\u003E和\u003Ccode\u003EDiff算法\u003C\u002Fcode\u003E来实现局部更新。所以对于\u003Ccode\u003EReact\u003C\u002Fcode\u003E或\u003Ccode\u003EVue\u003C\u002Fcode\u003E来说不可避免的需要引入\u003Ccode\u003Eruntime code\u003C\u002Fcode\u003E以及\u003Ccode\u003Evirtual DOM\u003C\u002Fcode\u003E所带来的性能损耗。而 \u003Ccode\u003ESvelte\u003C\u002Fcode\u003E则是使用了一个全新的方式来构建用户界面。\u003C\u002Fp\u003E\\n\u003Ch2 id=\\\"svelte-三大特点\\\"\u003ESvelte 三大特点\u003C\u002Fh2\u003E\\n\u003Cul\u003E\\n\u003Cli\u003EWrite less code(更少的编码)\u003C\u002Fli\u003E\\n\u003Cli\u003ENo virtual DOM(无虚拟 DOM)\u003C\u002Fli\u003E\\n\u003Cli\u003ETruly reactive(真正的响应式)\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Ch3 id=\\\"write-less-code\\\"\u003EWrite less code\u003C\u002Fh3\u003E\\n\u003Cp\u003E相对于\u003Ccode\u003EReact\u003C\u002Fcode\u003E、\u003Ccode\u003EVue\u003C\u002Fcode\u003E，\u003Ccode\u003ESvelte\u003C\u002Fcode\u003E在编写代码时可通过少量的代码来完成相同的事情。比如：\u003Ccode\u003E一个简单的计数器\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003Cp\u003E\u003Ccode\u003EReact\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-react\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E React,{ useState } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;react&#x27;\u003C\u002Fspan\u003E\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eexport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Edefault\u003C\u002Fspan\u003E () =&gt; {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E [count,setCount] = useState(\u003Cspan class=\\\"hljs-number\\\"\u003E0\u003C\u002Fspan\u003E)\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E onAdd = \u003Cspan class=\\\"hljs-function\\\"\u003E() =&gt;\u003C\u002Fspan\u003E setCount(count+\u003Cspan class=\\\"hljs-number\\\"\u003E1\u003C\u002Fspan\u003E)\\n\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E (\\n        \u003Cspan class=\\\"xml\\\"\u003E\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;&gt;\u003C\u002Fspan\u003E\\n            \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Ediv\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E{count}\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Ediv\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n            \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Ebutton\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003EonClick\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E{onAdd}\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E+1\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Ebutton\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n        \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F&gt;\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E\\n    )\\n}\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cp\u003E\u003Ccode\u003EVue2\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-vue\\\"\u003E\u003Cspan class=\\\"xml\\\"\u003E\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Etemplate\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Ediv\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n    \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Ediv\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E\u003Cspan class=\\\"hljs-template-variable\\\"\u003E{{ \u003Cspan class=\\\"hljs-name\\\"\u003Ecount\u003C\u002Fspan\u003E }}\u003C\u002Fspan\u003E\u003Cspan class=\\\"xml\\\"\u003E\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Ediv\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n    \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Ebutton\u003C\u002Fspan\u003E @\u003Cspan class=\\\"hljs-attr\\\"\u003Eclick\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E&quot;onAdd&quot;\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E+1\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Ebutton\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Ediv\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Etemplate\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n\\n\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Escript\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\u003Cspan class=\\\"javascript\\\"\u003E\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eexport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Edefault\u003C\u002Fspan\u003E {\\n  \u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-title\\\"\u003Edata\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-params\\\"\u003E\u003C\u002Fspan\u003E)\u003C\u002Fspan\u003E {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E {\\n      \u003Cspan class=\\\"hljs-attr\\\"\u003Ecount\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-number\\\"\u003E0\u003C\u002Fspan\u003E,\\n    }\\n  },\\n  \u003Cspan class=\\\"hljs-attr\\\"\u003Emethods\u003C\u002Fspan\u003E: {\\n    \u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-title\\\"\u003EonAdd\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-params\\\"\u003E\u003C\u002Fspan\u003E)\u003C\u002Fspan\u003E {\\n      \u003Cspan class=\\\"hljs-built_in\\\"\u003Ethis\u003C\u002Fspan\u003E.count++\\n    },\\n  },\\n}\\n\u003C\u002Fspan\u003E\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Escript\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cp\u003E\u003Ccode\u003EVue3\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-vue\\\"\u003E\u003Cspan class=\\\"xml\\\"\u003E\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Etemplate\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n    \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Ediv\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E\u003Cspan class=\\\"hljs-template-variable\\\"\u003E{{\u003Cspan class=\\\"hljs-name\\\"\u003Ecount\u003C\u002Fspan\u003E}}\u003C\u002Fspan\u003E\u003Cspan class=\\\"xml\\\"\u003E\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Ediv\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n    \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Ebutton\u003C\u002Fspan\u003E @\u003Cspan class=\\\"hljs-attr\\\"\u003Eclick\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E&quot;onAdd&quot;\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E+1\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Ebutton\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Etemplate\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n\\n\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Escript\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\u003Cspan class=\\\"javascript\\\"\u003E\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E { ref } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;vue&#x27;\u003C\u002Fspan\u003E\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eexport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Edefault\u003C\u002Fspan\u003E {\\n    \u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-title\\\"\u003Esetup\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-params\\\"\u003E\u003C\u002Fspan\u003E)\u003C\u002Fspan\u003E{\\n        \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E count = ref(\u003Cspan class=\\\"hljs-number\\\"\u003E0\u003C\u002Fspan\u003E)\\n        \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E onAdd = \u003Cspan class=\\\"hljs-function\\\"\u003E() =&gt;\u003C\u002Fspan\u003E count.value++\\n\\n        \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E {\\n            count,\\n            onAdd\\n        }\\n    }\\n}\\n\u003C\u002Fspan\u003E\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Escript\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cp\u003E\u003Ccode\u003EVue3 script setup rfc\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-vue\\\"\u003E\u003Cspan class=\\\"xml\\\"\u003E\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Etemplate\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n    \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Ediv\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E\u003Cspan class=\\\"hljs-template-variable\\\"\u003E{{\u003Cspan class=\\\"hljs-name\\\"\u003Ecount\u003C\u002Fspan\u003E}}\u003C\u002Fspan\u003E\u003Cspan class=\\\"xml\\\"\u003E\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Ediv\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n    \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Ebutton\u003C\u002Fspan\u003E @\u003Cspan class=\\\"hljs-attr\\\"\u003Eclick\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E&quot;onAdd&quot;\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E+1\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Ebutton\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Etemplate\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n\\n\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Escript\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003Esetup\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\u003Cspan class=\\\"javascript\\\"\u003E\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E { ref } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;vue&#x27;\u003C\u002Fspan\u003E\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E count = ref(\u003Cspan class=\\\"hljs-number\\\"\u003E0\u003C\u002Fspan\u003E)\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E onAdd = \u003Cspan class=\\\"hljs-function\\\"\u003E() =&gt;\u003C\u002Fspan\u003E count.value++\\n\u003C\u002Fspan\u003E\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Escript\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cp\u003E\u003Ccode\u003ESvelte\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-svelte\\\"\u003E\u003Cspan class=\\\"xml\\\"\u003E\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Escript\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\u003Cspan class=\\\"javascript\\\"\u003E\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Elet\u003C\u002Fspan\u003E count = \u003Cspan class=\\\"hljs-number\\\"\u003E0\u003C\u002Fspan\u003E\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E onAdd = \u003Cspan class=\\\"hljs-function\\\"\u003E() =&gt;\u003C\u002Fspan\u003E count++\\n\u003C\u002Fspan\u003E\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Escript\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n\\n\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Ediv\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E\u003Cspan class=\\\"hljs-template-variable\\\"\u003E{count}\u003C\u002Fspan\u003E\u003Cspan class=\\\"xml\\\"\u003E\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Ediv\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Ebutton\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003Eon:click\u003C\u002Fspan\u003E=\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E\u003Cspan class=\\\"hljs-template-variable\\\"\u003E{onAdd}\u003C\u002Fspan\u003E\u003Cspan class=\\\"xml\\\"\u003E\u003Cspan class=\\\"hljs-tag\\\"\u003E&gt;\u003C\u002Fspan\u003E+1\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Ebutton\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cp\u003E上述分别列举了在\u003Ccode\u003EReact\u003C\u002Fcode\u003E,\u003Ccode\u003EVue2\u003C\u002Fcode\u003E,\u003Ccode\u003EVue3\u003C\u002Fcode\u003E,\u003Ccode\u003EVue3 script setup rfc\u003C\u002Fcode\u003E，\u003Ccode\u003ESvelte\u003C\u002Fcode\u003E中的实现一个简单的计数器，从中可以看出，仅当\u003Ccode\u003EVue3\u003C\u002Fcode\u003E使用了\u003Ccode\u003Escript setup\u003C\u002Fcode\u003E的提案后相对于其他实现足够精简了，但对比\u003Ccode\u003ESvelte\u003C\u002Fcode\u003E来说还不够精简，在\u003Ca href=\\\"https:\u002F\u002Fsvelte.dev\u002Fblog\u002Fwrite-less-code\\\"\u003E此文\u003C\u002Fa\u003E中有官方列举的例子。\u003C\u002Fp\u003E\\n\u003Ch3 id=\\\"no-virtual-dom\\\"\u003ENo virtual DOM\u003C\u002Fh3\u003E\\n\u003Cp\u003E\u003Ccode\u003ESvelte\u003C\u002Fcode\u003E没有\u003Ccode\u003E虚拟DOM\u003C\u002Fcode\u003E，也不存在\u003Ccode\u003Eruntime code\u003C\u002Fcode\u003E，\u003Ccode\u003ESvelte\u003C\u002Fcode\u003E的魔法发生在构建时，即\u003Ccode\u003ESvelte\u003C\u002Fcode\u003E是一个编译器，在编译过程中注入所需的魔法代码。在\u003Ca href=\\\"https:\u002F\u002Fsvelte.dev\u002Fblog\u002Fvirtual-dom-is-pure-overhead\\\"\u003E此文\u003C\u002Fa\u003E中有详细内容来说明此特点。\u003C\u002Fp\u003E\\n\u003Ch3 id=\\\"truky-reactive\\\"\u003ETruky reactive\u003C\u002Fh3\u003E\\n\u003Cp\u003E\u003Ccode\u003ESvelte\u003C\u002Fcode\u003E中实现了真正的响应式，省去了响应式使用代理或访问器的开销和复杂性，仅仅一个变量便可实现拥有响应式。在上述\u003Ccode\u003E一个简单的计数器\u003C\u002Fcode\u003E的例子中可以看出，只是定义了一个变量\u003Ccode\u003Ecount\u003C\u002Fcode\u003E,然后\u003Ccode\u003Ecount++\u003C\u002Fcode\u003E便可以自动更新视图，可谓是惊喜。\u003Ca href=\\\"https:\u002F\u002Fsvelte.dev\u002Fblog\u002Fsvelte-3-rethinking-reactivity\\\"\u003E此文\u003C\u002Fa\u003E有一个简短的介绍。\u003C\u002Fp\u003E\\n\u003Ch2 id=\\\"快速上手\\\"\u003E快速上手\u003C\u002Fh2\u003E\\n\u003Cp\u003E快速创建项目\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-bash\\\"\u003Enpx degit sveltejs\u002Ftemplate \u003Cspan class=\\\"hljs-keyword\\\"\u003Emy\u003C\u002Fspan\u003E-svelte-project\\n\u003Cspan class=\\\"hljs-comment\\\"\u003E# or download and extract\u003C\u002Fspan\u003E\\ncd \u003Cspan class=\\\"hljs-keyword\\\"\u003Emy\u003C\u002Fspan\u003E-svelte-project\\n\u003Cspan class=\\\"hljs-comment\\\"\u003E# to use  run:\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-comment\\\"\u003E# node scripts\u002FsetupTypeScript.js\u003C\u002Fspan\u003E\\n\\nnpm install\\nnpm \u003Cspan class=\\\"hljs-built_in\\\"\u003Erun\u003C\u002Fspan\u003E dev\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch3 id=\\\"基础知识\\\"\u003E基础知识\u003C\u002Fh3\u003E\\n\u003Cp\u003E\u003Ccode\u003ESvelte\u003C\u002Fcode\u003E文件是以\u003Ccode\u003E.svelte\u003C\u002Fcode\u003E为后缀，文件中可以书写\u003Ccode\u003EHTML\u003C\u002Fcode\u003E、\u003Ccode\u003EJavaScript\u003C\u002Fcode\u003E、\u003Ccode\u003ECss\u003C\u002Fcode\u003E，每个\u003Ccode\u003ESvelte\u003C\u002Fcode\u003E文件都是一个组件。\u003C\u002Fp\u003E\\n\u003Ch4 id=\\\"展示数据\\\"\u003E展示数据\u003C\u002Fh4\u003E\\n\u003Cp\u003E\u003Ccode\u003ESvelte\u003C\u002Fcode\u003E通过\u003Ccode\u003E{}\u003C\u002Fcode\u003E来插入\u003Ccode\u003EJavaScript\u003C\u002Fcode\u003E变量，在\u003Ccode\u003E{}\u003C\u002Fcode\u003E中可以放置任何\u003Ccode\u003EJavaScript\u003C\u002Fcode\u003E代码，如：\u003Ccode\u003Ename.toUpperCase()\u003C\u002Fcode\u003E。\u003Ccode\u003E{}\u003C\u002Fcode\u003E只能插入纯文本，如果需要插入\u003Ccode\u003EHTML\u003C\u002Fcode\u003E需要使用\u003Ccode\u003E{@html }\u003C\u002Fcode\u003E。\u003Ccode\u003ESvelte\u003C\u002Fcode\u003E还提供了一个调试 API：\u003Ccode\u003E{@debug val1,var2...}\u003C\u002Fcode\u003E，每当特定的值发生改变时都会记录这些变量的值，如果打开了调试控制台，则会暂停代码执行（打断点）。\u003C\u002Fp\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E注意：在\u003Ccode\u003ESvelte\u003C\u002Fcode\u003E中\u003Ccode\u003Estyle\u003C\u002Fcode\u003E的样式只对当前组件生效，如需全局影响，需要使用\u003Ccode\u003E:global()\u003C\u002Fcode\u003E。\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-svelte\\\"\u003E\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Escript\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\u003Cspan class=\\\"javascript\\\"\u003E\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Eexport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Elet\u003C\u002Fspan\u003E name\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Elet\u003C\u002Fspan\u003E html = \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;&lt;h1&gt;这是一个H1&lt;\u002Fh1&gt;&#x27;\u003C\u002Fspan\u003E\\n\u003C\u002Fspan\u003E\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Escript\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n\\n\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Eh1\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003EHello {name}\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Eh1\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Ediv\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E{@html html}\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Ediv\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n\\n\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Estyle\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\u003Cspan class=\\\"css\\\"\u003E\\n\u003Cspan class=\\\"hljs-selector-tag\\\"\u003Eh1\u003C\u002Fspan\u003E{\\n    \u003Cspan class=\\\"hljs-attribute\\\"\u003Ecolor\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-number\\\"\u003E#ff3e00\u003C\u002Fspan\u003E;\\n}\\n\u003C\u002Fspan\u003E\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Estyle\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch4 id=\\\"动态属性\\\"\u003E动态属性\u003C\u002Fh4\u003E\\n\u003Cp\u003E如果一个\u003Ccode\u003EHTML\u003C\u002Fcode\u003E元素需要动态绑定属性的话，可通过\u003Ccode\u003E{}\u003C\u002Fcode\u003E来绑定，如果绑定的值和属性名一样，可以简写为\u003Ccode\u003E{变量名}\u003C\u002Fcode\u003E，如：\u003Ccode\u003E&lt;img src={src} \u002F&gt; 简写： &lt;img {src} \u002F&gt;\u003C\u002Fcode\u003E。\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-svelte\\\"\u003E\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Escript\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\u003Cspan class=\\\"javascript\\\"\u003E\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Elet\u003C\u002Fspan\u003E src = \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;https:\u002F\u002Fcodebook.vercel.app\u002Fassets\u002Fimages\u002Flogo.png&#x27;\u003C\u002Fspan\u003E\\n\u003C\u002Fspan\u003E\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Escript\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n\\n\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Eimg\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003Esrc\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E{src}\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cp\u003E通过简单的了解，可以发现\u003Ccode\u003ESvelte\u003C\u002Fcode\u003E还是和\u003Ccode\u003EReact\u003C\u002Fcode\u003E和\u003Ccode\u003EVue\u003C\u002Fcode\u003E有很多相似的地方，但是要记住一个关键性的区别：\u003C\u002Fp\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E\u003Ccode\u003ESvelte\u003C\u002Fcode\u003E在\u003Ccode\u003E构建\u002F编译阶段\u003C\u002Fcode\u003E将应用程序转换为理想的\u003Ccode\u003EJavaScript\u003C\u002Fcode\u003E应用，而不是在\u003Ccode\u003E运行阶段\u003C\u002Fcode\u003E解释应用程序的代码。这意味着不需要为框架所消耗的性能付出成本，并且在应用程序首次加载时没有额外损失。同时，\u003Ccode\u003ESvelte\u003C\u002Fcode\u003E还可以将组件作为独立的包发布并应用到任何地方且不会带来额外的开销。\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\"}"}</script>
+</div>
+	</body>
+</html>

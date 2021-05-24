@@ -3,8 +3,8 @@ import path from 'path'
 import marked from 'marked'
 import hljs from 'highlight.js'
 import grayMatter from 'gray-matter'
-import { MD_BASE_PATH } from '../config'
-import type { Article } from '../types'
+import { MD_BASE_PATH } from '$lib/config'
+import type { Article } from '$lib/types'
 
 const resolve = (filename:string) => path.resolve(MD_BASE_PATH,filename)
 

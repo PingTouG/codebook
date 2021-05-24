@@ -1,5 +1,5 @@
-rm -rf __sapper__/export && 
-npm run export && 
-git add __sapper__/export && 
+rm -rf build && 
+npm run build && 
+git add build && 
 git commit -m "deploy" &&
 git push origin main
