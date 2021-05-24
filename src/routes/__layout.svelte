@@ -4,17 +4,9 @@
 	import NProgress from 'nprogress'
 
 	NProgress.configure({ showSpinner: false })
-	const onNavigationStart = () => {
-		console.log('start')
-		NProgress.start()
-	}
-	const onNavigationEnd = () => {
-		console.log('end')
-		NProgress.done()
-	}
 </script>
 
-<svelte:window on:sveltekit:navigation-start="{onNavigationStart}" on:sveltekit:navigation-end="{onNavigationEnd}"  />
+<svelte:window on:sveltekit:navigation-start="{() => NProgress.start()}" on:sveltekit:navigation-end="{() => NProgress.done()}"  />
 <section>
 	<header>
 		<a href="/">
