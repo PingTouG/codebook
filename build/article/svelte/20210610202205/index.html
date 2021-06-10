@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" content="#333333" />
+		<link rel="stylesheet" href="/assets/styles/global.css" />
+		<title>SvelteKit：一个基于Svelte开发服务端渲染网站的框架</title>
+
+		
+
+		<link rel="modulepreload" href="/./_app/start-763c7552.js">
+		<link rel="modulepreload" href="/./_app/chunks/vendor-d00531f1.js">
+		<link rel="modulepreload" href="/./_app/pages/__layout.svelte-2c475058.js">
+		<link rel="modulepreload" href="/./_app/pages/article/__layout.svelte-42f46e6c.js">
+		<link rel="modulepreload" href="/./_app/pages/article/[category]/[id].svelte-f684a407.js">
+		<link rel="modulepreload" href="/./_app/chunks/utils-a81d5505.js">
+		<link rel="stylesheet" href="/./_app/assets/start-a8cd1609.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/__layout.svelte-dfbf40bb.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/article/__layout.svelte-1448dd73.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/article/[category]/[id].svelte-7f79f039.css">
+
+		<script type="module">
+			import { start } from "/./_app/start-763c7552.js";
+			start({
+				target: document.querySelector("#svelte"),
+				paths: {"base":"","assets":"/."},
+				session: {},
+				host: location.host,
+				route: true,
+				spa: false,
+				trailing_slash: "never",
+				hydrate: {
+					status: 200,
+					error: null,
+					nodes: [
+						import("/./_app/pages/__layout.svelte-2c475058.js"),
+						import("/./_app/pages/article/__layout.svelte-42f46e6c.js"),
+						import("/./_app/pages/article/[category]/[id].svelte-f684a407.js")
+					],
+					page: {
+						host: location.host, // TODO this is redundant
+						path: "/article/svelte/20210610202205",
+						query: new URLSearchParams(""),
+						params: {"category":"svelte","id":"20210610202205"}
+					}
+				}
+			});
+		</script>
+	</head>
+	<body>
+		<div id="svelte">
+
+
+
+<section class="svelte-jbk32v"><header class="svelte-jbk32v"><a href="/"><img class="logo svelte-jbk32v" src="/assets/images/logo.png" alt="code book logo"></a>
+<a class="github svelte-jbk32v" href="https://github.com/PingTouG" target="_blank"><i class="iconfont icon-github svelte-jbk32v"></i></a></header>
+	<main><section><main class="svelte-1fbldbu">
+
+<section class="md"><h1 class="title">SvelteKit：一个基于Svelte开发服务端渲染网站的框架</h1>
+  <div class="info svelte-1vg5uky"><div class="author svelte-1vg5uky">作者：PingTouG</div>
+    <div class="time">时间：2021-05-24 16:59:55</div></div>
+
+  <div class="md-content"><blockquote>
+<p><code>SvelteKit</code>是一个用于构建各种规模的<code>Web</code>应用程序的框架且具有出色的开发体验和基于文件系统的灵活路由。
+<br />
+与单页应用程序不同，<code>SvelteKit</code>不会在<code>SEO</code>，渐进增强或初始加载体验上做出让步-但与传统的服务器呈现的应用程序不同，导航是即时的，类似于应用程序的感觉。<code>(摘自SvelteKit官网)</code></p>
+</blockquote>
+<h2 id="入门">入门</h2>
+<pre><code class="language-bash"><span class="hljs-built_in">npm</span> init svelte@next my-app
+cd my-app
+<span class="hljs-built_in">npm</span> install
+<span class="hljs-built_in">npm</span> run dev
+</code></pre>
+<p><code>SvelteKit</code>是基于<code>Svelte</code>构建的一个服务端渲染框架，对标的是<code>React</code>的<code>Next</code>框架，最初是基于<code>Snowpack</code>打包的，后来<code>Vite</code>出来之后，团队将其迁移到了<code>Vite</code>。此框架有三大特点：</p>
+<ul>
+<li>基于<code>Svelte</code></li>
+<li>友好的服务端渲染，<code>SEO</code>，渐进式增强，以及<code>SPA</code>的流畅导航。</li>
+<li>使用基于文件系统的路由，代码拆分，离线支持。</li>
+</ul>
+<p>总之如果你想尝试<code>Svelte</code>技术栈的话，此框架是开发的不二选择。你现在的所看到的网站就是用<code>SvelteKit</code>开发的静态网站。</p>
+<h2 id="router路由">router(路由)</h2>
+<p><code>SvelteKit</code>是基于文件系统的生成的路由，默认在<code>src/routes</code>的<code>.svelte</code>文件都是一个页面，路由就是文件名且区分大小写。如：<code>routes/about.svelte</code>→<code>/about</code>、<code>routes/userHome.svelte</code>→<code>/userHome</code>。所以建议使用<code>短横线</code>命名法命名文件，即：<code>user-home</code>。</p>
+<h2 id="嵌套路由">嵌套路由</h2>
+<p>实现嵌套路由就只需嵌套目录即可，目录下的<code>index.svelte</code>会自动将当前目录名转换为路由。如：<code>routes/news/index.svelte</code>→<code>/news</code>、<code>routes/news/list.svelte</code>→<code>/news/list</code>。</p>
+<h3 id="动态路由">动态路由</h3>
+<p>如果需要使用动态路由可以使用<code>[路由名].svelte</code>来命名文件，如：<code>routes/news/[id].svelte</code>→<code>/news/:id</code>。其动态的路由可作为<code>params</code>参数传入页面中，获取方法会在下面说明。
+<br />
+如果需要多个动态参数传入的话，可使用<code>-</code>分割。如：<code>routes/news/[category]-[id].svelte</code>→<code>/news/:idcategory/:id</code>。
+<br />
+如果路由的动态数量未知，可以使用剩余参数，即：<code>routes/[tree]/[dir]/[...file]</code>→<code>/:tree/:dir/...file</code>。如：<code>routes/master/docs/router/01.md</code>解析为<code>master</code>→<code>tree</code>、<code>dir</code>→<code>docs</code>、<code>file</code>→<code>router/01.md</code></p>
+<h2 id="layout布局">layout(布局)</h2>
+<p>如果需要使用布局模板的话，可以在其目录下创建<code>__layout.svelte</code>，则此目录下的所有页面都会应用此布局。布局页中必须含有<code>&lt;slot&gt;&lt;/slot&gt;</code>，其代表页面内容在布局页的位置。如果在<code>routes</code>下创建一个<code>__layout.svelte</code>则所有页面都会应用此布局，如果想重置布局，则在其目录下创建一个<code>__layout.reset.svelte</code>文件即可，然后此目录下的所有页面都会应用此布局，而不会布局中含有布局。如果需要嵌套布局则在目录下继续创建一个<code>__layout.svelte</code>即可。</p>
+<h2 id="error错误页面">error(错误页面)</h2>
+</div>
+</section></main>
+</section></main>
+	
+<div class="back-top svelte-9c9s8u" style="bottom: 5rem;right: 0.625rem;display: none"><i class="iconfont icon-back-top"></i>
+</div>
+</section>
+
+
+
+	<script type="svelte-data" url="20210610202205.json">{"status":200,"statusText":"","headers":{"content-type":"text/plain;charset=UTF-8"},"body":"{\"title\":\"SvelteKit：一个基于Svelte开发服务端渲染网站的框架\",\"slug\":\"svelte kit\",\"time\":\"2021-05-24T16:59:55.000Z\",\"author\":\"PingTouG\",\"html\":\"\u003Cblockquote\u003E\\n\u003Cp\u003E\u003Ccode\u003ESvelteKit\u003C\u002Fcode\u003E是一个用于构建各种规模的\u003Ccode\u003EWeb\u003C\u002Fcode\u003E应用程序的框架且具有出色的开发体验和基于文件系统的灵活路由。\\n\u003Cbr \u002F\u003E\\n与单页应用程序不同，\u003Ccode\u003ESvelteKit\u003C\u002Fcode\u003E不会在\u003Ccode\u003ESEO\u003C\u002Fcode\u003E，渐进增强或初始加载体验上做出让步-但与传统的服务器呈现的应用程序不同，导航是即时的，类似于应用程序的感觉。\u003Ccode\u003E(摘自SvelteKit官网)\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Ch2 id=\\\"入门\\\"\u003E入门\u003C\u002Fh2\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-bash\\\"\u003E\u003Cspan class=\\\"hljs-built_in\\\"\u003Enpm\u003C\u002Fspan\u003E init svelte@next my-app\\ncd my-app\\n\u003Cspan class=\\\"hljs-built_in\\\"\u003Enpm\u003C\u002Fspan\u003E install\\n\u003Cspan class=\\\"hljs-built_in\\\"\u003Enpm\u003C\u002Fspan\u003E run dev\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cp\u003E\u003Ccode\u003ESvelteKit\u003C\u002Fcode\u003E是基于\u003Ccode\u003ESvelte\u003C\u002Fcode\u003E构建的一个服务端渲染框架，对标的是\u003Ccode\u003EReact\u003C\u002Fcode\u003E的\u003Ccode\u003ENext\u003C\u002Fcode\u003E框架，最初是基于\u003Ccode\u003ESnowpack\u003C\u002Fcode\u003E打包的，后来\u003Ccode\u003EVite\u003C\u002Fcode\u003E出来之后，团队将其迁移到了\u003Ccode\u003EVite\u003C\u002Fcode\u003E。此框架有三大特点：\u003C\u002Fp\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E基于\u003Ccode\u003ESvelte\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E友好的服务端渲染，\u003Ccode\u003ESEO\u003C\u002Fcode\u003E，渐进式增强，以及\u003Ccode\u003ESPA\u003C\u002Fcode\u003E的流畅导航。\u003C\u002Fli\u003E\\n\u003Cli\u003E使用基于文件系统的路由，代码拆分，离线支持。\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Cp\u003E总之如果你想尝试\u003Ccode\u003ESvelte\u003C\u002Fcode\u003E技术栈的话，此框架是开发的不二选择。你现在的所看到的网站就是用\u003Ccode\u003ESvelteKit\u003C\u002Fcode\u003E开发的静态网站。\u003C\u002Fp\u003E\\n\u003Ch2 id=\\\"router路由\\\"\u003Erouter(路由)\u003C\u002Fh2\u003E\\n\u003Cp\u003E\u003Ccode\u003ESvelteKit\u003C\u002Fcode\u003E是基于文件系统的生成的路由，默认在\u003Ccode\u003Esrc\u002Froutes\u003C\u002Fcode\u003E的\u003Ccode\u003E.svelte\u003C\u002Fcode\u003E文件都是一个页面，路由就是文件名且区分大小写。如：\u003Ccode\u003Eroutes\u002Fabout.svelte\u003C\u002Fcode\u003E→\u003Ccode\u003E\u002Fabout\u003C\u002Fcode\u003E、\u003Ccode\u003Eroutes\u002FuserHome.svelte\u003C\u002Fcode\u003E→\u003Ccode\u003E\u002FuserHome\u003C\u002Fcode\u003E。所以建议使用\u003Ccode\u003E短横线\u003C\u002Fcode\u003E命名法命名文件，即：\u003Ccode\u003Euser-home\u003C\u002Fcode\u003E。\u003C\u002Fp\u003E\\n\u003Ch2 id=\\\"嵌套路由\\\"\u003E嵌套路由\u003C\u002Fh2\u003E\\n\u003Cp\u003E实现嵌套路由就只需嵌套目录即可，目录下的\u003Ccode\u003Eindex.svelte\u003C\u002Fcode\u003E会自动将当前目录名转换为路由。如：\u003Ccode\u003Eroutes\u002Fnews\u002Findex.svelte\u003C\u002Fcode\u003E→\u003Ccode\u003E\u002Fnews\u003C\u002Fcode\u003E、\u003Ccode\u003Eroutes\u002Fnews\u002Flist.svelte\u003C\u002Fcode\u003E→\u003Ccode\u003E\u002Fnews\u002Flist\u003C\u002Fcode\u003E。\u003C\u002Fp\u003E\\n\u003Ch3 id=\\\"动态路由\\\"\u003E动态路由\u003C\u002Fh3\u003E\\n\u003Cp\u003E如果需要使用动态路由可以使用\u003Ccode\u003E[路由名].svelte\u003C\u002Fcode\u003E来命名文件，如：\u003Ccode\u003Eroutes\u002Fnews\u002F[id].svelte\u003C\u002Fcode\u003E→\u003Ccode\u003E\u002Fnews\u002F:id\u003C\u002Fcode\u003E。其动态的路由可作为\u003Ccode\u003Eparams\u003C\u002Fcode\u003E参数传入页面中，获取方法会在下面说明。\\n\u003Cbr \u002F\u003E\\n如果需要多个动态参数传入的话，可使用\u003Ccode\u003E-\u003C\u002Fcode\u003E分割。如：\u003Ccode\u003Eroutes\u002Fnews\u002F[category]-[id].svelte\u003C\u002Fcode\u003E→\u003Ccode\u003E\u002Fnews\u002F:idcategory\u002F:id\u003C\u002Fcode\u003E。\\n\u003Cbr \u002F\u003E\\n如果路由的动态数量未知，可以使用剩余参数，即：\u003Ccode\u003Eroutes\u002F[tree]\u002F[dir]\u002F[...file]\u003C\u002Fcode\u003E→\u003Ccode\u003E\u002F:tree\u002F:dir\u002F...file\u003C\u002Fcode\u003E。如：\u003Ccode\u003Eroutes\u002Fmaster\u002Fdocs\u002Frouter\u002F01.md\u003C\u002Fcode\u003E解析为\u003Ccode\u003Emaster\u003C\u002Fcode\u003E→\u003Ccode\u003Etree\u003C\u002Fcode\u003E、\u003Ccode\u003Edir\u003C\u002Fcode\u003E→\u003Ccode\u003Edocs\u003C\u002Fcode\u003E、\u003Ccode\u003Efile\u003C\u002Fcode\u003E→\u003Ccode\u003Erouter\u002F01.md\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003Ch2 id=\\\"layout布局\\\"\u003Elayout(布局)\u003C\u002Fh2\u003E\\n\u003Cp\u003E如果需要使用布局模板的话，可以在其目录下创建\u003Ccode\u003E__layout.svelte\u003C\u002Fcode\u003E，则此目录下的所有页面都会应用此布局。布局页中必须含有\u003Ccode\u003E&lt;slot&gt;&lt;\u002Fslot&gt;\u003C\u002Fcode\u003E，其代表页面内容在布局页的位置。如果在\u003Ccode\u003Eroutes\u003C\u002Fcode\u003E下创建一个\u003Ccode\u003E__layout.svelte\u003C\u002Fcode\u003E则所有页面都会应用此布局，如果想重置布局，则在其目录下创建一个\u003Ccode\u003E__layout.reset.svelte\u003C\u002Fcode\u003E文件即可，然后此目录下的所有页面都会应用此布局，而不会布局中含有布局。如果需要嵌套布局则在目录下继续创建一个\u003Ccode\u003E__layout.svelte\u003C\u002Fcode\u003E即可。\u003C\u002Fp\u003E\\n\u003Ch2 id=\\\"error错误页面\\\"\u003Eerror(错误页面)\u003C\u002Fh2\u003E\\n\"}"}</script>
+</div>
+	</body>
+</html>
