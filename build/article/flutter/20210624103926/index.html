@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" content="#333333" />
+		<link rel="stylesheet" href="/assets/styles/global.css" />
+		<title>Wigets学习之Flex布局</title>
+
+		
+
+		<link rel="modulepreload" href="/./_app/start-bf43ee66.js">
+		<link rel="modulepreload" href="/./_app/chunks/vendor-d00531f1.js">
+		<link rel="modulepreload" href="/./_app/pages/__layout.svelte-2c475058.js">
+		<link rel="modulepreload" href="/./_app/pages/article/__layout.svelte-42f46e6c.js">
+		<link rel="modulepreload" href="/./_app/pages/article/[category]/[id].svelte-f684a407.js">
+		<link rel="modulepreload" href="/./_app/chunks/utils-a81d5505.js">
+		<link rel="stylesheet" href="/./_app/assets/start-a8cd1609.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/__layout.svelte-dfbf40bb.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/article/__layout.svelte-1448dd73.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/article/[category]/[id].svelte-7f79f039.css">
+
+		<script type="module">
+			import { start } from "/./_app/start-bf43ee66.js";
+			start({
+				target: document.querySelector("#svelte"),
+				paths: {"base":"","assets":"/."},
+				session: {},
+				host: location.host,
+				route: true,
+				spa: false,
+				trailing_slash: "never",
+				hydrate: {
+					status: 200,
+					error: null,
+					nodes: [
+						import("/./_app/pages/__layout.svelte-2c475058.js"),
+						import("/./_app/pages/article/__layout.svelte-42f46e6c.js"),
+						import("/./_app/pages/article/[category]/[id].svelte-f684a407.js")
+					],
+					page: {
+						host: location.host, // TODO this is redundant
+						path: "/article/flutter/20210624103926",
+						query: new URLSearchParams(""),
+						params: {"category":"flutter","id":"20210624103926"}
+					}
+				}
+			});
+		</script>
+	</head>
+	<body>
+		<div id="svelte">
+
+
+
+<section class="svelte-jbk32v"><header class="svelte-jbk32v"><a href="/"><img class="logo svelte-jbk32v" src="/assets/images/logo.png" alt="code book logo"></a>
+<a class="github svelte-jbk32v" href="https://github.com/PingTouG" target="_blank"><i class="iconfont icon-github svelte-jbk32v"></i></a></header>
+	<main><section><main class="svelte-1fbldbu">
+
+<section class="md"><h1 class="title">Wigets学习之Flex布局</h1>
+  <div class="info svelte-1vg5uky"><div class="author svelte-1vg5uky">作者：PingTouG</div>
+    <div class="time">时间：2021-06-24 10:39:58</div></div>
+
+  <div class="md-content"><h2 id="flex-→-display-flexcss">Flex → display: flex(Css)</h2>
+<blockquote>
+<p>创建 Flex 布局</p>
+</blockquote>
+<ul>
+<li><code>direction</code>：主轴方向(必填)：<code>Axis.horizontal(横向排列)</code>、<code>Axis.vertical(纵向排列)</code>。如果为<code>Axis.horizontal</code>则需要指定<code>textDirection</code>参数</li>
+<li><code>mainAxisAlignment</code>：主轴的对齐方式</li>
+<li><code>mainAxisSize</code>：主轴占用的空间，默认为<code>MainAxisSize.max</code></li>
+<li><code>crossAxisAlignment</code>：交叉轴对齐方式</li>
+<li><code>textDirection</code>：横向文本排列方向</li>
+<li><code>verticalDirection</code>：垂直方向的文本排列方向</li>
+<li><code>textBaseline</code>：基线对齐方式</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-keyword">import</span> <span class="hljs-symbol">&#x27;package</span>:flutter/material.dart&#x27;;
+
+void main() {
+  runApp(<span class="hljs-type">App</span>());
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">App</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatelessWidget</span> </span>{
+  <span class="hljs-meta">@override</span>
+  <span class="hljs-type">Widget</span> build(<span class="hljs-type">BuildContext</span> context) {
+    <span class="hljs-keyword">return</span> <span class="hljs-type">Flex</span>(
+      direction: <span class="hljs-type">Axis</span>.vertical,
+      textDirection: <span class="hljs-type">TextDirection</span>.ltr,
+      mainAxisAlignment: <span class="hljs-type">MainAxisAlignment</span>.center,
+      children: [
+        <span class="hljs-type">Container</span>(
+          color: <span class="hljs-type">Colors</span>.yellow,
+          child: <span class="hljs-type">Text</span>(<span class="hljs-symbol">&#x27;Hello</span>1&#x27;, textDirection: <span class="hljs-type">TextDirection</span>.ltr),
+        ),
+        <span class="hljs-type">Container</span>(
+          color: <span class="hljs-type">Colors</span>.cyan,
+          child: <span class="hljs-type">Text</span>(<span class="hljs-symbol">&#x27;Hello</span>2&#x27;, textDirection: <span class="hljs-type">TextDirection</span>.ltr),
+        )
+      ],
+    );
+  }
+}
+</code></pre>
+<h2 id="row">Row</h2>
+<blockquote>
+<p>横向布局，和<code>Flex</code>参数<code>direction=Axis.horizontal</code>一样</p>
+</blockquote>
+<ul>
+<li><code>children</code>: 子部件</li>
+<li><code>mainAxisAlignment</code>：主轴的对齐方式</li>
+<li><code>mainAxisSize</code>：主轴占用的空间，默认为<code>MainAxisSize.max</code></li>
+<li><code>crossAxisAlignment</code>：交叉轴对齐方式</li>
+<li><code>textDirection</code>：横向文本排列方向，需要指定</li>
+<li><code>verticalDirection</code>：垂直方向的文本排列方向</li>
+<li><code>textBaseline</code>：基线对齐方式</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-keyword">import</span> <span class="hljs-symbol">&#x27;package</span>:flutter/material.dart&#x27;;
+
+void main() {
+  runApp(<span class="hljs-type">App</span>());
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">App</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatelessWidget</span> </span>{
+  <span class="hljs-meta">@override</span>
+  <span class="hljs-type">Widget</span> build(<span class="hljs-type">BuildContext</span> context) {
+    <span class="hljs-keyword">return</span> <span class="hljs-type">Row</span>(
+      textDirection: <span class="hljs-type">TextDirection</span>.ltr,
+      children: [
+        <span class="hljs-type">Container</span>(
+          color: <span class="hljs-type">Colors</span>.yellow,
+          child: <span class="hljs-type">Text</span>(<span class="hljs-symbol">&#x27;Hello</span>1&#x27;, textDirection: <span class="hljs-type">TextDirection</span>.ltr),
+        ),
+        <span class="hljs-type">Container</span>(
+          color: <span class="hljs-type">Colors</span>.cyan,
+          child: <span class="hljs-type">Text</span>(<span class="hljs-symbol">&#x27;Hello</span>2&#x27;, textDirection: <span class="hljs-type">TextDirection</span>.ltr),
+        )
+      ],
+    );
+  }
+}
+</code></pre>
+<h2 id="column">Column</h2>
+<blockquote>
+<p>纵向布局，和<code>Flex</code>参数<code>direction=Axis.vertical</code>一样</p>
+</blockquote>
+<ul>
+<li><code>children</code>: 子部件</li>
+<li><code>mainAxisAlignment</code>：主轴的对齐方式</li>
+<li><code>mainAxisSize</code>：主轴占用的空间，默认为<code>MainAxisSize.max</code></li>
+<li><code>crossAxisAlignment</code>：交叉轴对齐方式</li>
+<li><code>textDirection</code>：纵向文本排列方向</li>
+<li><code>verticalDirection</code>：垂直方向的文本排列方向</li>
+<li><code>textBaseline</code>：基线对齐方式</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-keyword">import</span> <span class="hljs-symbol">&#x27;package</span>:flutter/material.dart&#x27;;
+
+void main() {
+  runApp(<span class="hljs-type">App</span>());
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">App</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatelessWidget</span> </span>{
+  <span class="hljs-meta">@override</span>
+  <span class="hljs-type">Widget</span> build(<span class="hljs-type">BuildContext</span> context) {
+    <span class="hljs-keyword">return</span> <span class="hljs-type">Column</span>(
+      children: [
+        <span class="hljs-type">Container</span>(
+          color: <span class="hljs-type">Colors</span>.yellow,
+          child: <span class="hljs-type">Text</span>(<span class="hljs-symbol">&#x27;Hello</span>1&#x27;, textDirection: <span class="hljs-type">TextDirection</span>.ltr),
+        ),
+        <span class="hljs-type">Container</span>(
+          color: <span class="hljs-type">Colors</span>.cyan,
+          child: <span class="hljs-type">Text</span>(<span class="hljs-symbol">&#x27;Hello</span>2&#x27;, textDirection: <span class="hljs-type">TextDirection</span>.ltr),
+        )
+      ],
+    );
+  }
+}
+</code></pre>
+<h2 id="expanded">Expanded</h2>
+<blockquote>
+<p>用于扩展<code>Flex</code>、<code>Row</code>、<code>Column</code>，使用此部件可以使子部件撑满指定比例</p>
+</blockquote>
+<ul>
+<li><code>child</code>：子部件(必填)</li>
+<li><code>flex</code>：占用比例，默认为 1</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-keyword">import</span> <span class="hljs-symbol">&#x27;package</span>:flutter/material.dart&#x27;;
+
+void main() {
+  runApp(<span class="hljs-type">App</span>());
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">App</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatelessWidget</span> </span>{
+  <span class="hljs-meta">@override</span>
+  <span class="hljs-type">Widget</span> build(<span class="hljs-type">BuildContext</span> context) {
+    <span class="hljs-keyword">return</span> <span class="hljs-type">Flex</span>(
+      direction: <span class="hljs-type">Axis</span>.horizontal,
+      textDirection: <span class="hljs-type">TextDirection</span>.ltr,
+      children: [
+        <span class="hljs-type">Expanded</span>(
+            flex: <span class="hljs-number">2</span>,
+            child: <span class="hljs-type">Container</span>(
+              color: <span class="hljs-type">Colors</span>.yellow,
+              child: <span class="hljs-type">Text</span>(<span class="hljs-symbol">&#x27;Hello</span>1&#x27;, textDirection: <span class="hljs-type">TextDirection</span>.ltr),
+            )),
+        <span class="hljs-type">Expanded</span>(
+            flex: <span class="hljs-number">4</span>,
+            child: <span class="hljs-type">Container</span>(
+              color: <span class="hljs-type">Colors</span>.cyan,
+              child: <span class="hljs-type">Text</span>(<span class="hljs-symbol">&#x27;Hello</span>2&#x27;, textDirection: <span class="hljs-type">TextDirection</span>.ltr),
+            ))
+      ],
+    );
+  }
+}
+</code></pre>
+</div>
+</section></main>
+</section></main>
+	
+<div class="back-top svelte-9c9s8u" style="bottom: 5rem;right: 0.625rem;display: none"><i class="iconfont icon-back-top"></i>
+</div>
+</section>
+
+
+
+	<script type="svelte-data" url="20210624103926.json">{"status":200,"statusText":"","headers":{"content-type":"text/plain;charset=UTF-8"},"body":"{\"title\":\"Wigets学习之Flex布局\",\"slug\":\"Flutter Wiget\",\"time\":\"2021-06-24T10:39:58.000Z\",\"author\":\"PingTouG\",\"html\":\"\u003Ch2 id=\\\"flex-→-display-flexcss\\\"\u003EFlex → display: flex(Css)\u003C\u002Fh2\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E创建 Flex 布局\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003Edirection\u003C\u002Fcode\u003E：主轴方向(必填)：\u003Ccode\u003EAxis.horizontal(横向排列)\u003C\u002Fcode\u003E、\u003Ccode\u003EAxis.vertical(纵向排列)\u003C\u002Fcode\u003E。如果为\u003Ccode\u003EAxis.horizontal\u003C\u002Fcode\u003E则需要指定\u003Ccode\u003EtextDirection\u003C\u002Fcode\u003E参数\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EmainAxisAlignment\u003C\u002Fcode\u003E：主轴的对齐方式\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EmainAxisSize\u003C\u002Fcode\u003E：主轴占用的空间，默认为\u003Ccode\u003EMainAxisSize.max\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EcrossAxisAlignment\u003C\u002Fcode\u003E：交叉轴对齐方式\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EtextDirection\u003C\u002Fcode\u003E：横向文本排列方向\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EverticalDirection\u003C\u002Fcode\u003E：垂直方向的文本排列方向\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EtextBaseline\u003C\u002Fcode\u003E：基线对齐方式\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-dart\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;package\u003C\u002Fspan\u003E:flutter\u002Fmaterial.dart&#x27;;\\n\\nvoid main() {\\n  runApp(\u003Cspan class=\\\"hljs-type\\\"\u003EApp\u003C\u002Fspan\u003E());\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EApp\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EStatelessWidget\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EWidget\u003C\u002Fspan\u003E build(\u003Cspan class=\\\"hljs-type\\\"\u003EBuildContext\u003C\u002Fspan\u003E context) {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-type\\\"\u003EFlex\u003C\u002Fspan\u003E(\\n      direction: \u003Cspan class=\\\"hljs-type\\\"\u003EAxis\u003C\u002Fspan\u003E.vertical,\\n      textDirection: \u003Cspan class=\\\"hljs-type\\\"\u003ETextDirection\u003C\u002Fspan\u003E.ltr,\\n      mainAxisAlignment: \u003Cspan class=\\\"hljs-type\\\"\u003EMainAxisAlignment\u003C\u002Fspan\u003E.center,\\n      children: [\\n        \u003Cspan class=\\\"hljs-type\\\"\u003EContainer\u003C\u002Fspan\u003E(\\n          color: \u003Cspan class=\\\"hljs-type\\\"\u003EColors\u003C\u002Fspan\u003E.yellow,\\n          child: \u003Cspan class=\\\"hljs-type\\\"\u003EText\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;Hello\u003C\u002Fspan\u003E1&#x27;, textDirection: \u003Cspan class=\\\"hljs-type\\\"\u003ETextDirection\u003C\u002Fspan\u003E.ltr),\\n        ),\\n        \u003Cspan class=\\\"hljs-type\\\"\u003EContainer\u003C\u002Fspan\u003E(\\n          color: \u003Cspan class=\\\"hljs-type\\\"\u003EColors\u003C\u002Fspan\u003E.cyan,\\n          child: \u003Cspan class=\\\"hljs-type\\\"\u003EText\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;Hello\u003C\u002Fspan\u003E2&#x27;, textDirection: \u003Cspan class=\\\"hljs-type\\\"\u003ETextDirection\u003C\u002Fspan\u003E.ltr),\\n        )\\n      ],\\n    );\\n  }\\n}\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch2 id=\\\"row\\\"\u003ERow\u003C\u002Fh2\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E横向布局，和\u003Ccode\u003EFlex\u003C\u002Fcode\u003E参数\u003Ccode\u003Edirection=Axis.horizontal\u003C\u002Fcode\u003E一样\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003Echildren\u003C\u002Fcode\u003E: 子部件\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EmainAxisAlignment\u003C\u002Fcode\u003E：主轴的对齐方式\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EmainAxisSize\u003C\u002Fcode\u003E：主轴占用的空间，默认为\u003Ccode\u003EMainAxisSize.max\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EcrossAxisAlignment\u003C\u002Fcode\u003E：交叉轴对齐方式\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EtextDirection\u003C\u002Fcode\u003E：横向文本排列方向，需要指定\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EverticalDirection\u003C\u002Fcode\u003E：垂直方向的文本排列方向\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EtextBaseline\u003C\u002Fcode\u003E：基线对齐方式\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-dart\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;package\u003C\u002Fspan\u003E:flutter\u002Fmaterial.dart&#x27;;\\n\\nvoid main() {\\n  runApp(\u003Cspan class=\\\"hljs-type\\\"\u003EApp\u003C\u002Fspan\u003E());\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EApp\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EStatelessWidget\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EWidget\u003C\u002Fspan\u003E build(\u003Cspan class=\\\"hljs-type\\\"\u003EBuildContext\u003C\u002Fspan\u003E context) {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-type\\\"\u003ERow\u003C\u002Fspan\u003E(\\n      textDirection: \u003Cspan class=\\\"hljs-type\\\"\u003ETextDirection\u003C\u002Fspan\u003E.ltr,\\n      children: [\\n        \u003Cspan class=\\\"hljs-type\\\"\u003EContainer\u003C\u002Fspan\u003E(\\n          color: \u003Cspan class=\\\"hljs-type\\\"\u003EColors\u003C\u002Fspan\u003E.yellow,\\n          child: \u003Cspan class=\\\"hljs-type\\\"\u003EText\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;Hello\u003C\u002Fspan\u003E1&#x27;, textDirection: \u003Cspan class=\\\"hljs-type\\\"\u003ETextDirection\u003C\u002Fspan\u003E.ltr),\\n        ),\\n        \u003Cspan class=\\\"hljs-type\\\"\u003EContainer\u003C\u002Fspan\u003E(\\n          color: \u003Cspan class=\\\"hljs-type\\\"\u003EColors\u003C\u002Fspan\u003E.cyan,\\n          child: \u003Cspan class=\\\"hljs-type\\\"\u003EText\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;Hello\u003C\u002Fspan\u003E2&#x27;, textDirection: \u003Cspan class=\\\"hljs-type\\\"\u003ETextDirection\u003C\u002Fspan\u003E.ltr),\\n        )\\n      ],\\n    );\\n  }\\n}\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch2 id=\\\"column\\\"\u003EColumn\u003C\u002Fh2\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E纵向布局，和\u003Ccode\u003EFlex\u003C\u002Fcode\u003E参数\u003Ccode\u003Edirection=Axis.vertical\u003C\u002Fcode\u003E一样\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003Echildren\u003C\u002Fcode\u003E: 子部件\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EmainAxisAlignment\u003C\u002Fcode\u003E：主轴的对齐方式\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EmainAxisSize\u003C\u002Fcode\u003E：主轴占用的空间，默认为\u003Ccode\u003EMainAxisSize.max\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EcrossAxisAlignment\u003C\u002Fcode\u003E：交叉轴对齐方式\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EtextDirection\u003C\u002Fcode\u003E：纵向文本排列方向\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EverticalDirection\u003C\u002Fcode\u003E：垂直方向的文本排列方向\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EtextBaseline\u003C\u002Fcode\u003E：基线对齐方式\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-dart\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;package\u003C\u002Fspan\u003E:flutter\u002Fmaterial.dart&#x27;;\\n\\nvoid main() {\\n  runApp(\u003Cspan class=\\\"hljs-type\\\"\u003EApp\u003C\u002Fspan\u003E());\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EApp\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EStatelessWidget\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EWidget\u003C\u002Fspan\u003E build(\u003Cspan class=\\\"hljs-type\\\"\u003EBuildContext\u003C\u002Fspan\u003E context) {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-type\\\"\u003EColumn\u003C\u002Fspan\u003E(\\n      children: [\\n        \u003Cspan class=\\\"hljs-type\\\"\u003EContainer\u003C\u002Fspan\u003E(\\n          color: \u003Cspan class=\\\"hljs-type\\\"\u003EColors\u003C\u002Fspan\u003E.yellow,\\n          child: \u003Cspan class=\\\"hljs-type\\\"\u003EText\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;Hello\u003C\u002Fspan\u003E1&#x27;, textDirection: \u003Cspan class=\\\"hljs-type\\\"\u003ETextDirection\u003C\u002Fspan\u003E.ltr),\\n        ),\\n        \u003Cspan class=\\\"hljs-type\\\"\u003EContainer\u003C\u002Fspan\u003E(\\n          color: \u003Cspan class=\\\"hljs-type\\\"\u003EColors\u003C\u002Fspan\u003E.cyan,\\n          child: \u003Cspan class=\\\"hljs-type\\\"\u003EText\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;Hello\u003C\u002Fspan\u003E2&#x27;, textDirection: \u003Cspan class=\\\"hljs-type\\\"\u003ETextDirection\u003C\u002Fspan\u003E.ltr),\\n        )\\n      ],\\n    );\\n  }\\n}\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch2 id=\\\"expanded\\\"\u003EExpanded\u003C\u002Fh2\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E用于扩展\u003Ccode\u003EFlex\u003C\u002Fcode\u003E、\u003Ccode\u003ERow\u003C\u002Fcode\u003E、\u003Ccode\u003EColumn\u003C\u002Fcode\u003E，使用此部件可以使子部件撑满指定比例\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003Echild\u003C\u002Fcode\u003E：子部件(必填)\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Eflex\u003C\u002Fcode\u003E：占用比例，默认为 1\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-dart\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;package\u003C\u002Fspan\u003E:flutter\u002Fmaterial.dart&#x27;;\\n\\nvoid main() {\\n  runApp(\u003Cspan class=\\\"hljs-type\\\"\u003EApp\u003C\u002Fspan\u003E());\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EApp\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EStatelessWidget\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EWidget\u003C\u002Fspan\u003E build(\u003Cspan class=\\\"hljs-type\\\"\u003EBuildContext\u003C\u002Fspan\u003E context) {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-type\\\"\u003EFlex\u003C\u002Fspan\u003E(\\n      direction: \u003Cspan class=\\\"hljs-type\\\"\u003EAxis\u003C\u002Fspan\u003E.horizontal,\\n      textDirection: \u003Cspan class=\\\"hljs-type\\\"\u003ETextDirection\u003C\u002Fspan\u003E.ltr,\\n      children: [\\n        \u003Cspan class=\\\"hljs-type\\\"\u003EExpanded\u003C\u002Fspan\u003E(\\n            flex: \u003Cspan class=\\\"hljs-number\\\"\u003E2\u003C\u002Fspan\u003E,\\n            child: \u003Cspan class=\\\"hljs-type\\\"\u003EContainer\u003C\u002Fspan\u003E(\\n              color: \u003Cspan class=\\\"hljs-type\\\"\u003EColors\u003C\u002Fspan\u003E.yellow,\\n              child: \u003Cspan class=\\\"hljs-type\\\"\u003EText\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;Hello\u003C\u002Fspan\u003E1&#x27;, textDirection: \u003Cspan class=\\\"hljs-type\\\"\u003ETextDirection\u003C\u002Fspan\u003E.ltr),\\n            )),\\n        \u003Cspan class=\\\"hljs-type\\\"\u003EExpanded\u003C\u002Fspan\u003E(\\n            flex: \u003Cspan class=\\\"hljs-number\\\"\u003E4\u003C\u002Fspan\u003E,\\n            child: \u003Cspan class=\\\"hljs-type\\\"\u003EContainer\u003C\u002Fspan\u003E(\\n              color: \u003Cspan class=\\\"hljs-type\\\"\u003EColors\u003C\u002Fspan\u003E.cyan,\\n              child: \u003Cspan class=\\\"hljs-type\\\"\u003EText\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;Hello\u003C\u002Fspan\u003E2&#x27;, textDirection: \u003Cspan class=\\\"hljs-type\\\"\u003ETextDirection\u003C\u002Fspan\u003E.ltr),\\n            ))\\n      ],\\n    );\\n  }\\n}\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\"}"}</script>
+</div>
+	</body>
+</html>

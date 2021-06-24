@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" content="#333333" />
+		<link rel="stylesheet" href="/assets/styles/global.css" />
+		<title>Wigets学习之Container</title>
+
+		
+
+		<link rel="modulepreload" href="/./_app/start-bf43ee66.js">
+		<link rel="modulepreload" href="/./_app/chunks/vendor-d00531f1.js">
+		<link rel="modulepreload" href="/./_app/pages/__layout.svelte-2c475058.js">
+		<link rel="modulepreload" href="/./_app/pages/article/__layout.svelte-42f46e6c.js">
+		<link rel="modulepreload" href="/./_app/pages/article/[category]/[id].svelte-f684a407.js">
+		<link rel="modulepreload" href="/./_app/chunks/utils-a81d5505.js">
+		<link rel="stylesheet" href="/./_app/assets/start-a8cd1609.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/__layout.svelte-dfbf40bb.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/article/__layout.svelte-1448dd73.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/article/[category]/[id].svelte-7f79f039.css">
+
+		<script type="module">
+			import { start } from "/./_app/start-bf43ee66.js";
+			start({
+				target: document.querySelector("#svelte"),
+				paths: {"base":"","assets":"/."},
+				session: {},
+				host: location.host,
+				route: true,
+				spa: false,
+				trailing_slash: "never",
+				hydrate: {
+					status: 200,
+					error: null,
+					nodes: [
+						import("/./_app/pages/__layout.svelte-2c475058.js"),
+						import("/./_app/pages/article/__layout.svelte-42f46e6c.js"),
+						import("/./_app/pages/article/[category]/[id].svelte-f684a407.js")
+					],
+					page: {
+						host: location.host, // TODO this is redundant
+						path: "/article/flutter/20210624094314",
+						query: new URLSearchParams(""),
+						params: {"category":"flutter","id":"20210624094314"}
+					}
+				}
+			});
+		</script>
+	</head>
+	<body>
+		<div id="svelte">
+
+
+
+<section class="svelte-jbk32v"><header class="svelte-jbk32v"><a href="/"><img class="logo svelte-jbk32v" src="/assets/images/logo.png" alt="code book logo"></a>
+<a class="github svelte-jbk32v" href="https://github.com/PingTouG" target="_blank"><i class="iconfont icon-github svelte-jbk32v"></i></a></header>
+	<main><section><main class="svelte-1fbldbu">
+
+<section class="md"><h1 class="title">Wigets学习之Container</h1>
+  <div class="info svelte-1vg5uky"><div class="author svelte-1vg5uky">作者：PingTouG</div>
+    <div class="time">时间：2021-06-24 09:43:37</div></div>
+
+  <div class="md-content"><h2 id="container-→-divhtml">Container → div(HTML)</h2>
+<blockquote>
+<p>一个设置基本样式大小的容器部件</p>
+</blockquote>
+<ul>
+<li><code>child</code>：子部件</li>
+<li><code>height</code>: 高度</li>
+<li><code>width</code>：宽度</li>
+<li><code>padding</code>: 内边距</li>
+<li><code>margin</code>：外边距</li>
+<li><code>color</code>：背景色</li>
+<li><code>transform</code>：容器变换，类似于<code>Css</code>中的<code>transform</code></li>
+<li><code>transformAlignment</code>：变换的对齐方式</li>
+<li><code>decoration</code>：装饰容器，指定此参数则不能指定<code>color</code>参数，是一个<code>BoxDecoration</code>类型</li>
+<li><code>alignment</code>：容器中的子部件对齐方式，指定此参数则必须指定<code>decoration</code>参数</li>
+<li><code>constraints</code>: 创建一个装饰部件，指定此参数则不能指定<code>color</code>和<code>decoration</code>参数</li>
+</ul>
+<blockquote>
+<p>注意：Container 如果设置宽高无效的话，是因为 Container 计算宽高时需要考虑到父部件的尺寸约束(<code>BoxConstraints</code>)<code>，BoxConstraints</code>有四个参数: <code>minWidth</code>、<code>maxWidth</code>、<code>minHeight</code>、<code>maxHeight</code>。当宽高不在<code>constraints</code>范围内时则会强制计算符合<code>constraints</code>要求的值，而不再使用设置的宽高。可以使用 <code>Row</code>或<code>Column</code>部件包裹。</p>
+</blockquote>
+<h3 id="boxdecoration">BoxDecoration</h3>
+<ul>
+<li><code>color</code>：背景色</li>
+<li><code>image</code>: 背景图</li>
+<li><code>border</code>: 边框</li>
+<li><code>borderRadius</code>：圆角</li>
+<li><code>gradient</code>：渐变背景</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-keyword">import</span> <span class="hljs-symbol">&#x27;package</span>:flutter/material.dart&#x27;;
+
+void main() {
+  runApp(<span class="hljs-type">App</span>());
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">App</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatelessWidget</span> </span>{
+  <span class="hljs-meta">@override</span>
+  <span class="hljs-type">Widget</span> build(<span class="hljs-type">BuildContext</span> context) {
+    <span class="hljs-keyword">return</span> <span class="hljs-type">Center</span>(
+      child: <span class="hljs-type">Container</span>(
+        height: <span class="hljs-number">400</span>,
+        width: <span class="hljs-number">400</span>,
+        padding: <span class="hljs-type">EdgeInsets</span>.only(top: <span class="hljs-number">40</span>, left: <span class="hljs-number">20</span>),
+        decoration: <span class="hljs-type">BoxDecoration</span>(
+            borderRadius: <span class="hljs-type">BorderRadius</span>.all(<span class="hljs-type">Radius</span>.circular(<span class="hljs-number">50</span>)),
+            image: <span class="hljs-type">DecorationImage</span>(
+                image: <span class="hljs-type">NetworkImage</span>(
+                    <span class="hljs-symbol">&#x27;https</span>:<span class="hljs-comment">//img2.baidu.com/it/u=2969910583,3071772098&amp;fm=26&amp;fmt=auto&amp;gp=0.jpg&#x27;)),</span>
+            color: <span class="hljs-type">Colors</span>.yellow,
+            gradient: <span class="hljs-type">LinearGradient</span>(colors: [<span class="hljs-type">Colors</span>.red.shade400, <span class="hljs-type">Colors</span>.blue]),
+            border: <span class="hljs-type">Border</span>.all(width: <span class="hljs-number">2</span>, color: <span class="hljs-type">Colors</span>.white),
+            boxShadow: [<span class="hljs-type">BoxShadow</span>(color: <span class="hljs-type">Colors</span>.green, blurRadius: <span class="hljs-number">50</span>)]),
+        child: <span class="hljs-type">Text</span>(
+          <span class="hljs-symbol">&#x27;Hello</span> <span class="hljs-type">Fluter</span>&#x27;,
+          textDirection: <span class="hljs-type">TextDirection</span>.ltr,
+        ),
+      ),
+    );
+  }
+}
+</code></pre>
+</div>
+</section></main>
+</section></main>
+	
+<div class="back-top svelte-9c9s8u" style="bottom: 5rem;right: 0.625rem;display: none"><i class="iconfont icon-back-top"></i>
+</div>
+</section>
+
+
+
+	<script type="svelte-data" url="20210624094314.json">{"status":200,"statusText":"","headers":{"content-type":"text/plain;charset=UTF-8"},"body":"{\"title\":\"Wigets学习之Container\",\"slug\":\"Flutter Wiget\",\"time\":\"2021-06-24T09:43:37.000Z\",\"author\":\"PingTouG\",\"html\":\"\u003Ch2 id=\\\"container-→-divhtml\\\"\u003EContainer → div(HTML)\u003C\u002Fh2\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E一个设置基本样式大小的容器部件\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003Echild\u003C\u002Fcode\u003E：子部件\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Eheight\u003C\u002Fcode\u003E: 高度\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Ewidth\u003C\u002Fcode\u003E：宽度\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Epadding\u003C\u002Fcode\u003E: 内边距\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Emargin\u003C\u002Fcode\u003E：外边距\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Ecolor\u003C\u002Fcode\u003E：背景色\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Etransform\u003C\u002Fcode\u003E：容器变换，类似于\u003Ccode\u003ECss\u003C\u002Fcode\u003E中的\u003Ccode\u003Etransform\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EtransformAlignment\u003C\u002Fcode\u003E：变换的对齐方式\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Edecoration\u003C\u002Fcode\u003E：装饰容器，指定此参数则不能指定\u003Ccode\u003Ecolor\u003C\u002Fcode\u003E参数，是一个\u003Ccode\u003EBoxDecoration\u003C\u002Fcode\u003E类型\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Ealignment\u003C\u002Fcode\u003E：容器中的子部件对齐方式，指定此参数则必须指定\u003Ccode\u003Edecoration\u003C\u002Fcode\u003E参数\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Econstraints\u003C\u002Fcode\u003E: 创建一个装饰部件，指定此参数则不能指定\u003Ccode\u003Ecolor\u003C\u002Fcode\u003E和\u003Ccode\u003Edecoration\u003C\u002Fcode\u003E参数\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E注意：Container 如果设置宽高无效的话，是因为 Container 计算宽高时需要考虑到父部件的尺寸约束(\u003Ccode\u003EBoxConstraints\u003C\u002Fcode\u003E)\u003Ccode\u003E，BoxConstraints\u003C\u002Fcode\u003E有四个参数: \u003Ccode\u003EminWidth\u003C\u002Fcode\u003E、\u003Ccode\u003EmaxWidth\u003C\u002Fcode\u003E、\u003Ccode\u003EminHeight\u003C\u002Fcode\u003E、\u003Ccode\u003EmaxHeight\u003C\u002Fcode\u003E。当宽高不在\u003Ccode\u003Econstraints\u003C\u002Fcode\u003E范围内时则会强制计算符合\u003Ccode\u003Econstraints\u003C\u002Fcode\u003E要求的值，而不再使用设置的宽高。可以使用 \u003Ccode\u003ERow\u003C\u002Fcode\u003E或\u003Ccode\u003EColumn\u003C\u002Fcode\u003E部件包裹。\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Ch3 id=\\\"boxdecoration\\\"\u003EBoxDecoration\u003C\u002Fh3\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003Ecolor\u003C\u002Fcode\u003E：背景色\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Eimage\u003C\u002Fcode\u003E: 背景图\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Eborder\u003C\u002Fcode\u003E: 边框\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EborderRadius\u003C\u002Fcode\u003E：圆角\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Egradient\u003C\u002Fcode\u003E：渐变背景\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-dart\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;package\u003C\u002Fspan\u003E:flutter\u002Fmaterial.dart&#x27;;\\n\\nvoid main() {\\n  runApp(\u003Cspan class=\\\"hljs-type\\\"\u003EApp\u003C\u002Fspan\u003E());\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EApp\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EStatelessWidget\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EWidget\u003C\u002Fspan\u003E build(\u003Cspan class=\\\"hljs-type\\\"\u003EBuildContext\u003C\u002Fspan\u003E context) {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-type\\\"\u003ECenter\u003C\u002Fspan\u003E(\\n      child: \u003Cspan class=\\\"hljs-type\\\"\u003EContainer\u003C\u002Fspan\u003E(\\n        height: \u003Cspan class=\\\"hljs-number\\\"\u003E400\u003C\u002Fspan\u003E,\\n        width: \u003Cspan class=\\\"hljs-number\\\"\u003E400\u003C\u002Fspan\u003E,\\n        padding: \u003Cspan class=\\\"hljs-type\\\"\u003EEdgeInsets\u003C\u002Fspan\u003E.only(top: \u003Cspan class=\\\"hljs-number\\\"\u003E40\u003C\u002Fspan\u003E, left: \u003Cspan class=\\\"hljs-number\\\"\u003E20\u003C\u002Fspan\u003E),\\n        decoration: \u003Cspan class=\\\"hljs-type\\\"\u003EBoxDecoration\u003C\u002Fspan\u003E(\\n            borderRadius: \u003Cspan class=\\\"hljs-type\\\"\u003EBorderRadius\u003C\u002Fspan\u003E.all(\u003Cspan class=\\\"hljs-type\\\"\u003ERadius\u003C\u002Fspan\u003E.circular(\u003Cspan class=\\\"hljs-number\\\"\u003E50\u003C\u002Fspan\u003E)),\\n            image: \u003Cspan class=\\\"hljs-type\\\"\u003EDecorationImage\u003C\u002Fspan\u003E(\\n                image: \u003Cspan class=\\\"hljs-type\\\"\u003ENetworkImage\u003C\u002Fspan\u003E(\\n                    \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;https\u003C\u002Fspan\u003E:\u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002Fimg2.baidu.com\u002Fit\u002Fu=2969910583,3071772098&amp;fm=26&amp;fmt=auto&amp;gp=0.jpg&#x27;)),\u003C\u002Fspan\u003E\\n            color: \u003Cspan class=\\\"hljs-type\\\"\u003EColors\u003C\u002Fspan\u003E.yellow,\\n            gradient: \u003Cspan class=\\\"hljs-type\\\"\u003ELinearGradient\u003C\u002Fspan\u003E(colors: [\u003Cspan class=\\\"hljs-type\\\"\u003EColors\u003C\u002Fspan\u003E.red.shade400, \u003Cspan class=\\\"hljs-type\\\"\u003EColors\u003C\u002Fspan\u003E.blue]),\\n            border: \u003Cspan class=\\\"hljs-type\\\"\u003EBorder\u003C\u002Fspan\u003E.all(width: \u003Cspan class=\\\"hljs-number\\\"\u003E2\u003C\u002Fspan\u003E, color: \u003Cspan class=\\\"hljs-type\\\"\u003EColors\u003C\u002Fspan\u003E.white),\\n            boxShadow: [\u003Cspan class=\\\"hljs-type\\\"\u003EBoxShadow\u003C\u002Fspan\u003E(color: \u003Cspan class=\\\"hljs-type\\\"\u003EColors\u003C\u002Fspan\u003E.green, blurRadius: \u003Cspan class=\\\"hljs-number\\\"\u003E50\u003C\u002Fspan\u003E)]),\\n        child: \u003Cspan class=\\\"hljs-type\\\"\u003EText\u003C\u002Fspan\u003E(\\n          \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;Hello\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-type\\\"\u003EFluter\u003C\u002Fspan\u003E&#x27;,\\n          textDirection: \u003Cspan class=\\\"hljs-type\\\"\u003ETextDirection\u003C\u002Fspan\u003E.ltr,\\n        ),\\n      ),\\n    );\\n  }\\n}\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\"}"}</script>
+</div>
+	</body>
+</html>
