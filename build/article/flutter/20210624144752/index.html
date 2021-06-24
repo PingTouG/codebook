@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" content="#333333" />
+		<link rel="stylesheet" href="/assets/styles/global.css" />
+		<title>Wigets学习之Stack</title>
+
+		
+
+		<link rel="modulepreload" href="/./_app/start-bf43ee66.js">
+		<link rel="modulepreload" href="/./_app/chunks/vendor-d00531f1.js">
+		<link rel="modulepreload" href="/./_app/pages/__layout.svelte-2c475058.js">
+		<link rel="modulepreload" href="/./_app/pages/article/__layout.svelte-42f46e6c.js">
+		<link rel="modulepreload" href="/./_app/pages/article/[category]/[id].svelte-f684a407.js">
+		<link rel="modulepreload" href="/./_app/chunks/utils-a81d5505.js">
+		<link rel="stylesheet" href="/./_app/assets/start-a8cd1609.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/__layout.svelte-dfbf40bb.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/article/__layout.svelte-1448dd73.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/article/[category]/[id].svelte-7f79f039.css">
+
+		<script type="module">
+			import { start } from "/./_app/start-bf43ee66.js";
+			start({
+				target: document.querySelector("#svelte"),
+				paths: {"base":"","assets":"/."},
+				session: {},
+				host: location.host,
+				route: true,
+				spa: false,
+				trailing_slash: "never",
+				hydrate: {
+					status: 200,
+					error: null,
+					nodes: [
+						import("/./_app/pages/__layout.svelte-2c475058.js"),
+						import("/./_app/pages/article/__layout.svelte-42f46e6c.js"),
+						import("/./_app/pages/article/[category]/[id].svelte-f684a407.js")
+					],
+					page: {
+						host: location.host, // TODO this is redundant
+						path: "/article/flutter/20210624144752",
+						query: new URLSearchParams(""),
+						params: {"category":"flutter","id":"20210624144752"}
+					}
+				}
+			});
+		</script>
+	</head>
+	<body>
+		<div id="svelte">
+
+
+
+<section class="svelte-jbk32v"><header class="svelte-jbk32v"><a href="/"><img class="logo svelte-jbk32v" src="/assets/images/logo.png" alt="code book logo"></a>
+<a class="github svelte-jbk32v" href="https://github.com/PingTouG" target="_blank"><i class="iconfont icon-github svelte-jbk32v"></i></a></header>
+	<main><section><main class="svelte-1fbldbu">
+
+<section class="md"><h1 class="title">Wigets学习之Stack</h1>
+  <div class="info svelte-1vg5uky"><div class="author svelte-1vg5uky">作者：PingTouG</div>
+    <div class="time">时间：2021-06-24 14:48:24</div></div>
+
+  <div class="md-content"><h2 id="stack-→-postion-absolutecss">Stack → postion: absolute(Css)</h2>
+<blockquote>
+<p>使子部件绝对定位，可以配合使用<code>Positioned</code>部件一起使用，实现类似<code>Css</code>中的绝对定位效果</p>
+</blockquote>
+<ul>
+<li><code>textDirection</code>：文字排列方式</li>
+<li><code>fit</code>：定义未定位的对象大小，<code>StackFit.loose(不约束)</code>、<code>StackFit.expand(充满)</code>、<code>StackFit.passthrough(继承父级约束)</code></li>
+</ul>
+<h2 id="positioned">Positioned</h2>
+<blockquote>
+<p>设置在<code>Stack</code>中的位置</p>
+</blockquote>
+<ul>
+<li><code>child</code>：子部件(必传)</li>
+<li><code>left</code>：左侧距离</li>
+<li><code>top</code>：顶部距离</li>
+<li><code>right</code>：右侧距离</li>
+<li><code>bottom</code>：底部距离</li>
+<li><code>height</code>：高度</li>
+<li><code>width</code>：宽度</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-keyword">import</span> <span class="hljs-symbol">&#x27;package</span>:flutter/material.dart&#x27;;
+
+void main() {
+  runApp(<span class="hljs-type">App</span>());
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">App</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatelessWidget</span> </span>{
+  <span class="hljs-meta">@override</span>
+  <span class="hljs-type">Widget</span> build(<span class="hljs-type">BuildContext</span> context) {
+    <span class="hljs-keyword">return</span> <span class="hljs-type">Stack</span>(
+      textDirection: <span class="hljs-type">TextDirection</span>.ltr,
+      fit: <span class="hljs-type">StackFit</span>.loose,
+      children: [
+        <span class="hljs-type">Positioned</span>(
+            bottom: <span class="hljs-number">20</span>,
+            height: <span class="hljs-number">200</span>,
+            width: <span class="hljs-number">200</span>,
+            child: <span class="hljs-type">Container</span>(
+              color: <span class="hljs-type">Colors</span>.yellow,
+            )),
+        <span class="hljs-type">Container</span>(
+          height: <span class="hljs-number">400</span>,
+          width: <span class="hljs-number">400</span>,
+          color: <span class="hljs-type">Colors</span>.green,
+        ),
+      ],
+    );
+  }
+}
+</code></pre>
+</div>
+</section></main>
+</section></main>
+	
+<div class="back-top svelte-9c9s8u" style="bottom: 5rem;right: 0.625rem;display: none"><i class="iconfont icon-back-top"></i>
+</div>
+</section>
+
+
+
+	<script type="svelte-data" url="20210624144752.json">{"status":200,"statusText":"","headers":{"content-type":"text/plain;charset=UTF-8"},"body":"{\"title\":\"Wigets学习之Stack\",\"slug\":\"Flutter Wiget\",\"time\":\"2021-06-24T14:48:24.000Z\",\"author\":\"PingTouG\",\"html\":\"\u003Ch2 id=\\\"stack-→-postion-absolutecss\\\"\u003EStack → postion: absolute(Css)\u003C\u002Fh2\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E使子部件绝对定位，可以配合使用\u003Ccode\u003EPositioned\u003C\u002Fcode\u003E部件一起使用，实现类似\u003Ccode\u003ECss\u003C\u002Fcode\u003E中的绝对定位效果\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003EtextDirection\u003C\u002Fcode\u003E：文字排列方式\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Efit\u003C\u002Fcode\u003E：定义未定位的对象大小，\u003Ccode\u003EStackFit.loose(不约束)\u003C\u002Fcode\u003E、\u003Ccode\u003EStackFit.expand(充满)\u003C\u002Fcode\u003E、\u003Ccode\u003EStackFit.passthrough(继承父级约束)\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Ch2 id=\\\"positioned\\\"\u003EPositioned\u003C\u002Fh2\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E设置在\u003Ccode\u003EStack\u003C\u002Fcode\u003E中的位置\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003Echild\u003C\u002Fcode\u003E：子部件(必传)\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Eleft\u003C\u002Fcode\u003E：左侧距离\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Etop\u003C\u002Fcode\u003E：顶部距离\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Eright\u003C\u002Fcode\u003E：右侧距离\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Ebottom\u003C\u002Fcode\u003E：底部距离\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Eheight\u003C\u002Fcode\u003E：高度\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Ewidth\u003C\u002Fcode\u003E：宽度\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-dart\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;package\u003C\u002Fspan\u003E:flutter\u002Fmaterial.dart&#x27;;\\n\\nvoid main() {\\n  runApp(\u003Cspan class=\\\"hljs-type\\\"\u003EApp\u003C\u002Fspan\u003E());\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EApp\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EStatelessWidget\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EWidget\u003C\u002Fspan\u003E build(\u003Cspan class=\\\"hljs-type\\\"\u003EBuildContext\u003C\u002Fspan\u003E context) {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-type\\\"\u003EStack\u003C\u002Fspan\u003E(\\n      textDirection: \u003Cspan class=\\\"hljs-type\\\"\u003ETextDirection\u003C\u002Fspan\u003E.ltr,\\n      fit: \u003Cspan class=\\\"hljs-type\\\"\u003EStackFit\u003C\u002Fspan\u003E.loose,\\n      children: [\\n        \u003Cspan class=\\\"hljs-type\\\"\u003EPositioned\u003C\u002Fspan\u003E(\\n            bottom: \u003Cspan class=\\\"hljs-number\\\"\u003E20\u003C\u002Fspan\u003E,\\n            height: \u003Cspan class=\\\"hljs-number\\\"\u003E200\u003C\u002Fspan\u003E,\\n            width: \u003Cspan class=\\\"hljs-number\\\"\u003E200\u003C\u002Fspan\u003E,\\n            child: \u003Cspan class=\\\"hljs-type\\\"\u003EContainer\u003C\u002Fspan\u003E(\\n              color: \u003Cspan class=\\\"hljs-type\\\"\u003EColors\u003C\u002Fspan\u003E.yellow,\\n            )),\\n        \u003Cspan class=\\\"hljs-type\\\"\u003EContainer\u003C\u002Fspan\u003E(\\n          height: \u003Cspan class=\\\"hljs-number\\\"\u003E400\u003C\u002Fspan\u003E,\\n          width: \u003Cspan class=\\\"hljs-number\\\"\u003E400\u003C\u002Fspan\u003E,\\n          color: \u003Cspan class=\\\"hljs-type\\\"\u003EColors\u003C\u002Fspan\u003E.green,\\n        ),\\n      ],\\n    );\\n  }\\n}\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\"}"}</script>
+</div>
+	</body>
+</html>
