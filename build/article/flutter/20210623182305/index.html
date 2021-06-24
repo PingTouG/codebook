@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" content="#333333" />
+		<link rel="stylesheet" href="/assets/styles/global.css" />
+		<title>Flutter常见问题</title>
+
+		
+
+		<link rel="modulepreload" href="/./_app/start-bf43ee66.js">
+		<link rel="modulepreload" href="/./_app/chunks/vendor-d00531f1.js">
+		<link rel="modulepreload" href="/./_app/pages/__layout.svelte-2c475058.js">
+		<link rel="modulepreload" href="/./_app/pages/article/__layout.svelte-42f46e6c.js">
+		<link rel="modulepreload" href="/./_app/pages/article/[category]/[id].svelte-f684a407.js">
+		<link rel="modulepreload" href="/./_app/chunks/utils-a81d5505.js">
+		<link rel="stylesheet" href="/./_app/assets/start-a8cd1609.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/__layout.svelte-dfbf40bb.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/article/__layout.svelte-1448dd73.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/article/[category]/[id].svelte-7f79f039.css">
+
+		<script type="module">
+			import { start } from "/./_app/start-bf43ee66.js";
+			start({
+				target: document.querySelector("#svelte"),
+				paths: {"base":"","assets":"/."},
+				session: {},
+				host: location.host,
+				route: true,
+				spa: false,
+				trailing_slash: "never",
+				hydrate: {
+					status: 200,
+					error: null,
+					nodes: [
+						import("/./_app/pages/__layout.svelte-2c475058.js"),
+						import("/./_app/pages/article/__layout.svelte-42f46e6c.js"),
+						import("/./_app/pages/article/[category]/[id].svelte-f684a407.js")
+					],
+					page: {
+						host: location.host, // TODO this is redundant
+						path: "/article/flutter/20210623182305",
+						query: new URLSearchParams(""),
+						params: {"category":"flutter","id":"20210623182305"}
+					}
+				}
+			});
+		</script>
+	</head>
+	<body>
+		<div id="svelte">
+
+
+
+<section class="svelte-jbk32v"><header class="svelte-jbk32v"><a href="/"><img class="logo svelte-jbk32v" src="/assets/images/logo.png" alt="code book logo"></a>
+<a class="github svelte-jbk32v" href="https://github.com/PingTouG" target="_blank"><i class="iconfont icon-github svelte-jbk32v"></i></a></header>
+	<main><section><main class="svelte-1fbldbu">
+
+<section class="md"><h1 class="title">Flutter常见问题</h1>
+  <div class="info svelte-1vg5uky"><div class="author svelte-1vg5uky">作者：PingTouG</div>
+    <div class="time">时间：2021-06-23 18:24:00</div></div>
+
+  <div class="md-content"><h2 id="问题1-running-gradle-task-assembledebug长时间无反应-或者could-not-determine-the-dependencies-of-task-appcompiledebugjavawithjavac">问题1: Running Gradle task &#39;assembleDebug&#39;...长时间无反应 或者Could not determine the dependencies of task &#39;:app:compileDebugJavaWithJavac&#39;</h2>
+<p>此问题是因为<code>Google</code>被墙了,需要配置一下国内镜像,这里使用阿里云镜像.修改<code>android\build.gradle</code>如下即可.此问题一般只会在搭建环境后第一次创建项目并运行,此后再创建项目则不会再出现此问题.</p>
+<p><code>android\build.gradle</code></p>
+<pre><code class="language-diff"><span class="hljs-keyword">buildscript</span> {
+    ext.kotlin_version = <span class="hljs-string">&#x27;1.3.50&#x27;</span>
+    repositories {
+-        google()
+-        jcenter()
++        maven { url <span class="hljs-string">&#x27;https://maven.aliyun.com/repository/google&#x27;</span> }
++        <span class="hljs-keyword">maven</span> { url <span class="hljs-string">&#x27;https://maven.aliyun.com/repository/jcenter&#x27;</span> }
++        <span class="hljs-keyword">maven</span> { url <span class="hljs-string">&#x27;http://maven.aliyun.com/nexus/content/groups/public&#x27;</span> }
++        <span class="hljs-keyword">maven</span> { url <span class="hljs-string">&#x27;http://download.flutter.io&#x27;</span>}
+    }
+
+    <span class="hljs-keyword">dependencies</span> {
+        classpath <span class="hljs-string">&#x27;com.android.tools.build:gradle:4.1.0&#x27;</span>
+        classpath <span class="hljs-string">&quot;org.jetbrains.kotlin:kotlin-gradle-plugin:<span class="hljs-variable">$kotlin_version</span>&quot;</span>
+    }
+}
+
+<span class="hljs-keyword">allprojects</span> {
+    repositories {
+-        google()
+-        jcenter()
++        maven { url <span class="hljs-string">&#x27;https://maven.aliyun.com/repository/google&#x27;</span> }
++        <span class="hljs-keyword">maven</span> { url <span class="hljs-string">&#x27;https://maven.aliyun.com/repository/jcenter&#x27;</span> }
++        <span class="hljs-keyword">maven</span> { url <span class="hljs-string">&#x27;http://maven.aliyun.com/nexus/content/groups/public&#x27;</span> }
++        <span class="hljs-keyword">maven</span> { url <span class="hljs-string">&#x27;http://download.flutter.io&#x27;</span>}
+    }
+}
+
+rootProject.buildDir = <span class="hljs-string">&#x27;../build&#x27;</span>
+<span class="hljs-keyword">subprojects</span> {
+    <span class="hljs-literal">project</span>.buildDir = <span class="hljs-string">&quot;${rootProject.buildDir}/${project.name}&quot;</span>
+}
+<span class="hljs-keyword">subprojects</span> {
+    <span class="hljs-literal">project</span>.evaluationDependsOn(<span class="hljs-string">&#x27;:app&#x27;</span>)
+}
+
+<span class="hljs-keyword">task</span> <span class="hljs-keyword">clean</span>(type: Delete) {
+    delete rootProject.buildDir
+}
+</code></pre>
+<h2 id="问题2-build-tools2902-android-sdk-build-tools-2902">问题2: build-tools;29.0.2 Android SDK Build-Tools 29.0.2</h2>
+<pre><code>FAILURE: <span class="hljs-keyword">Build</span> failed <span class="hljs-keyword">with</span> an exception.
+
+* What went wrong:
+Could <span class="hljs-keyword">not</span> determine the dependencies of task <span class="hljs-string">&#x27;:app:compileDebugJavaWithJavac&#x27;</span>.
+&gt; Failed <span class="hljs-keyword">to</span> install the following SDK components:
+      <span class="hljs-keyword">build</span>-tools;29.0.2 Android SDK <span class="hljs-keyword">Build</span>-Tools <span class="hljs-number">29.0</span><span class="hljs-number">.2</span>
+  Install the <span class="hljs-literal">missing</span> components <span class="hljs-keyword">using</span> the SDK manager <span class="hljs-keyword">in</span> Android Studio.
+<span class="hljs-number">2</span>
+
+* Try:
+Run <span class="hljs-keyword">with</span> --stacktrace <span class="hljs-keyword">option</span> <span class="hljs-keyword">to</span> get the stack trace. Run <span class="hljs-keyword">with</span> --info <span class="hljs-keyword">or</span> --debug <span class="hljs-keyword">option</span> <span class="hljs-keyword">to</span> get more <span class="hljs-built_in">log</span> output. Run <span class="hljs-keyword">with</span> --scan <span class="hljs-keyword">to</span> get full insights.
+
+* Get more help at https://help.gradle.org
+
+<span class="hljs-keyword">BUILD</span> FAILED <span class="hljs-keyword">in</span> <span class="hljs-number">4</span>s
+Exception: Gradle task assembleDebug failed <span class="hljs-keyword">with</span> exit code <span class="hljs-number">1</span>
+</code></pre>
+<p>此问题是因为Flutter打包使用的<code>Android SDK</code>和当前电脑上的不一致,通过<code>Flutter doctor</code>查看当前<code>Android SDK</code>的版本: <code>[√] Android toolchain - develop for Android devices (Android SDK version 30.0.3)</code>,然后在<code>android\app\build.gradle</code>文件中的<code>android</code>对象中添加<code>buildToolsVersion &quot;30.0.3&quot;</code>即可解决.</p>
+<p><code>android\app\build.gradle</code></p>
+<pre><code class="language-diff"><span class="hljs-keyword">def</span> localProperties = <span class="hljs-keyword">new</span> Properties()
+<span class="hljs-keyword">def</span> localPropertiesFile = rootProject.<span class="hljs-keyword">file</span>(<span class="hljs-string">&#x27;local.properties&#x27;</span>)
+<span class="hljs-keyword">if</span> (localPropertiesFile.exists()) {
+    localPropertiesFile.<span class="hljs-keyword">withReader</span>(<span class="hljs-string">&#x27;UTF-8&#x27;</span>) { reader -&gt;
+        localProperties.load(reader)
+    }
+}
+
+<span class="hljs-keyword">def</span> flutterRoot = localProperties.getProperty(<span class="hljs-string">&#x27;flutter.sdk&#x27;</span>)
+<span class="hljs-keyword">if</span> (flutterRoot == <span class="hljs-keyword">null</span>) {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> GradleException(<span class="hljs-string">&quot;Flutter SDK not found. Define location with flutter.sdk in the local.properties file.&quot;</span>)
+}
+
+<span class="hljs-keyword">def</span> flutterVersionCode = localProperties.getProperty(<span class="hljs-string">&#x27;flutter.versionCode&#x27;</span>)
+<span class="hljs-keyword">if</span> (flutterVersionCode == <span class="hljs-keyword">null</span>) {
+    flutterVersionCode = <span class="hljs-string">&#x27;1&#x27;</span>
+}
+
+<span class="hljs-keyword">def</span> flutterVersionName = localProperties.getProperty(<span class="hljs-string">&#x27;flutter.versionName&#x27;</span>)
+<span class="hljs-keyword">if</span> (flutterVersionName == <span class="hljs-keyword">null</span>) {
+    flutterVersionName = <span class="hljs-string">&#x27;1.0&#x27;</span>
+}
+
+apply plugin: <span class="hljs-string">&#x27;com.android.application&#x27;</span>
+apply plugin: <span class="hljs-string">&#x27;kotlin-android&#x27;</span>
+apply <span class="hljs-keyword">from</span>: <span class="hljs-string">&quot;$flutterRoot/packages/flutter_tools/gradle/flutter.gradle&quot;</span>
+
+android {
+    compileSdkVersion <span class="hljs-number">30</span>
++    buildToolsVersion <span class="hljs-string">&quot;30.0.3&quot;</span>
+
+    <span class="hljs-keyword">sourceSets</span> {
+        main.java.srcDirs += <span class="hljs-string">&#x27;src/main/kotlin&#x27;</span>
+    }
+
+    defaultConfig {
+        <span class="hljs-comment">// <span class="hljs-doctag">TODO:</span> Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).</span>
+        applicationId <span class="hljs-string">&quot;com.example.learn&quot;</span>
+        minSdkVersion <span class="hljs-number">16</span>
+        targetSdkVersion <span class="hljs-number">30</span>
+        versionCode flutterVersionCode.<span class="hljs-keyword">toInteger</span>()
+        versionName flutterVersionName
+    }
+
+    buildTypes {
+        release {
+            <span class="hljs-comment">// <span class="hljs-doctag">TODO:</span> Add your own signing config for the release build.</span>
+            <span class="hljs-comment">// Signing with the debug keys for now, so `flutter run --release` works.</span>
+            signingConfig signingConfigs.debug
+        }
+    }
+}
+
+flutter {
+    <span class="hljs-keyword">source</span> <span class="hljs-string">&#x27;../..&#x27;</span>
+}
+
+<span class="hljs-keyword">dependencies</span> {
+    implementation <span class="hljs-string">&quot;org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version&quot;</span>
+}
+</code></pre>
+</div>
+</section></main>
+</section></main>
+	
+<div class="back-top svelte-9c9s8u" style="bottom: 5rem;right: 0.625rem;display: none"><i class="iconfont icon-back-top"></i>
+</div>
+</section>
+
+
+
+	<script type="svelte-data" url="20210623182305.json">{"status":200,"statusText":"","headers":{"content-type":"text/plain;charset=UTF-8"},"body":"{\"title\":\"Flutter常见问题\",\"slug\":\"Flutter\",\"time\":\"2021-06-23T18:24:00.000Z\",\"author\":\"PingTouG\",\"html\":\"\u003Ch2 id=\\\"问题1-running-gradle-task-assembledebug长时间无反应-或者could-not-determine-the-dependencies-of-task-appcompiledebugjavawithjavac\\\"\u003E问题1: Running Gradle task &#39;assembleDebug&#39;...长时间无反应 或者Could not determine the dependencies of task &#39;:app:compileDebugJavaWithJavac&#39;\u003C\u002Fh2\u003E\\n\u003Cp\u003E此问题是因为\u003Ccode\u003EGoogle\u003C\u002Fcode\u003E被墙了,需要配置一下国内镜像,这里使用阿里云镜像.修改\u003Ccode\u003Eandroid\\\\build.gradle\u003C\u002Fcode\u003E如下即可.此问题一般只会在搭建环境后第一次创建项目并运行,此后再创建项目则不会再出现此问题.\u003C\u002Fp\u003E\\n\u003Cp\u003E\u003Ccode\u003Eandroid\\\\build.gradle\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-diff\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Ebuildscript\u003C\u002Fspan\u003E {\\n    ext.kotlin_version = \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;1.3.50&#x27;\u003C\u002Fspan\u003E\\n    repositories {\\n-        google()\\n-        jcenter()\\n+        maven { url \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;https:\u002F\u002Fmaven.aliyun.com\u002Frepository\u002Fgoogle&#x27;\u003C\u002Fspan\u003E }\\n+        \u003Cspan class=\\\"hljs-keyword\\\"\u003Emaven\u003C\u002Fspan\u003E { url \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;https:\u002F\u002Fmaven.aliyun.com\u002Frepository\u002Fjcenter&#x27;\u003C\u002Fspan\u003E }\\n+        \u003Cspan class=\\\"hljs-keyword\\\"\u003Emaven\u003C\u002Fspan\u003E { url \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;http:\u002F\u002Fmaven.aliyun.com\u002Fnexus\u002Fcontent\u002Fgroups\u002Fpublic&#x27;\u003C\u002Fspan\u003E }\\n+        \u003Cspan class=\\\"hljs-keyword\\\"\u003Emaven\u003C\u002Fspan\u003E { url \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;http:\u002F\u002Fdownload.flutter.io&#x27;\u003C\u002Fspan\u003E}\\n    }\\n\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Edependencies\u003C\u002Fspan\u003E {\\n        classpath \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;com.android.tools.build:gradle:4.1.0&#x27;\u003C\u002Fspan\u003E\\n        classpath \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;org.jetbrains.kotlin:kotlin-gradle-plugin:\u003Cspan class=\\\"hljs-variable\\\"\u003E$kotlin_version\u003C\u002Fspan\u003E&quot;\u003C\u002Fspan\u003E\\n    }\\n}\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eallprojects\u003C\u002Fspan\u003E {\\n    repositories {\\n-        google()\\n-        jcenter()\\n+        maven { url \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;https:\u002F\u002Fmaven.aliyun.com\u002Frepository\u002Fgoogle&#x27;\u003C\u002Fspan\u003E }\\n+        \u003Cspan class=\\\"hljs-keyword\\\"\u003Emaven\u003C\u002Fspan\u003E { url \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;https:\u002F\u002Fmaven.aliyun.com\u002Frepository\u002Fjcenter&#x27;\u003C\u002Fspan\u003E }\\n+        \u003Cspan class=\\\"hljs-keyword\\\"\u003Emaven\u003C\u002Fspan\u003E { url \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;http:\u002F\u002Fmaven.aliyun.com\u002Fnexus\u002Fcontent\u002Fgroups\u002Fpublic&#x27;\u003C\u002Fspan\u003E }\\n+        \u003Cspan class=\\\"hljs-keyword\\\"\u003Emaven\u003C\u002Fspan\u003E { url \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;http:\u002F\u002Fdownload.flutter.io&#x27;\u003C\u002Fspan\u003E}\\n    }\\n}\\n\\nrootProject.buildDir = \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;..\u002Fbuild&#x27;\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Esubprojects\u003C\u002Fspan\u003E {\\n    \u003Cspan class=\\\"hljs-literal\\\"\u003Eproject\u003C\u002Fspan\u003E.buildDir = \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;${rootProject.buildDir}\u002F${project.name}&quot;\u003C\u002Fspan\u003E\\n}\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Esubprojects\u003C\u002Fspan\u003E {\\n    \u003Cspan class=\\\"hljs-literal\\\"\u003Eproject\u003C\u002Fspan\u003E.evaluationDependsOn(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;:app&#x27;\u003C\u002Fspan\u003E)\\n}\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Etask\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eclean\u003C\u002Fspan\u003E(type: Delete) {\\n    delete rootProject.buildDir\\n}\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch2 id=\\\"问题2-build-tools2902-android-sdk-build-tools-2902\\\"\u003E问题2: build-tools;29.0.2 Android SDK Build-Tools 29.0.2\u003C\u002Fh2\u003E\\n\u003Cpre\u003E\u003Ccode\u003EFAILURE: \u003Cspan class=\\\"hljs-keyword\\\"\u003EBuild\u003C\u002Fspan\u003E failed \u003Cspan class=\\\"hljs-keyword\\\"\u003Ewith\u003C\u002Fspan\u003E an exception.\\n\\n* What went wrong:\\nCould \u003Cspan class=\\\"hljs-keyword\\\"\u003Enot\u003C\u002Fspan\u003E determine the dependencies of task \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;:app:compileDebugJavaWithJavac&#x27;\u003C\u002Fspan\u003E.\\n&gt; Failed \u003Cspan class=\\\"hljs-keyword\\\"\u003Eto\u003C\u002Fspan\u003E install the following SDK components:\\n      \u003Cspan class=\\\"hljs-keyword\\\"\u003Ebuild\u003C\u002Fspan\u003E-tools;29.0.2 Android SDK \u003Cspan class=\\\"hljs-keyword\\\"\u003EBuild\u003C\u002Fspan\u003E-Tools \u003Cspan class=\\\"hljs-number\\\"\u003E29.0\u003C\u002Fspan\u003E\u003Cspan class=\\\"hljs-number\\\"\u003E.2\u003C\u002Fspan\u003E\\n  Install the \u003Cspan class=\\\"hljs-literal\\\"\u003Emissing\u003C\u002Fspan\u003E components \u003Cspan class=\\\"hljs-keyword\\\"\u003Eusing\u003C\u002Fspan\u003E the SDK manager \u003Cspan class=\\\"hljs-keyword\\\"\u003Ein\u003C\u002Fspan\u003E Android Studio.\\n\u003Cspan class=\\\"hljs-number\\\"\u003E2\u003C\u002Fspan\u003E\\n\\n* Try:\\nRun \u003Cspan class=\\\"hljs-keyword\\\"\u003Ewith\u003C\u002Fspan\u003E --stacktrace \u003Cspan class=\\\"hljs-keyword\\\"\u003Eoption\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eto\u003C\u002Fspan\u003E get the stack trace. Run \u003Cspan class=\\\"hljs-keyword\\\"\u003Ewith\u003C\u002Fspan\u003E --info \u003Cspan class=\\\"hljs-keyword\\\"\u003Eor\u003C\u002Fspan\u003E --debug \u003Cspan class=\\\"hljs-keyword\\\"\u003Eoption\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eto\u003C\u002Fspan\u003E get more \u003Cspan class=\\\"hljs-built_in\\\"\u003Elog\u003C\u002Fspan\u003E output. Run \u003Cspan class=\\\"hljs-keyword\\\"\u003Ewith\u003C\u002Fspan\u003E --scan \u003Cspan class=\\\"hljs-keyword\\\"\u003Eto\u003C\u002Fspan\u003E get full insights.\\n\\n* Get more help at https:\u002F\u002Fhelp.gradle.org\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003EBUILD\u003C\u002Fspan\u003E FAILED \u003Cspan class=\\\"hljs-keyword\\\"\u003Ein\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-number\\\"\u003E4\u003C\u002Fspan\u003Es\\nException: Gradle task assembleDebug failed \u003Cspan class=\\\"hljs-keyword\\\"\u003Ewith\u003C\u002Fspan\u003E exit code \u003Cspan class=\\\"hljs-number\\\"\u003E1\u003C\u002Fspan\u003E\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cp\u003E此问题是因为Flutter打包使用的\u003Ccode\u003EAndroid SDK\u003C\u002Fcode\u003E和当前电脑上的不一致,通过\u003Ccode\u003EFlutter doctor\u003C\u002Fcode\u003E查看当前\u003Ccode\u003EAndroid SDK\u003C\u002Fcode\u003E的版本: \u003Ccode\u003E[√] Android toolchain - develop for Android devices (Android SDK version 30.0.3)\u003C\u002Fcode\u003E,然后在\u003Ccode\u003Eandroid\\\\app\\\\build.gradle\u003C\u002Fcode\u003E文件中的\u003Ccode\u003Eandroid\u003C\u002Fcode\u003E对象中添加\u003Ccode\u003EbuildToolsVersion &quot;30.0.3&quot;\u003C\u002Fcode\u003E即可解决.\u003C\u002Fp\u003E\\n\u003Cp\u003E\u003Ccode\u003Eandroid\\\\app\\\\build.gradle\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-diff\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Edef\u003C\u002Fspan\u003E localProperties = \u003Cspan class=\\\"hljs-keyword\\\"\u003Enew\u003C\u002Fspan\u003E Properties()\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Edef\u003C\u002Fspan\u003E localPropertiesFile = rootProject.\u003Cspan class=\\\"hljs-keyword\\\"\u003Efile\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;local.properties&#x27;\u003C\u002Fspan\u003E)\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eif\u003C\u002Fspan\u003E (localPropertiesFile.exists()) {\\n    localPropertiesFile.\u003Cspan class=\\\"hljs-keyword\\\"\u003EwithReader\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;UTF-8&#x27;\u003C\u002Fspan\u003E) { reader -&gt;\\n        localProperties.load(reader)\\n    }\\n}\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Edef\u003C\u002Fspan\u003E flutterRoot = localProperties.getProperty(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;flutter.sdk&#x27;\u003C\u002Fspan\u003E)\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eif\u003C\u002Fspan\u003E (flutterRoot == \u003Cspan class=\\\"hljs-keyword\\\"\u003Enull\u003C\u002Fspan\u003E) {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ethrow\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Enew\u003C\u002Fspan\u003E GradleException(\u003Cspan class=\\\"hljs-string\\\"\u003E&quot;Flutter SDK not found. Define location with flutter.sdk in the local.properties file.&quot;\u003C\u002Fspan\u003E)\\n}\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Edef\u003C\u002Fspan\u003E flutterVersionCode = localProperties.getProperty(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;flutter.versionCode&#x27;\u003C\u002Fspan\u003E)\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eif\u003C\u002Fspan\u003E (flutterVersionCode == \u003Cspan class=\\\"hljs-keyword\\\"\u003Enull\u003C\u002Fspan\u003E) {\\n    flutterVersionCode = \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;1&#x27;\u003C\u002Fspan\u003E\\n}\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Edef\u003C\u002Fspan\u003E flutterVersionName = localProperties.getProperty(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;flutter.versionName&#x27;\u003C\u002Fspan\u003E)\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eif\u003C\u002Fspan\u003E (flutterVersionName == \u003Cspan class=\\\"hljs-keyword\\\"\u003Enull\u003C\u002Fspan\u003E) {\\n    flutterVersionName = \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;1.0&#x27;\u003C\u002Fspan\u003E\\n}\\n\\napply plugin: \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;com.android.application&#x27;\u003C\u002Fspan\u003E\\napply plugin: \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;kotlin-android&#x27;\u003C\u002Fspan\u003E\\napply \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;$flutterRoot\u002Fpackages\u002Fflutter_tools\u002Fgradle\u002Fflutter.gradle&quot;\u003C\u002Fspan\u003E\\n\\nandroid {\\n    compileSdkVersion \u003Cspan class=\\\"hljs-number\\\"\u003E30\u003C\u002Fspan\u003E\\n+    buildToolsVersion \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;30.0.3&quot;\u003C\u002Fspan\u003E\\n\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003EsourceSets\u003C\u002Fspan\u003E {\\n        main.java.srcDirs += \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;src\u002Fmain\u002Fkotlin&#x27;\u003C\u002Fspan\u003E\\n    }\\n\\n    defaultConfig {\\n        \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F \u003Cspan class=\\\"hljs-doctag\\\"\u003ETODO:\u003C\u002Fspan\u003E Specify your own unique Application ID (https:\u002F\u002Fdeveloper.android.com\u002Fstudio\u002Fbuild\u002Fapplication-id.html).\u003C\u002Fspan\u003E\\n        applicationId \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;com.example.learn&quot;\u003C\u002Fspan\u003E\\n        minSdkVersion \u003Cspan class=\\\"hljs-number\\\"\u003E16\u003C\u002Fspan\u003E\\n        targetSdkVersion \u003Cspan class=\\\"hljs-number\\\"\u003E30\u003C\u002Fspan\u003E\\n        versionCode flutterVersionCode.\u003Cspan class=\\\"hljs-keyword\\\"\u003EtoInteger\u003C\u002Fspan\u003E()\\n        versionName flutterVersionName\\n    }\\n\\n    buildTypes {\\n        release {\\n            \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F \u003Cspan class=\\\"hljs-doctag\\\"\u003ETODO:\u003C\u002Fspan\u003E Add your own signing config for the release build.\u003C\u002Fspan\u003E\\n            \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F Signing with the debug keys for now, so `flutter run --release` works.\u003C\u002Fspan\u003E\\n            signingConfig signingConfigs.debug\\n        }\\n    }\\n}\\n\\nflutter {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Esource\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;..\u002F..&#x27;\u003C\u002Fspan\u003E\\n}\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Edependencies\u003C\u002Fspan\u003E {\\n    implementation \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version&quot;\u003C\u002Fspan\u003E\\n}\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\"}"}</script>
+</div>
+	</body>
+</html>

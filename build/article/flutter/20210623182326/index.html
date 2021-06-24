@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" content="#333333" />
+		<link rel="stylesheet" href="/assets/styles/global.css" />
+		<title>Wigets学习之Text</title>
+
+		
+
+		<link rel="modulepreload" href="/./_app/start-bf43ee66.js">
+		<link rel="modulepreload" href="/./_app/chunks/vendor-d00531f1.js">
+		<link rel="modulepreload" href="/./_app/pages/__layout.svelte-2c475058.js">
+		<link rel="modulepreload" href="/./_app/pages/article/__layout.svelte-42f46e6c.js">
+		<link rel="modulepreload" href="/./_app/pages/article/[category]/[id].svelte-f684a407.js">
+		<link rel="modulepreload" href="/./_app/chunks/utils-a81d5505.js">
+		<link rel="stylesheet" href="/./_app/assets/start-a8cd1609.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/__layout.svelte-dfbf40bb.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/article/__layout.svelte-1448dd73.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/article/[category]/[id].svelte-7f79f039.css">
+
+		<script type="module">
+			import { start } from "/./_app/start-bf43ee66.js";
+			start({
+				target: document.querySelector("#svelte"),
+				paths: {"base":"","assets":"/."},
+				session: {},
+				host: location.host,
+				route: true,
+				spa: false,
+				trailing_slash: "never",
+				hydrate: {
+					status: 200,
+					error: null,
+					nodes: [
+						import("/./_app/pages/__layout.svelte-2c475058.js"),
+						import("/./_app/pages/article/__layout.svelte-42f46e6c.js"),
+						import("/./_app/pages/article/[category]/[id].svelte-f684a407.js")
+					],
+					page: {
+						host: location.host, // TODO this is redundant
+						path: "/article/flutter/20210623182326",
+						query: new URLSearchParams(""),
+						params: {"category":"flutter","id":"20210623182326"}
+					}
+				}
+			});
+		</script>
+	</head>
+	<body>
+		<div id="svelte">
+
+
+
+<section class="svelte-jbk32v"><header class="svelte-jbk32v"><a href="/"><img class="logo svelte-jbk32v" src="/assets/images/logo.png" alt="code book logo"></a>
+<a class="github svelte-jbk32v" href="https://github.com/PingTouG" target="_blank"><i class="iconfont icon-github svelte-jbk32v"></i></a></header>
+	<main><section><main class="svelte-1fbldbu">
+
+<section class="md"><h1 class="title">Wigets学习之Text</h1>
+  <div class="info svelte-1vg5uky"><div class="author svelte-1vg5uky">作者：PingTouG</div>
+    <div class="time">时间：2021-06-23 17:52:25</div></div>
+
+  <div class="md-content"><h2 id="text-→-spanhtml">Text → span(HTML)</h2>
+<blockquote>
+<p>用于显示文本的部件</p>
+</blockquote>
+<h3 id="参数说明">参数说明</h3>
+<ul>
+<li><code>data</code>: 显示的内容(必传)</li>
+<li><code>style</code>: 设置文本的样式,可通过<code>TextStyle</code>设置,未设置 style 参数,则采用最近的<code>DefaultTextStyle</code>部件定义的样式,如果<code>TextStlye.inherit</code>为<code>true</code>,则指定的样式和<code>DefaultTextStyle</code>合并</li>
+<li><code>textAlign</code>: 文本对齐方式,可用<code>TextAlign</code>中的值</li>
+<li><code>textDirection</code>: 文本排列方向,<code>TextDirection.ltr(左到右)</code>,<code>TextDirection.rtl(右到左)</code></li>
+<li><code>locale</code>: 设置语言环境</li>
+<li><code>softWrap</code>: 是否换行,默认为<code>true</code></li>
+<li><code>overflow</code>: 文本溢出样式,如果不指定<code>softWrap=true</code>或者不指定<code>maxLines</code>则<code>Textoverflow.clip(截取)</code>和<code>Textoverflow.fade(超出文本渐变透明)</code>没有效果,一般常用的是<code>Textoverflow.ellipsis(超出显示省略号)</code></li>
+<li><code>textScaleFactor</code>: 文本缩放比例,可以实现控制文本大小,默认为 1.0</li>
+<li><code>maxLines</code>: 最多展示几行</li>
+<li><code>semanticsLabel</code>: 语义化描述</li>
+<li><code>textWidthBasis</code>: 定义如何测量渲染文本的宽度</li>
+</ul>
+<h4 id="textstyle">TextStyle</h4>
+<ul>
+<li><code>color</code>: 设置颜色</li>
+<li><code>backgroundColor</code>: 设置背景色</li>
+<li><code>fontSize</code>: 设置大小</li>
+<li><code>fontWeight</code>: 设置粗细</li>
+<li><code>fontStyle</code>: 设置样式<code>FontStyle.italic(斜体)</code></li>
+<li><code>letterSpacing</code>: 设置间距</li>
+<li><code>height</code>: 设置行高</li>
+<li><code>decoration</code>: 设置装饰线条</li>
+<li><code>decorationColor</code>: 设置装饰线条颜色</li>
+<li><code>decorationStyle</code>: 设置装饰线条样式<code>dashed(虚线)\dotted(点)\double(双线)\solid(单线)\wavy(波浪线)</code></li>
+<li><code>decorationThickness</code>: 设置装饰线条的粗细</li>
+<li><code>fontFamily</code>: 设置字体</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-keyword">import</span> <span class="hljs-symbol">&#x27;package</span>:flutter/material.dart&#x27;;
+
+void main() {
+  runApp(<span class="hljs-type">App</span>());
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">App</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatelessWidget</span> </span>{
+  const <span class="hljs-type">App</span>({<span class="hljs-type">Key</span>? key}) : <span class="hljs-keyword">super</span>(key: key);
+
+  <span class="hljs-meta">@override</span>
+  <span class="hljs-type">Widget</span> build(<span class="hljs-type">BuildContext</span> context) {
+    <span class="hljs-keyword">return</span> <span class="hljs-type">Center</span>(
+      child: <span class="hljs-type">Text</span>(
+        <span class="hljs-symbol">&#x27;Hello</span> <span class="hljs-type">Flutter</span> &#x27; * <span class="hljs-number">20</span>,
+        textDirection: <span class="hljs-type">TextDirection</span>.ltr,
+        textAlign: <span class="hljs-type">TextAlign</span>.center,
+        maxLines: <span class="hljs-number">2</span>,
+        overflow: <span class="hljs-type">TextOverflow</span>.ellipsis,
+        style: <span class="hljs-type">TextStyle</span>(
+            color: <span class="hljs-type">Colors</span>.red,
+            backgroundColor: <span class="hljs-type">Colors</span>.white,
+            fontWeight: <span class="hljs-type">FontWeight</span>.bold,
+            fontSize: <span class="hljs-number">20</span>,
+            letterSpacing: <span class="hljs-number">4</span>,
+            height: <span class="hljs-number">1.5</span>,
+            decoration: <span class="hljs-type">TextDecoration</span>.lineThrough,
+            decorationColor: <span class="hljs-type">Colors</span>.green,
+            decorationThickness: <span class="hljs-number">5.0</span>),
+      ),
+    );
+  }
+}
+</code></pre>
+<h2 id="richtext">RichText</h2>
+<blockquote>
+<p>展示富文本的部件</p>
+</blockquote>
+<ul>
+<li><code>text</code>：显示的内容(必填)。是一个<code>InLineSpan</code>类型。一般使用<code>TextSpan</code>部件</li>
+<li><code>textAlign</code>: 对齐方式</li>
+<li><code>textDirection</code>: 文本排列方式，一般需要指定，不指定会报错</li>
+<li><code>softWrap</code>：是否换行,默认为<code>true</code></li>
+<li><code>overflow</code>：文本溢出样式</li>
+<li><code>textScaleFactor</code>: 文本缩放比例</li>
+<li><code>maxLines</code>: 最多展示几行</li>
+<li><code>textWidthBasis</code>: 定义如何测量渲染文本的宽度</li>
+</ul>
+<h2 id="textspan">TextSpan</h2>
+<blockquote>
+<p>展示文本的部件，可以嵌套使用。<code>Text</code>不能嵌套使用。</p>
+</blockquote>
+<ul>
+<li><code>text</code>: 展示的内容</li>
+<li><code>children</code>: 子部件，是一个<code>List&lt;InLineSpan&gt;</code>类型</li>
+<li><code>style</code>: 文字样式，和<code>Text</code>一致。</li>
+<li><code>recognizer</code>：手势检测，是一个<code>GestureRecognizer</code>类型</li>
+<li><code>semanticsLabel</code>: 语义化描述</li>
+</ul>
+<p>如果要使用<code>TextSpan</code>必须放在<code>RichText</code>类型的部件中，不能单独使用。除了使用<code>RichText</code>部件外还可以使用<code>Text.rich</code></p>
+<pre><code class="language-dart"><span class="hljs-keyword">import</span> <span class="hljs-symbol">&#x27;package</span>:flutter/gestures.dart&#x27;;
+<span class="hljs-keyword">import</span> <span class="hljs-symbol">&#x27;package</span>:flutter/material.dart&#x27;;
+
+void main() {
+  runApp(<span class="hljs-type">App</span>());
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">App</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatelessWidget</span> </span>{
+  const <span class="hljs-type">App</span>({<span class="hljs-type">Key</span>? key}) : <span class="hljs-keyword">super</span>(key: key);
+
+  <span class="hljs-meta">@override</span>
+  <span class="hljs-type">Widget</span> build(<span class="hljs-type">BuildContext</span> context) {
+    <span class="hljs-keyword">return</span> <span class="hljs-type">Center</span>(
+      child: <span class="hljs-type">RichText</span>(
+        textDirection: <span class="hljs-type">TextDirection</span>.ltr,
+        text: <span class="hljs-type">TextSpan</span>(children: [
+          <span class="hljs-type">TextSpan</span>(text: <span class="hljs-string">&quot;网站: &quot;</span>),
+          <span class="hljs-type">TextSpan</span>(
+              text: <span class="hljs-string">&quot;codebook.vercel.app&quot;</span>,
+              style: <span class="hljs-type">TextStyle</span>(color: <span class="hljs-type">Colors</span>.blue),
+              recognizer: <span class="hljs-type">TapGestureRecognizer</span>()..onTap = () =&gt; {print(&#x27;点击网站&#x27;)})
+        ]),
+      ),
+    );
+  }
+}
+</code></pre>
+<h2 id="textrich">Text.rich</h2>
+<blockquote>
+<p>创建一个类型为<code>InLineSpan</code>的文本部件</p>
+</blockquote>
+<ul>
+<li><code>textSpan</code>：显示内容(必填)</li>
+<li><code>style</code>：和<code>Text</code>一致</li>
+<li><code>textAlign</code>: 对齐方式</li>
+<li><code>textDirection</code>: 文本排列方式，一般需要指定，不指定会报错</li>
+<li><code>softWrap</code>：是否换行,默认为<code>true</code></li>
+<li><code>overflow</code>：文本溢出样式</li>
+<li><code>textScaleFactor</code>: 文本缩放比例</li>
+<li><code>maxLines</code>: 最多展示几行</li>
+<li><code>semanticsLabel</code>: 语义化描述</li>
+<li><code>textWidthBasis</code>: 定义如何测量渲染文本的宽度</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-keyword">import</span> <span class="hljs-symbol">&#x27;package</span>:flutter/gestures.dart&#x27;;
+<span class="hljs-keyword">import</span> <span class="hljs-symbol">&#x27;package</span>:flutter/material.dart&#x27;;
+
+void main() {
+  runApp(<span class="hljs-type">App</span>());
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">App</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatelessWidget</span> </span>{
+  const <span class="hljs-type">App</span>({<span class="hljs-type">Key</span>? key}) : <span class="hljs-keyword">super</span>(key: key);
+
+  <span class="hljs-meta">@override</span>
+  <span class="hljs-type">Widget</span> build(<span class="hljs-type">BuildContext</span> context) {
+    <span class="hljs-keyword">return</span> <span class="hljs-type">Center</span>(
+      child: <span class="hljs-type">Text</span>.rich(
+        <span class="hljs-type">TextSpan</span>(children: [
+          <span class="hljs-type">TextSpan</span>(text: <span class="hljs-string">&quot;网站：&quot;</span>),
+          <span class="hljs-type">TextSpan</span>(
+              text: <span class="hljs-string">&quot;codebook.vercel.app&quot;</span>,
+              style: <span class="hljs-type">TextStyle</span>(color: <span class="hljs-type">Colors</span>.blue),
+              recognizer: <span class="hljs-type">TapGestureRecognizer</span>()..onTap = () =&gt; {print(&#x27;点击网站&#x27;)})
+        ]),
+        textDirection: <span class="hljs-type">TextDirection</span>.ltr,
+      ),
+    );
+  }
+}
+</code></pre>
+</div>
+</section></main>
+</section></main>
+	
+<div class="back-top svelte-9c9s8u" style="bottom: 5rem;right: 0.625rem;display: none"><i class="iconfont icon-back-top"></i>
+</div>
+</section>
+
+
+
+	<script type="svelte-data" url="20210623182326.json">{"status":200,"statusText":"","headers":{"content-type":"text/plain;charset=UTF-8"},"body":"{\"title\":\"Wigets学习之Text\",\"slug\":\"Flutter Wiget\",\"time\":\"2021-06-23T17:52:25.000Z\",\"author\":\"PingTouG\",\"html\":\"\u003Ch2 id=\\\"text-→-spanhtml\\\"\u003EText → span(HTML)\u003C\u002Fh2\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E用于显示文本的部件\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Ch3 id=\\\"参数说明\\\"\u003E参数说明\u003C\u002Fh3\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003Edata\u003C\u002Fcode\u003E: 显示的内容(必传)\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Estyle\u003C\u002Fcode\u003E: 设置文本的样式,可通过\u003Ccode\u003ETextStyle\u003C\u002Fcode\u003E设置,未设置 style 参数,则采用最近的\u003Ccode\u003EDefaultTextStyle\u003C\u002Fcode\u003E部件定义的样式,如果\u003Ccode\u003ETextStlye.inherit\u003C\u002Fcode\u003E为\u003Ccode\u003Etrue\u003C\u002Fcode\u003E,则指定的样式和\u003Ccode\u003EDefaultTextStyle\u003C\u002Fcode\u003E合并\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EtextAlign\u003C\u002Fcode\u003E: 文本对齐方式,可用\u003Ccode\u003ETextAlign\u003C\u002Fcode\u003E中的值\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EtextDirection\u003C\u002Fcode\u003E: 文本排列方向,\u003Ccode\u003ETextDirection.ltr(左到右)\u003C\u002Fcode\u003E,\u003Ccode\u003ETextDirection.rtl(右到左)\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Elocale\u003C\u002Fcode\u003E: 设置语言环境\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EsoftWrap\u003C\u002Fcode\u003E: 是否换行,默认为\u003Ccode\u003Etrue\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Eoverflow\u003C\u002Fcode\u003E: 文本溢出样式,如果不指定\u003Ccode\u003EsoftWrap=true\u003C\u002Fcode\u003E或者不指定\u003Ccode\u003EmaxLines\u003C\u002Fcode\u003E则\u003Ccode\u003ETextoverflow.clip(截取)\u003C\u002Fcode\u003E和\u003Ccode\u003ETextoverflow.fade(超出文本渐变透明)\u003C\u002Fcode\u003E没有效果,一般常用的是\u003Ccode\u003ETextoverflow.ellipsis(超出显示省略号)\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EtextScaleFactor\u003C\u002Fcode\u003E: 文本缩放比例,可以实现控制文本大小,默认为 1.0\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EmaxLines\u003C\u002Fcode\u003E: 最多展示几行\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EsemanticsLabel\u003C\u002Fcode\u003E: 语义化描述\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EtextWidthBasis\u003C\u002Fcode\u003E: 定义如何测量渲染文本的宽度\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Ch4 id=\\\"textstyle\\\"\u003ETextStyle\u003C\u002Fh4\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003Ecolor\u003C\u002Fcode\u003E: 设置颜色\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EbackgroundColor\u003C\u002Fcode\u003E: 设置背景色\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EfontSize\u003C\u002Fcode\u003E: 设置大小\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EfontWeight\u003C\u002Fcode\u003E: 设置粗细\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EfontStyle\u003C\u002Fcode\u003E: 设置样式\u003Ccode\u003EFontStyle.italic(斜体)\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EletterSpacing\u003C\u002Fcode\u003E: 设置间距\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Eheight\u003C\u002Fcode\u003E: 设置行高\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Edecoration\u003C\u002Fcode\u003E: 设置装饰线条\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EdecorationColor\u003C\u002Fcode\u003E: 设置装饰线条颜色\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EdecorationStyle\u003C\u002Fcode\u003E: 设置装饰线条样式\u003Ccode\u003Edashed(虚线)\\\\dotted(点)\\\\double(双线)\\\\solid(单线)\\\\wavy(波浪线)\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EdecorationThickness\u003C\u002Fcode\u003E: 设置装饰线条的粗细\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EfontFamily\u003C\u002Fcode\u003E: 设置字体\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-dart\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;package\u003C\u002Fspan\u003E:flutter\u002Fmaterial.dart&#x27;;\\n\\nvoid main() {\\n  runApp(\u003Cspan class=\\\"hljs-type\\\"\u003EApp\u003C\u002Fspan\u003E());\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EApp\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EStatelessWidget\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  const \u003Cspan class=\\\"hljs-type\\\"\u003EApp\u003C\u002Fspan\u003E({\u003Cspan class=\\\"hljs-type\\\"\u003EKey\u003C\u002Fspan\u003E? key}) : \u003Cspan class=\\\"hljs-keyword\\\"\u003Esuper\u003C\u002Fspan\u003E(key: key);\\n\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EWidget\u003C\u002Fspan\u003E build(\u003Cspan class=\\\"hljs-type\\\"\u003EBuildContext\u003C\u002Fspan\u003E context) {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-type\\\"\u003ECenter\u003C\u002Fspan\u003E(\\n      child: \u003Cspan class=\\\"hljs-type\\\"\u003EText\u003C\u002Fspan\u003E(\\n        \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;Hello\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-type\\\"\u003EFlutter\u003C\u002Fspan\u003E &#x27; * \u003Cspan class=\\\"hljs-number\\\"\u003E20\u003C\u002Fspan\u003E,\\n        textDirection: \u003Cspan class=\\\"hljs-type\\\"\u003ETextDirection\u003C\u002Fspan\u003E.ltr,\\n        textAlign: \u003Cspan class=\\\"hljs-type\\\"\u003ETextAlign\u003C\u002Fspan\u003E.center,\\n        maxLines: \u003Cspan class=\\\"hljs-number\\\"\u003E2\u003C\u002Fspan\u003E,\\n        overflow: \u003Cspan class=\\\"hljs-type\\\"\u003ETextOverflow\u003C\u002Fspan\u003E.ellipsis,\\n        style: \u003Cspan class=\\\"hljs-type\\\"\u003ETextStyle\u003C\u002Fspan\u003E(\\n            color: \u003Cspan class=\\\"hljs-type\\\"\u003EColors\u003C\u002Fspan\u003E.red,\\n            backgroundColor: \u003Cspan class=\\\"hljs-type\\\"\u003EColors\u003C\u002Fspan\u003E.white,\\n            fontWeight: \u003Cspan class=\\\"hljs-type\\\"\u003EFontWeight\u003C\u002Fspan\u003E.bold,\\n            fontSize: \u003Cspan class=\\\"hljs-number\\\"\u003E20\u003C\u002Fspan\u003E,\\n            letterSpacing: \u003Cspan class=\\\"hljs-number\\\"\u003E4\u003C\u002Fspan\u003E,\\n            height: \u003Cspan class=\\\"hljs-number\\\"\u003E1.5\u003C\u002Fspan\u003E,\\n            decoration: \u003Cspan class=\\\"hljs-type\\\"\u003ETextDecoration\u003C\u002Fspan\u003E.lineThrough,\\n            decorationColor: \u003Cspan class=\\\"hljs-type\\\"\u003EColors\u003C\u002Fspan\u003E.green,\\n            decorationThickness: \u003Cspan class=\\\"hljs-number\\\"\u003E5.0\u003C\u002Fspan\u003E),\\n      ),\\n    );\\n  }\\n}\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch2 id=\\\"richtext\\\"\u003ERichText\u003C\u002Fh2\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E展示富文本的部件\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003Etext\u003C\u002Fcode\u003E：显示的内容(必填)。是一个\u003Ccode\u003EInLineSpan\u003C\u002Fcode\u003E类型。一般使用\u003Ccode\u003ETextSpan\u003C\u002Fcode\u003E部件\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EtextAlign\u003C\u002Fcode\u003E: 对齐方式\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EtextDirection\u003C\u002Fcode\u003E: 文本排列方式，一般需要指定，不指定会报错\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EsoftWrap\u003C\u002Fcode\u003E：是否换行,默认为\u003Ccode\u003Etrue\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Eoverflow\u003C\u002Fcode\u003E：文本溢出样式\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EtextScaleFactor\u003C\u002Fcode\u003E: 文本缩放比例\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EmaxLines\u003C\u002Fcode\u003E: 最多展示几行\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EtextWidthBasis\u003C\u002Fcode\u003E: 定义如何测量渲染文本的宽度\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Ch2 id=\\\"textspan\\\"\u003ETextSpan\u003C\u002Fh2\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E展示文本的部件，可以嵌套使用。\u003Ccode\u003EText\u003C\u002Fcode\u003E不能嵌套使用。\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003Etext\u003C\u002Fcode\u003E: 展示的内容\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Echildren\u003C\u002Fcode\u003E: 子部件，是一个\u003Ccode\u003EList&lt;InLineSpan&gt;\u003C\u002Fcode\u003E类型\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Estyle\u003C\u002Fcode\u003E: 文字样式，和\u003Ccode\u003EText\u003C\u002Fcode\u003E一致。\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Erecognizer\u003C\u002Fcode\u003E：手势检测，是一个\u003Ccode\u003EGestureRecognizer\u003C\u002Fcode\u003E类型\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EsemanticsLabel\u003C\u002Fcode\u003E: 语义化描述\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Cp\u003E如果要使用\u003Ccode\u003ETextSpan\u003C\u002Fcode\u003E必须放在\u003Ccode\u003ERichText\u003C\u002Fcode\u003E类型的部件中，不能单独使用。除了使用\u003Ccode\u003ERichText\u003C\u002Fcode\u003E部件外还可以使用\u003Ccode\u003EText.rich\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-dart\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;package\u003C\u002Fspan\u003E:flutter\u002Fgestures.dart&#x27;;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;package\u003C\u002Fspan\u003E:flutter\u002Fmaterial.dart&#x27;;\\n\\nvoid main() {\\n  runApp(\u003Cspan class=\\\"hljs-type\\\"\u003EApp\u003C\u002Fspan\u003E());\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EApp\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EStatelessWidget\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  const \u003Cspan class=\\\"hljs-type\\\"\u003EApp\u003C\u002Fspan\u003E({\u003Cspan class=\\\"hljs-type\\\"\u003EKey\u003C\u002Fspan\u003E? key}) : \u003Cspan class=\\\"hljs-keyword\\\"\u003Esuper\u003C\u002Fspan\u003E(key: key);\\n\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EWidget\u003C\u002Fspan\u003E build(\u003Cspan class=\\\"hljs-type\\\"\u003EBuildContext\u003C\u002Fspan\u003E context) {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-type\\\"\u003ECenter\u003C\u002Fspan\u003E(\\n      child: \u003Cspan class=\\\"hljs-type\\\"\u003ERichText\u003C\u002Fspan\u003E(\\n        textDirection: \u003Cspan class=\\\"hljs-type\\\"\u003ETextDirection\u003C\u002Fspan\u003E.ltr,\\n        text: \u003Cspan class=\\\"hljs-type\\\"\u003ETextSpan\u003C\u002Fspan\u003E(children: [\\n          \u003Cspan class=\\\"hljs-type\\\"\u003ETextSpan\u003C\u002Fspan\u003E(text: \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;网站: &quot;\u003C\u002Fspan\u003E),\\n          \u003Cspan class=\\\"hljs-type\\\"\u003ETextSpan\u003C\u002Fspan\u003E(\\n              text: \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;codebook.vercel.app&quot;\u003C\u002Fspan\u003E,\\n              style: \u003Cspan class=\\\"hljs-type\\\"\u003ETextStyle\u003C\u002Fspan\u003E(color: \u003Cspan class=\\\"hljs-type\\\"\u003EColors\u003C\u002Fspan\u003E.blue),\\n              recognizer: \u003Cspan class=\\\"hljs-type\\\"\u003ETapGestureRecognizer\u003C\u002Fspan\u003E()..onTap = () =&gt; {print(&#x27;点击网站&#x27;)})\\n        ]),\\n      ),\\n    );\\n  }\\n}\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch2 id=\\\"textrich\\\"\u003EText.rich\u003C\u002Fh2\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E创建一个类型为\u003Ccode\u003EInLineSpan\u003C\u002Fcode\u003E的文本部件\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003EtextSpan\u003C\u002Fcode\u003E：显示内容(必填)\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Estyle\u003C\u002Fcode\u003E：和\u003Ccode\u003EText\u003C\u002Fcode\u003E一致\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EtextAlign\u003C\u002Fcode\u003E: 对齐方式\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EtextDirection\u003C\u002Fcode\u003E: 文本排列方式，一般需要指定，不指定会报错\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EsoftWrap\u003C\u002Fcode\u003E：是否换行,默认为\u003Ccode\u003Etrue\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Eoverflow\u003C\u002Fcode\u003E：文本溢出样式\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EtextScaleFactor\u003C\u002Fcode\u003E: 文本缩放比例\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EmaxLines\u003C\u002Fcode\u003E: 最多展示几行\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EsemanticsLabel\u003C\u002Fcode\u003E: 语义化描述\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EtextWidthBasis\u003C\u002Fcode\u003E: 定义如何测量渲染文本的宽度\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-dart\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;package\u003C\u002Fspan\u003E:flutter\u002Fgestures.dart&#x27;;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;package\u003C\u002Fspan\u003E:flutter\u002Fmaterial.dart&#x27;;\\n\\nvoid main() {\\n  runApp(\u003Cspan class=\\\"hljs-type\\\"\u003EApp\u003C\u002Fspan\u003E());\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EApp\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EStatelessWidget\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  const \u003Cspan class=\\\"hljs-type\\\"\u003EApp\u003C\u002Fspan\u003E({\u003Cspan class=\\\"hljs-type\\\"\u003EKey\u003C\u002Fspan\u003E? key}) : \u003Cspan class=\\\"hljs-keyword\\\"\u003Esuper\u003C\u002Fspan\u003E(key: key);\\n\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EWidget\u003C\u002Fspan\u003E build(\u003Cspan class=\\\"hljs-type\\\"\u003EBuildContext\u003C\u002Fspan\u003E context) {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-type\\\"\u003ECenter\u003C\u002Fspan\u003E(\\n      child: \u003Cspan class=\\\"hljs-type\\\"\u003EText\u003C\u002Fspan\u003E.rich(\\n        \u003Cspan class=\\\"hljs-type\\\"\u003ETextSpan\u003C\u002Fspan\u003E(children: [\\n          \u003Cspan class=\\\"hljs-type\\\"\u003ETextSpan\u003C\u002Fspan\u003E(text: \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;网站：&quot;\u003C\u002Fspan\u003E),\\n          \u003Cspan class=\\\"hljs-type\\\"\u003ETextSpan\u003C\u002Fspan\u003E(\\n              text: \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;codebook.vercel.app&quot;\u003C\u002Fspan\u003E,\\n              style: \u003Cspan class=\\\"hljs-type\\\"\u003ETextStyle\u003C\u002Fspan\u003E(color: \u003Cspan class=\\\"hljs-type\\\"\u003EColors\u003C\u002Fspan\u003E.blue),\\n              recognizer: \u003Cspan class=\\\"hljs-type\\\"\u003ETapGestureRecognizer\u003C\u002Fspan\u003E()..onTap = () =&gt; {print(&#x27;点击网站&#x27;)})\\n        ]),\\n        textDirection: \u003Cspan class=\\\"hljs-type\\\"\u003ETextDirection\u003C\u002Fspan\u003E.ltr,\\n      ),\\n    );\\n  }\\n}\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\"}"}</script>
+</div>
+	</body>
+</html>
