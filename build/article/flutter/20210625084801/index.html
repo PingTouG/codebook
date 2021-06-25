@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" content="#333333" />
+		<link rel="stylesheet" href="/assets/styles/global.css" />
+		<title>Wigets学习之Icon</title>
+
+		
+
+		<link rel="modulepreload" href="/./_app/start-bf43ee66.js">
+		<link rel="modulepreload" href="/./_app/chunks/vendor-d00531f1.js">
+		<link rel="modulepreload" href="/./_app/pages/__layout.svelte-2c475058.js">
+		<link rel="modulepreload" href="/./_app/pages/article/__layout.svelte-42f46e6c.js">
+		<link rel="modulepreload" href="/./_app/pages/article/[category]/[id].svelte-f684a407.js">
+		<link rel="modulepreload" href="/./_app/chunks/utils-a81d5505.js">
+		<link rel="stylesheet" href="/./_app/assets/start-a8cd1609.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/__layout.svelte-dfbf40bb.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/article/__layout.svelte-1448dd73.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/article/[category]/[id].svelte-7f79f039.css">
+
+		<script type="module">
+			import { start } from "/./_app/start-bf43ee66.js";
+			start({
+				target: document.querySelector("#svelte"),
+				paths: {"base":"","assets":"/."},
+				session: {},
+				host: location.host,
+				route: true,
+				spa: false,
+				trailing_slash: "never",
+				hydrate: {
+					status: 200,
+					error: null,
+					nodes: [
+						import("/./_app/pages/__layout.svelte-2c475058.js"),
+						import("/./_app/pages/article/__layout.svelte-42f46e6c.js"),
+						import("/./_app/pages/article/[category]/[id].svelte-f684a407.js")
+					],
+					page: {
+						host: location.host, // TODO this is redundant
+						path: "/article/flutter/20210625084801",
+						query: new URLSearchParams(""),
+						params: {"category":"flutter","id":"20210625084801"}
+					}
+				}
+			});
+		</script>
+	</head>
+	<body>
+		<div id="svelte">
+
+
+
+<section class="svelte-jbk32v"><header class="svelte-jbk32v"><a href="/"><img class="logo svelte-jbk32v" src="/assets/images/logo.png" alt="code book logo"></a>
+<a class="github svelte-jbk32v" href="https://github.com/PingTouG" target="_blank"><i class="iconfont icon-github svelte-jbk32v"></i></a></header>
+	<main><section><main class="svelte-1fbldbu">
+
+<section class="md"><h1 class="title">Wigets学习之Icon</h1>
+  <div class="info svelte-1vg5uky"><div class="author svelte-1vg5uky">作者：PingTouG</div>
+    <div class="time">时间：2021-06-25 08:48:31</div></div>
+
+  <div class="md-content"><h2 id="icon">Icon</h2>
+<blockquote>
+<p>图标部件，用于显示图标</p>
+</blockquote>
+<ul>
+<li><code>icon</code>: 图标(必填)，可以使用<code>Icons</code>指定值</li>
+<li><code>size</code>：图标大小</li>
+<li><code>color</code>：图标颜色</li>
+<li><code>semanticLabel</code>：语义化</li>
+<li><code>textDirection</code>：文本排列方式</li>
+</ul>
+<blockquote>
+<p>注意：如果要使用默认的<code>Material</code>图标，需要在<code>pubspec.yaml</code>文件中设置如下：</p>
+</blockquote>
+<pre><code class="language-yaml"><span class="hljs-attr">flutter:</span>
+  <span class="hljs-attr">uses-material-design:</span> <span class="hljs-literal">true</span>
+</code></pre>
+<pre><code class="language-dart"><span class="hljs-keyword">import</span> <span class="hljs-symbol">&#x27;package</span>:flutter/material.dart&#x27;;
+
+void main() {
+  runApp(<span class="hljs-type">App</span>());
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">App</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatelessWidget</span> </span>{
+  <span class="hljs-meta">@override</span>
+  <span class="hljs-type">Widget</span> build(<span class="hljs-type">BuildContext</span> context) {
+    <span class="hljs-keyword">return</span> <span class="hljs-type">Row</span>(
+      textDirection: <span class="hljs-type">TextDirection</span>.ltr,
+      mainAxisAlignment: <span class="hljs-type">MainAxisAlignment</span>.spaceAround,
+      children: [
+        <span class="hljs-type">Icon</span>(
+          <span class="hljs-type">Icons</span>.ac_unit,
+          textDirection: <span class="hljs-type">TextDirection</span>.ltr,
+          color: <span class="hljs-type">Colors</span>.white,
+          size: <span class="hljs-number">30</span>,
+        ),
+        <span class="hljs-type">Icon</span>(
+          <span class="hljs-type">Icons</span>.access_alarm_outlined,
+          textDirection: <span class="hljs-type">TextDirection</span>.ltr,
+          color: <span class="hljs-type">Colors</span>.blue,
+          size: <span class="hljs-number">30</span>,
+        ),
+        <span class="hljs-type">Icon</span>(
+          <span class="hljs-type">Icons</span>.cake_outlined,
+          textDirection: <span class="hljs-type">TextDirection</span>.ltr,
+          color: <span class="hljs-type">Colors</span>.orange,
+          size: <span class="hljs-number">30</span>,
+        ),
+      ],
+    );
+  }
+}
+</code></pre>
+<h2 id="使用自定义图标">使用自定义图标</h2>
+<p>要想使用自定义图标的话可以使用<code>IconData</code>来指定，下面使用<code>iconfont</code>来举例。</p>
+<h3 id="配置图标字体资源">配置图标字体资源</h3>
+<p>在<code>iconfont</code>官网将图标资源下载下来只复制<code>iconfont.ttf</code>文件到项目目录中如：<code>lib/assets/fonts/iconfont.ttf</code>。
+<br />
+然后在<code>pubspec.yaml</code>文件中引入资源</p>
+<pre><code class="language-diff"><span class="hljs-attr">name:</span> <span class="hljs-string">learn</span>
+<span class="hljs-attr">description:</span> <span class="hljs-string">A</span> <span class="hljs-string">new</span> <span class="hljs-string">Flutter</span> <span class="hljs-string">project.</span>
+<span class="hljs-attr">version:</span> <span class="hljs-number">1.0</span><span class="hljs-number">.0</span><span class="hljs-string">+1</span>
+<span class="hljs-attr">environment:</span>
+  <span class="hljs-attr">sdk:</span> <span class="hljs-string">&#x27;&gt;=2.12.0 &lt;3.0.0&#x27;</span>
+
+<span class="hljs-attr">dependencies:</span>
+  <span class="hljs-attr">flutter:</span>
+    <span class="hljs-attr">sdk:</span> <span class="hljs-string">flutter</span>
+  <span class="hljs-attr">cupertino_icons:</span> <span class="hljs-string">^1.0.2</span>
+
+<span class="hljs-attr">dev_dependencies:</span>
+  <span class="hljs-attr">flutter_test:</span>
+    <span class="hljs-attr">sdk:</span> <span class="hljs-string">flutter</span>
+
+<span class="hljs-attr">flutter:</span>
+  <span class="hljs-attr">uses-material-design:</span> <span class="hljs-literal">true</span>
+<span class="hljs-string">+</span>  <span class="hljs-attr">fonts:</span>
+<span class="hljs-string">+</span>    <span class="hljs-bullet">-</span> <span class="hljs-attr">family:</span> <span class="hljs-string">iconFont</span>
+<span class="hljs-string">+</span>      <span class="hljs-attr">fonts:</span>
+<span class="hljs-string">+</span>        <span class="hljs-bullet">-</span> <span class="hljs-attr">asset:</span> <span class="hljs-string">lib/assets/fonts/iconfont.ttf</span>
+</code></pre>
+<p><code>fonts</code>配置项：</p>
+<ul>
+<li><code>family</code>：指定 fontFamily，可以用在需要指定<code>fontFamily</code>参数的位置</li>
+<li><code>fonts</code>：指定资源位置</li>
+<li><code>weight</code>：指定字体粗细，取值范围：100~900</li>
+<li><code>style</code>：指定斜体(<code>italic</code>)还是正常(<code>normal</code>)</li>
+</ul>
+<blockquote>
+<p>注意：你可能在其他地方看到过，如果资源放在<code>lib</code>下则不需要再加上<code>lib/</code>，但是我实际测试如果不加则会报错找不到资源：<code>Error: unable to locate asset entry in pubspec.yaml: &quot;assets/fonts/iconfont.ttf&quot;. </code>。</p>
+</blockquote>
+<h3 id="使用图标">使用图标</h3>
+<p>在<code>iconfont</code>官网上找到图标的<code>Unicode</code>编码并将<code>&amp;#</code>换成<code>0</code>使用，如：<code>&amp;#xe608</code>→<code>0xe608</code>，然后使用<code>IconData</code>。</p>
+<pre><code class="language-dart"><span class="hljs-keyword">import</span> <span class="hljs-symbol">&#x27;package</span>:flutter/material.dart&#x27;;
+
+void main() {
+  runApp(<span class="hljs-type">App</span>());
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">App</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatelessWidget</span> </span>{
+  <span class="hljs-meta">@override</span>
+  <span class="hljs-type">Widget</span> build(<span class="hljs-type">BuildContext</span> context) {
+    <span class="hljs-keyword">return</span> <span class="hljs-type">Row</span>(
+      textDirection: <span class="hljs-type">TextDirection</span>.ltr,
+      mainAxisAlignment: <span class="hljs-type">MainAxisAlignment</span>.spaceAround,
+      children: [
+        <span class="hljs-type">Icon</span>(
+          <span class="hljs-type">IconData</span>(<span class="hljs-number">0xe608</span>, fontFamily: <span class="hljs-symbol">&#x27;iconFon</span>t&#x27;),
+          textDirection: <span class="hljs-type">TextDirection</span>.ltr,
+          color: <span class="hljs-type">Colors</span>.white,
+          size: <span class="hljs-number">30</span>,
+        ),
+        <span class="hljs-type">Icon</span>(
+          <span class="hljs-type">IconData</span>(<span class="hljs-number">0xea0a</span>, fontFamily: <span class="hljs-symbol">&#x27;iconFon</span>t&#x27;),
+          textDirection: <span class="hljs-type">TextDirection</span>.ltr,
+          color: <span class="hljs-type">Colors</span>.white,
+          size: <span class="hljs-number">30</span>,
+        ),
+        <span class="hljs-type">Icon</span>(
+          <span class="hljs-type">IconData</span>(<span class="hljs-number">0xe640</span>, fontFamily: <span class="hljs-symbol">&#x27;iconFon</span>t&#x27;),
+          textDirection: <span class="hljs-type">TextDirection</span>.ltr,
+          color: <span class="hljs-type">Colors</span>.white,
+          size: <span class="hljs-number">30</span>,
+        ),
+      ],
+    );
+  }
+}
+</code></pre>
+</div>
+</section></main>
+</section></main>
+	
+<div class="back-top svelte-9c9s8u" style="bottom: 5rem;right: 0.625rem;display: none"><i class="iconfont icon-back-top"></i>
+</div>
+</section>
+
+
+
+	<script type="svelte-data" url="20210625084801.json">{"status":200,"statusText":"","headers":{"content-type":"text/plain;charset=UTF-8"},"body":"{\"title\":\"Wigets学习之Icon\",\"slug\":\"Flutter Wiget\",\"time\":\"2021-06-25T08:48:31.000Z\",\"author\":\"PingTouG\",\"html\":\"\u003Ch2 id=\\\"icon\\\"\u003EIcon\u003C\u002Fh2\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E图标部件，用于显示图标\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003Eicon\u003C\u002Fcode\u003E: 图标(必填)，可以使用\u003Ccode\u003EIcons\u003C\u002Fcode\u003E指定值\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Esize\u003C\u002Fcode\u003E：图标大小\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Ecolor\u003C\u002Fcode\u003E：图标颜色\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EsemanticLabel\u003C\u002Fcode\u003E：语义化\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EtextDirection\u003C\u002Fcode\u003E：文本排列方式\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E注意：如果要使用默认的\u003Ccode\u003EMaterial\u003C\u002Fcode\u003E图标，需要在\u003Ccode\u003Epubspec.yaml\u003C\u002Fcode\u003E文件中设置如下：\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-yaml\\\"\u003E\u003Cspan class=\\\"hljs-attr\\\"\u003Eflutter:\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-attr\\\"\u003Euses-material-design:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-literal\\\"\u003Etrue\u003C\u002Fspan\u003E\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-dart\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;package\u003C\u002Fspan\u003E:flutter\u002Fmaterial.dart&#x27;;\\n\\nvoid main() {\\n  runApp(\u003Cspan class=\\\"hljs-type\\\"\u003EApp\u003C\u002Fspan\u003E());\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EApp\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EStatelessWidget\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EWidget\u003C\u002Fspan\u003E build(\u003Cspan class=\\\"hljs-type\\\"\u003EBuildContext\u003C\u002Fspan\u003E context) {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-type\\\"\u003ERow\u003C\u002Fspan\u003E(\\n      textDirection: \u003Cspan class=\\\"hljs-type\\\"\u003ETextDirection\u003C\u002Fspan\u003E.ltr,\\n      mainAxisAlignment: \u003Cspan class=\\\"hljs-type\\\"\u003EMainAxisAlignment\u003C\u002Fspan\u003E.spaceAround,\\n      children: [\\n        \u003Cspan class=\\\"hljs-type\\\"\u003EIcon\u003C\u002Fspan\u003E(\\n          \u003Cspan class=\\\"hljs-type\\\"\u003EIcons\u003C\u002Fspan\u003E.ac_unit,\\n          textDirection: \u003Cspan class=\\\"hljs-type\\\"\u003ETextDirection\u003C\u002Fspan\u003E.ltr,\\n          color: \u003Cspan class=\\\"hljs-type\\\"\u003EColors\u003C\u002Fspan\u003E.white,\\n          size: \u003Cspan class=\\\"hljs-number\\\"\u003E30\u003C\u002Fspan\u003E,\\n        ),\\n        \u003Cspan class=\\\"hljs-type\\\"\u003EIcon\u003C\u002Fspan\u003E(\\n          \u003Cspan class=\\\"hljs-type\\\"\u003EIcons\u003C\u002Fspan\u003E.access_alarm_outlined,\\n          textDirection: \u003Cspan class=\\\"hljs-type\\\"\u003ETextDirection\u003C\u002Fspan\u003E.ltr,\\n          color: \u003Cspan class=\\\"hljs-type\\\"\u003EColors\u003C\u002Fspan\u003E.blue,\\n          size: \u003Cspan class=\\\"hljs-number\\\"\u003E30\u003C\u002Fspan\u003E,\\n        ),\\n        \u003Cspan class=\\\"hljs-type\\\"\u003EIcon\u003C\u002Fspan\u003E(\\n          \u003Cspan class=\\\"hljs-type\\\"\u003EIcons\u003C\u002Fspan\u003E.cake_outlined,\\n          textDirection: \u003Cspan class=\\\"hljs-type\\\"\u003ETextDirection\u003C\u002Fspan\u003E.ltr,\\n          color: \u003Cspan class=\\\"hljs-type\\\"\u003EColors\u003C\u002Fspan\u003E.orange,\\n          size: \u003Cspan class=\\\"hljs-number\\\"\u003E30\u003C\u002Fspan\u003E,\\n        ),\\n      ],\\n    );\\n  }\\n}\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch2 id=\\\"使用自定义图标\\\"\u003E使用自定义图标\u003C\u002Fh2\u003E\\n\u003Cp\u003E要想使用自定义图标的话可以使用\u003Ccode\u003EIconData\u003C\u002Fcode\u003E来指定，下面使用\u003Ccode\u003Eiconfont\u003C\u002Fcode\u003E来举例。\u003C\u002Fp\u003E\\n\u003Ch3 id=\\\"配置图标字体资源\\\"\u003E配置图标字体资源\u003C\u002Fh3\u003E\\n\u003Cp\u003E在\u003Ccode\u003Eiconfont\u003C\u002Fcode\u003E官网将图标资源下载下来只复制\u003Ccode\u003Eiconfont.ttf\u003C\u002Fcode\u003E文件到项目目录中如：\u003Ccode\u003Elib\u002Fassets\u002Ffonts\u002Ficonfont.ttf\u003C\u002Fcode\u003E。\\n\u003Cbr \u002F\u003E\\n然后在\u003Ccode\u003Epubspec.yaml\u003C\u002Fcode\u003E文件中引入资源\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-diff\\\"\u003E\u003Cspan class=\\\"hljs-attr\\\"\u003Ename:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003Elearn\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-attr\\\"\u003Edescription:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003EA\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003Enew\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003EFlutter\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003Eproject.\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-attr\\\"\u003Eversion:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-number\\\"\u003E1.0\u003C\u002Fspan\u003E\u003Cspan class=\\\"hljs-number\\\"\u003E.0\u003C\u002Fspan\u003E\u003Cspan class=\\\"hljs-string\\\"\u003E+1\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-attr\\\"\u003Eenvironment:\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-attr\\\"\u003Esdk:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;&gt;=2.12.0 &lt;3.0.0&#x27;\u003C\u002Fspan\u003E\\n\\n\u003Cspan class=\\\"hljs-attr\\\"\u003Edependencies:\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-attr\\\"\u003Eflutter:\u003C\u002Fspan\u003E\\n    \u003Cspan class=\\\"hljs-attr\\\"\u003Esdk:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003Eflutter\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-attr\\\"\u003Ecupertino_icons:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E^1.0.2\u003C\u002Fspan\u003E\\n\\n\u003Cspan class=\\\"hljs-attr\\\"\u003Edev_dependencies:\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-attr\\\"\u003Eflutter_test:\u003C\u002Fspan\u003E\\n    \u003Cspan class=\\\"hljs-attr\\\"\u003Esdk:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003Eflutter\u003C\u002Fspan\u003E\\n\\n\u003Cspan class=\\\"hljs-attr\\\"\u003Eflutter:\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-attr\\\"\u003Euses-material-design:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-literal\\\"\u003Etrue\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-string\\\"\u003E+\u003C\u002Fspan\u003E  \u003Cspan class=\\\"hljs-attr\\\"\u003Efonts:\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-string\\\"\u003E+\u003C\u002Fspan\u003E    \u003Cspan class=\\\"hljs-bullet\\\"\u003E-\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003Efamily:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003EiconFont\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-string\\\"\u003E+\u003C\u002Fspan\u003E      \u003Cspan class=\\\"hljs-attr\\\"\u003Efonts:\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-string\\\"\u003E+\u003C\u002Fspan\u003E        \u003Cspan class=\\\"hljs-bullet\\\"\u003E-\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003Easset:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003Elib\u002Fassets\u002Ffonts\u002Ficonfont.ttf\u003C\u002Fspan\u003E\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cp\u003E\u003Ccode\u003Efonts\u003C\u002Fcode\u003E配置项：\u003C\u002Fp\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003Efamily\u003C\u002Fcode\u003E：指定 fontFamily，可以用在需要指定\u003Ccode\u003EfontFamily\u003C\u002Fcode\u003E参数的位置\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Efonts\u003C\u002Fcode\u003E：指定资源位置\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Eweight\u003C\u002Fcode\u003E：指定字体粗细，取值范围：100~900\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Estyle\u003C\u002Fcode\u003E：指定斜体(\u003Ccode\u003Eitalic\u003C\u002Fcode\u003E)还是正常(\u003Ccode\u003Enormal\u003C\u002Fcode\u003E)\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E注意：你可能在其他地方看到过，如果资源放在\u003Ccode\u003Elib\u003C\u002Fcode\u003E下则不需要再加上\u003Ccode\u003Elib\u002F\u003C\u002Fcode\u003E，但是我实际测试如果不加则会报错找不到资源：\u003Ccode\u003EError: unable to locate asset entry in pubspec.yaml: &quot;assets\u002Ffonts\u002Ficonfont.ttf&quot;. \u003C\u002Fcode\u003E。\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Ch3 id=\\\"使用图标\\\"\u003E使用图标\u003C\u002Fh3\u003E\\n\u003Cp\u003E在\u003Ccode\u003Eiconfont\u003C\u002Fcode\u003E官网上找到图标的\u003Ccode\u003EUnicode\u003C\u002Fcode\u003E编码并将\u003Ccode\u003E&amp;#\u003C\u002Fcode\u003E换成\u003Ccode\u003E0\u003C\u002Fcode\u003E使用，如：\u003Ccode\u003E&amp;#xe608\u003C\u002Fcode\u003E→\u003Ccode\u003E0xe608\u003C\u002Fcode\u003E，然后使用\u003Ccode\u003EIconData\u003C\u002Fcode\u003E。\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-dart\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;package\u003C\u002Fspan\u003E:flutter\u002Fmaterial.dart&#x27;;\\n\\nvoid main() {\\n  runApp(\u003Cspan class=\\\"hljs-type\\\"\u003EApp\u003C\u002Fspan\u003E());\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EApp\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EStatelessWidget\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EWidget\u003C\u002Fspan\u003E build(\u003Cspan class=\\\"hljs-type\\\"\u003EBuildContext\u003C\u002Fspan\u003E context) {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-type\\\"\u003ERow\u003C\u002Fspan\u003E(\\n      textDirection: \u003Cspan class=\\\"hljs-type\\\"\u003ETextDirection\u003C\u002Fspan\u003E.ltr,\\n      mainAxisAlignment: \u003Cspan class=\\\"hljs-type\\\"\u003EMainAxisAlignment\u003C\u002Fspan\u003E.spaceAround,\\n      children: [\\n        \u003Cspan class=\\\"hljs-type\\\"\u003EIcon\u003C\u002Fspan\u003E(\\n          \u003Cspan class=\\\"hljs-type\\\"\u003EIconData\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-number\\\"\u003E0xe608\u003C\u002Fspan\u003E, fontFamily: \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;iconFon\u003C\u002Fspan\u003Et&#x27;),\\n          textDirection: \u003Cspan class=\\\"hljs-type\\\"\u003ETextDirection\u003C\u002Fspan\u003E.ltr,\\n          color: \u003Cspan class=\\\"hljs-type\\\"\u003EColors\u003C\u002Fspan\u003E.white,\\n          size: \u003Cspan class=\\\"hljs-number\\\"\u003E30\u003C\u002Fspan\u003E,\\n        ),\\n        \u003Cspan class=\\\"hljs-type\\\"\u003EIcon\u003C\u002Fspan\u003E(\\n          \u003Cspan class=\\\"hljs-type\\\"\u003EIconData\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-number\\\"\u003E0xea0a\u003C\u002Fspan\u003E, fontFamily: \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;iconFon\u003C\u002Fspan\u003Et&#x27;),\\n          textDirection: \u003Cspan class=\\\"hljs-type\\\"\u003ETextDirection\u003C\u002Fspan\u003E.ltr,\\n          color: \u003Cspan class=\\\"hljs-type\\\"\u003EColors\u003C\u002Fspan\u003E.white,\\n          size: \u003Cspan class=\\\"hljs-number\\\"\u003E30\u003C\u002Fspan\u003E,\\n        ),\\n        \u003Cspan class=\\\"hljs-type\\\"\u003EIcon\u003C\u002Fspan\u003E(\\n          \u003Cspan class=\\\"hljs-type\\\"\u003EIconData\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-number\\\"\u003E0xe640\u003C\u002Fspan\u003E, fontFamily: \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;iconFon\u003C\u002Fspan\u003Et&#x27;),\\n          textDirection: \u003Cspan class=\\\"hljs-type\\\"\u003ETextDirection\u003C\u002Fspan\u003E.ltr,\\n          color: \u003Cspan class=\\\"hljs-type\\\"\u003EColors\u003C\u002Fspan\u003E.white,\\n          size: \u003Cspan class=\\\"hljs-number\\\"\u003E30\u003C\u002Fspan\u003E,\\n        ),\\n      ],\\n    );\\n  }\\n}\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\"}"}</script>
+</div>
+	</body>
+</html>

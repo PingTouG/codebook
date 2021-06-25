@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" content="#333333" />
+		<link rel="stylesheet" href="/assets/styles/global.css" />
+		<title>Wigets学习之Button</title>
+
+		
+
+		<link rel="modulepreload" href="/./_app/start-bf43ee66.js">
+		<link rel="modulepreload" href="/./_app/chunks/vendor-d00531f1.js">
+		<link rel="modulepreload" href="/./_app/pages/__layout.svelte-2c475058.js">
+		<link rel="modulepreload" href="/./_app/pages/article/__layout.svelte-42f46e6c.js">
+		<link rel="modulepreload" href="/./_app/pages/article/[category]/[id].svelte-f684a407.js">
+		<link rel="modulepreload" href="/./_app/chunks/utils-a81d5505.js">
+		<link rel="stylesheet" href="/./_app/assets/start-a8cd1609.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/__layout.svelte-dfbf40bb.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/article/__layout.svelte-1448dd73.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/article/[category]/[id].svelte-7f79f039.css">
+
+		<script type="module">
+			import { start } from "/./_app/start-bf43ee66.js";
+			start({
+				target: document.querySelector("#svelte"),
+				paths: {"base":"","assets":"/."},
+				session: {},
+				host: location.host,
+				route: true,
+				spa: false,
+				trailing_slash: "never",
+				hydrate: {
+					status: 200,
+					error: null,
+					nodes: [
+						import("/./_app/pages/__layout.svelte-2c475058.js"),
+						import("/./_app/pages/article/__layout.svelte-42f46e6c.js"),
+						import("/./_app/pages/article/[category]/[id].svelte-f684a407.js")
+					],
+					page: {
+						host: location.host, // TODO this is redundant
+						path: "/article/flutter/20210625093317",
+						query: new URLSearchParams(""),
+						params: {"category":"flutter","id":"20210625093317"}
+					}
+				}
+			});
+		</script>
+	</head>
+	<body>
+		<div id="svelte">
+
+
+
+<section class="svelte-jbk32v"><header class="svelte-jbk32v"><a href="/"><img class="logo svelte-jbk32v" src="/assets/images/logo.png" alt="code book logo"></a>
+<a class="github svelte-jbk32v" href="https://github.com/PingTouG" target="_blank"><i class="iconfont icon-github svelte-jbk32v"></i></a></header>
+	<main><section><main class="svelte-1fbldbu">
+
+<section class="md"><h1 class="title">Wigets学习之Button</h1>
+  <div class="info svelte-1vg5uky"><div class="author svelte-1vg5uky">作者：PingTouG</div>
+    <div class="time">时间：2021-06-25 09:33:40</div></div>
+
+  <div class="md-content"><p><code>Material</code>提供了多种按钮：</p>
+<ul>
+<li><code>TextButton</code>：文本按钮</li>
+<li><code>OutlineButton</code>：边框按钮</li>
+<li><code>FlatButton</code>：扁平按钮</li>
+<li><code>RaisedButton</code>：漂浮按钮</li>
+<li><code>IconButton</code>：图标按钮</li>
+<li><code>FloatingActionButton</code>：悬浮按钮</li>
+<li><code>MaterialButton</code>：Material 风格按钮</li>
+<li><code>ButtonBar</code>：按钮组</li>
+<li><code>DropdownButton</code>：下拉框按钮</li>
+</ul>
+<h2 id="textbutton：文本按钮">TextButton：文本按钮</h2>
+<blockquote>
+<p>显示一个可点击的文本</p>
+</blockquote>
+</div>
+</section></main>
+</section></main>
+	
+<div class="back-top svelte-9c9s8u" style="bottom: 5rem;right: 0.625rem;display: none"><i class="iconfont icon-back-top"></i>
+</div>
+</section>
+
+
+
+	<script type="svelte-data" url="20210625093317.json">{"status":200,"statusText":"","headers":{"content-type":"text/plain;charset=UTF-8"},"body":"{\"title\":\"Wigets学习之Button\",\"slug\":\"Flutter Wiget\",\"time\":\"2021-06-25T09:33:40.000Z\",\"author\":\"PingTouG\",\"html\":\"\u003Cp\u003E\u003Ccode\u003EMaterial\u003C\u002Fcode\u003E提供了多种按钮：\u003C\u002Fp\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003ETextButton\u003C\u002Fcode\u003E：文本按钮\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EOutlineButton\u003C\u002Fcode\u003E：边框按钮\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EFlatButton\u003C\u002Fcode\u003E：扁平按钮\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003ERaisedButton\u003C\u002Fcode\u003E：漂浮按钮\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EIconButton\u003C\u002Fcode\u003E：图标按钮\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EFloatingActionButton\u003C\u002Fcode\u003E：悬浮按钮\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EMaterialButton\u003C\u002Fcode\u003E：Material 风格按钮\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EButtonBar\u003C\u002Fcode\u003E：按钮组\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EDropdownButton\u003C\u002Fcode\u003E：下拉框按钮\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Ch2 id=\\\"textbutton：文本按钮\\\"\u003ETextButton：文本按钮\u003C\u002Fh2\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E显示一个可点击的文本\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\"}"}</script>
+</div>
+	</body>
+</html>
