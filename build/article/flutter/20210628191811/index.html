@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" content="#333333" />
+		<link rel="stylesheet" href="/assets/styles/global.css" />
+		<title>Wigets学习之Material组件</title>
+
+		
+
+		<link rel="modulepreload" href="/./_app/start-bf43ee66.js">
+		<link rel="modulepreload" href="/./_app/chunks/vendor-d00531f1.js">
+		<link rel="modulepreload" href="/./_app/pages/__layout.svelte-2c475058.js">
+		<link rel="modulepreload" href="/./_app/pages/article/__layout.svelte-42f46e6c.js">
+		<link rel="modulepreload" href="/./_app/pages/article/[category]/[id].svelte-f684a407.js">
+		<link rel="modulepreload" href="/./_app/chunks/utils-a81d5505.js">
+		<link rel="stylesheet" href="/./_app/assets/start-a8cd1609.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/__layout.svelte-dfbf40bb.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/article/__layout.svelte-1448dd73.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/article/[category]/[id].svelte-7f79f039.css">
+
+		<script type="module">
+			import { start } from "/./_app/start-bf43ee66.js";
+			start({
+				target: document.querySelector("#svelte"),
+				paths: {"base":"","assets":"/."},
+				session: {},
+				host: location.host,
+				route: true,
+				spa: false,
+				trailing_slash: "never",
+				hydrate: {
+					status: 200,
+					error: null,
+					nodes: [
+						import("/./_app/pages/__layout.svelte-2c475058.js"),
+						import("/./_app/pages/article/__layout.svelte-42f46e6c.js"),
+						import("/./_app/pages/article/[category]/[id].svelte-f684a407.js")
+					],
+					page: {
+						host: location.host, // TODO this is redundant
+						path: "/article/flutter/20210628191811",
+						query: new URLSearchParams(""),
+						params: {"category":"flutter","id":"20210628191811"}
+					}
+				}
+			});
+		</script>
+	</head>
+	<body>
+		<div id="svelte">
+
+
+
+<section class="svelte-jbk32v"><header class="svelte-jbk32v"><a href="/"><img class="logo svelte-jbk32v" src="/assets/images/logo.png" alt="code book logo"></a>
+<a class="github svelte-jbk32v" href="https://github.com/PingTouG" target="_blank"><i class="iconfont icon-github svelte-jbk32v"></i></a></header>
+	<main><section><main class="svelte-1fbldbu">
+
+<section class="md"><h1 class="title">Wigets学习之Material组件</h1>
+  <div class="info svelte-1vg5uky"><div class="author svelte-1vg5uky">作者：PingTouG</div>
+    <div class="time">时间：2021-06-28 19:18:38</div></div>
+
+  <div class="md-content"><p>Flutter 提供了一套 Material 组件，一般 Material 应用都是以<code>MaterialApp</code>这个部件开始的。</p>
+<h2 id="materialapp">MaterialApp</h2>
+<ul>
+<li><code>title</code>：标题，此标题是任务管理器中的标题</li>
+<li><code>onGenerateTitle</code>：动态设置标题，指定则使用返回的字符串，未指定则使用<code>title</code></li>
+<li><code>home</code>：应用首页</li>
+<li><code>initialRoute</code>：初始路由</li>
+<li><code>routes</code>：路由列表</li>
+<li><code>onGenerateRoute</code>：动态路由构造函数</li>
+<li><code>onGenerateInitialRoutes</code>：如果提供了<code>initialRoute</code>，则作为初始路由的路由生成构造函数</li>
+<li><code>onUnknownRoute</code>：未找到指定的路由时跳转的路由</li>
+<li><code>color</code>：应用的主色</li>
+<li><code>theme</code>：浅色主题，可用<code>Theme</code>指定</li>
+<li><code>darkTheme</code>：深色主题</li>
+<li><code>highContrastTheme</code>：高对比浅色主题</li>
+<li><code>highContrastDarkTheme</code>：高对比深色主题</li>
+<li><code>locale</code>：多语言配置</li>
+<li><code>debugShowMaterialGrid</code>：是否显示调试网格，默认为<code>false</code></li>
+<li><code>showPerformanceOverlay</code>：是否显示性能面板，默认为<code>false</code></li>
+<li><code>showSemanticsDebugger</code>：是否显示报告可访问性的覆盖，默认为<code>false</code></li>
+<li><code>debugShowCheckedModeBanner</code>：是否显示右侧顶部<code>debug</code>标签，开发环境默认为<code>true</code></li>
+<li><code>shortcuts</code>：快捷键配置</li>
+<li><code>actions</code>：行为配置</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-keyword">import</span> <span class="hljs-symbol">&#x27;package</span>:flutter/material.dart&#x27;;
+
+void main() {
+  runApp(<span class="hljs-type">App</span>());
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">App</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatelessWidget</span> </span>{
+  <span class="hljs-meta">@override</span>
+  <span class="hljs-type">Widget</span> build(<span class="hljs-type">BuildContext</span> context) {
+    <span class="hljs-keyword">return</span> <span class="hljs-type">MaterialApp</span>(
+      title: <span class="hljs-string">&quot;Material组件学习&quot;</span>,
+      home: <span class="hljs-type">Home</span>(),
+    );
+  }
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Home</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatelessWidget</span> </span>{
+  <span class="hljs-meta">@override</span>
+  <span class="hljs-type">Widget</span> build(<span class="hljs-type">BuildContext</span> context) {
+    <span class="hljs-keyword">return</span> <span class="hljs-type">Scaffold</span>(
+      appBar: <span class="hljs-type">AppBar</span>(
+        title: <span class="hljs-type">Text</span>(<span class="hljs-symbol">&#x27;Material</span>组件&#x27;),
+      ),
+    );
+  }
+}
+</code></pre>
+<h2 id="scaffold：material风格布局">Scaffold：<code>Material</code>风格布局</h2>
+<blockquote>
+<p><code>Scaffold</code>布局提供了一些预留位置，比如：<code>appBar</code>、<code>body</code>、<code>floatingActionButton</code>、<code>bottomNavigationBar</code>等</p>
+</blockquote>
+<ul>
+<li><code>appBar</code>：顶部应用程序栏，通过<code>AppBar</code>指定</li>
+<li><code>body</code>：主体</li>
+<li><code>backgroundColor</code>：背景色</li>
+<li><code>floatingActionButton</code>：右底部悬停按钮</li>
+<li><code>drawer</code>：左侧抽屉，如果指定了，则在<code>appBar</code>左侧会出现一个菜单图标，点击之后可以在左侧打开抽屉</li>
+<li><code>onDrawerChanged</code>：抽屉显示改变事件，接受一个<code>bool</code>类型的参数，抽屉是否打开</li>
+<li><code>endDrawer</code>：右侧抽屉，如果指定了，则在<code>appBar</code>右侧会出现一个菜单图标，点击之后可以在右侧打开抽屉</li>
+<li><code>drawerScrimColor</code>：抽屉的遮罩颜色</li>
+<li><code>drawerEdgeDragWidth</code>：抽屉打开的默认宽度</li>
+<li><code>bottomNavigationBar</code>：底部<code>tabbar</code>，通过<code>BottomNavigationBar</code>指定</li>
+<li><code>persistentFooterButtons</code>：底部按钮组，在<code>bottomNavigationBar</code>上方显示</li>
+<li><code>bottomSheet</code>：底部区域，在<code>persistentFooterButtons</code>上方显示</li>
+<li><code>resizeToAvoidBottomInset</code>：<code>body</code>和浮动小部件自动调整大小，避免键盘弹起遮挡，默认为<code>true</code></li>
+<li><code>primary</code>：是否使用屏幕状态栏高度，如果为<code>true</code>则<code>appBar</code>的高度会扩展屏幕状态栏的高度，默认为<code>true</code></li>
+<li><code>drawerDragStartBehavior</code>：设置抽屉拖动行为，<code>DragStartBehavior.start</code>: 检测拖动手势开始，<code>DragStartBehavior.end</code>：检测首次<code>down</code>事件开始，默认为<code>DragStartBehavior.start</code></li>
+<li><code>extendBody</code>：是否扩展<code>body</code>，如果为<code>true</code>，则<code>body</code>则会充满除<code>appBar</code>和<code>bottomNavigationBar</code>区域，默认为<code>false</code></li>
+<li><code>drawerEnableOpenDragGesture</code>：是否可手势拖动打开左侧抽屉，默认为<code>true</code></li>
+<li><code>endDrawerEnableOpenDragGesture</code>：是否可手势拖动打开右侧侧抽屉，默认为<code>true</code></li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-string">import</span> <span class="hljs-string">&#x27;package:flutter/gestures.dart&#x27;</span><span class="hljs-string">;</span>
+<span class="hljs-string">import</span> <span class="hljs-string">&#x27;package:flutter/material.dart&#x27;</span><span class="hljs-string">;</span>
+
+<span class="hljs-string">void</span> <span class="hljs-string">main()</span> {
+  <span class="hljs-string">runApp(App());</span>
+}
+
+<span class="hljs-string">class</span> <span class="hljs-string">App</span> <span class="hljs-string">extends</span> <span class="hljs-string">StatelessWidget</span> {
+  <span class="hljs-string">@override</span>
+  <span class="hljs-string">Widget</span> <span class="hljs-string">build(BuildContext</span> <span class="hljs-string">context)</span> {
+    <span class="hljs-string">return</span> <span class="hljs-string">MaterialApp(</span>
+      <span class="hljs-attr">title:</span> <span class="hljs-string">&quot;Material组件学习&quot;</span>,
+      <span class="hljs-attr">home:</span> <span class="hljs-string">Home()</span>,
+      <span class="hljs-attr">theme:</span> <span class="hljs-string">ThemeData(</span>
+          <span class="hljs-attr">primaryColor:</span> <span class="hljs-string">Colors.yellow</span>,
+          <span class="hljs-attr">floatingActionButtonTheme:</span> <span class="hljs-string">FloatingActionButtonThemeData(</span>
+              <span class="hljs-attr">backgroundColor:</span> <span class="hljs-string">Colors.yellow</span>, <span class="hljs-attr">foregroundColor:</span> <span class="hljs-string">Colors.black))</span>,
+    <span class="hljs-string">);</span>
+  }
+}
+
+<span class="hljs-string">class</span> <span class="hljs-string">Home</span> <span class="hljs-string">extends</span> <span class="hljs-string">StatelessWidget</span> {
+  <span class="hljs-string">@override</span>
+  <span class="hljs-string">Widget</span> <span class="hljs-string">build(BuildContext</span> <span class="hljs-string">context)</span> {
+    <span class="hljs-string">return</span> <span class="hljs-string">Scaffold(</span>
+        <span class="hljs-attr">appBar:</span> <span class="hljs-string">AppBar(</span>
+          <span class="hljs-attr">title:</span> <span class="hljs-string">Text(&#x27;Material组件&#x27;)</span>,
+        <span class="hljs-string">)</span>,
+        <span class="hljs-attr">body:</span> <span class="hljs-string">Container(</span>
+          <span class="hljs-attr">color:</span> <span class="hljs-string">Colors.blue</span>,
+        <span class="hljs-string">)</span>,
+        <span class="hljs-attr">floatingActionButton:</span> <span class="hljs-string">FloatingActionButton(</span>
+          <span class="hljs-attr">onPressed:</span> <span class="hljs-string">()</span> {},
+          <span class="hljs-attr">child:</span> <span class="hljs-string">Icon(Icons.add)</span>,
+        <span class="hljs-string">)</span>,
+        <span class="hljs-attr">drawer:</span> <span class="hljs-string">Container(</span>
+          <span class="hljs-attr">width:</span> <span class="hljs-number">300</span>,
+          <span class="hljs-attr">height:</span> <span class="hljs-string">double.infinity</span>,
+          <span class="hljs-attr">padding:</span> <span class="hljs-string">EdgeInsets.all(24)</span>,
+          <span class="hljs-attr">color:</span> <span class="hljs-string">Colors.white</span>,
+          <span class="hljs-attr">child:</span> <span class="hljs-string">Text(&#x27;这是一个左侧抽屉&#x27;)</span>,
+        <span class="hljs-string">)</span>,
+        <span class="hljs-attr">onDrawerChanged:</span> <span class="hljs-string">(bool</span> <span class="hljs-string">isOpened)</span> {
+          <span class="hljs-string">print(&#x27;左侧抽屉：</span> <span class="hljs-string">$isOpened&#x27;);</span>
+        },
+        <span class="hljs-attr">endDrawer:</span> <span class="hljs-string">Container(</span>
+          <span class="hljs-attr">width:</span> <span class="hljs-number">300</span>,
+          <span class="hljs-attr">height:</span> <span class="hljs-string">double.infinity</span>,
+          <span class="hljs-attr">padding:</span> <span class="hljs-string">EdgeInsets.all(24)</span>,
+          <span class="hljs-attr">color:</span> <span class="hljs-string">Colors.white</span>,
+          <span class="hljs-attr">child:</span> <span class="hljs-string">Text(&#x27;这是一个右侧抽屉&#x27;)</span>,
+        <span class="hljs-string">)</span>,
+        <span class="hljs-attr">onEndDrawerChanged:</span> <span class="hljs-string">(bool</span> <span class="hljs-string">isOpened)</span> {
+          <span class="hljs-string">print(&#x27;右侧抽屉：</span> <span class="hljs-string">$isOpened&#x27;);</span>
+        },
+        <span class="hljs-attr">bottomSheet:</span> <span class="hljs-string">Container(</span>
+          <span class="hljs-attr">width:</span> <span class="hljs-string">double.infinity</span>,
+          <span class="hljs-attr">child:</span> <span class="hljs-string">Text(&#x27;这是bottomSheet区域&#x27;)</span>,
+        <span class="hljs-string">)</span>,
+        <span class="hljs-attr">persistentFooterButtons:</span> [
+          <span class="hljs-string">OutlinedButton(onPressed:</span> <span class="hljs-literal">null</span>, <span class="hljs-attr">child:</span> <span class="hljs-string">Text(&#x27;按钮1&#x27;))</span>,
+          <span class="hljs-string">OutlinedButton(onPressed:</span> <span class="hljs-literal">null</span>, <span class="hljs-attr">child:</span> <span class="hljs-string">Text(&#x27;按钮2&#x27;))</span>,
+          <span class="hljs-string">OutlinedButton(onPressed:</span> <span class="hljs-literal">null</span>, <span class="hljs-attr">child:</span> <span class="hljs-string">Text(&#x27;按钮3&#x27;))</span>,
+          <span class="hljs-string">OutlinedButton(onPressed:</span> <span class="hljs-literal">null</span>, <span class="hljs-attr">child:</span> <span class="hljs-string">Text(&#x27;按钮4&#x27;))</span>,
+        ],
+        <span class="hljs-attr">bottomNavigationBar:</span> <span class="hljs-string">BottomNavigationBar(</span>
+          <span class="hljs-attr">type:</span> <span class="hljs-string">BottomNavigationBarType.fixed</span>,
+          <span class="hljs-attr">items:</span> [
+            <span class="hljs-string">BottomNavigationBarItem(icon:</span> <span class="hljs-string">Icon(Icons.home)</span>, <span class="hljs-attr">label:</span> <span class="hljs-string">&quot;首页&quot;</span><span class="hljs-string">)</span>,
+            <span class="hljs-string">BottomNavigationBarItem(icon:</span> <span class="hljs-string">Icon(Icons.camera)</span>, <span class="hljs-attr">label:</span> <span class="hljs-string">&quot;圈子&quot;</span><span class="hljs-string">)</span>,
+            <span class="hljs-string">BottomNavigationBarItem(icon:</span> <span class="hljs-string">Icon(Icons.weekend)</span>, <span class="hljs-attr">label:</span> <span class="hljs-string">&quot;生活&quot;</span><span class="hljs-string">)</span>,
+            <span class="hljs-string">BottomNavigationBarItem(</span>
+                <span class="hljs-attr">icon:</span> <span class="hljs-string">Icon(Icons.shopping_bag)</span>, <span class="hljs-attr">label:</span> <span class="hljs-string">&quot;返利优惠&quot;</span><span class="hljs-string">)</span>,
+            <span class="hljs-string">BottomNavigationBarItem(icon:</span> <span class="hljs-string">Icon(Icons.person)</span>, <span class="hljs-attr">label:</span> <span class="hljs-string">&quot;我的&quot;</span><span class="hljs-string">)</span>
+          ],
+        <span class="hljs-string">)</span>,
+        <span class="hljs-attr">backgroundColor:</span> <span class="hljs-string">Colors.blue.shade50</span>,
+        <span class="hljs-attr">drawerEdgeDragWidth:</span> <span class="hljs-number">20</span><span class="hljs-string">);</span>
+  }
+}
+</code></pre>
+<h3 id="appbar">AppBar</h3>
+<ul>
+<li><code>leading</code>：应用程序栏左侧图标</li>
+<li><code>leadingWidth</code>：左侧宽度</li>
+<li><code>automaticallyImplyLeading</code>：是否尝试自动展示 leading 部件，如果<code>leading</code>没有指定，则此参数生效，为<code>true</code>时，如果指定了<code>Scaffold</code>的<code>drawer</code>则会<code>leading</code>会自动展示为一个菜单按钮，为<code>false</code>则不展示<code>leading</code>，除非指定<code>leading</code></li>
+<li><code>title</code>：标题</li>
+<li><code>centerTitle</code>：标题是否居中，默认为<code>false</code></li>
+<li><code>titleSpacing</code>：标题左右间距</li>
+<li><code>titleTextStyle</code>：标题样式</li>
+<li><code>actions</code>：右侧操作列表</li>
+<li><code>flexibleSpace</code>：绝对定位在屏幕状态栏和应用程序栏上，高度和应用程序栏高度相同</li>
+<li><code>bottom</code>：位于应用程序栏下的位置，一般用于放置<code>tabBar</code></li>
+<li><code>elevation</code>：阴影</li>
+<li><code>shadowColor</code>：阴影颜色</li>
+<li><code>backgroundColor</code>：背景色</li>
+<li><code>foregroundColor</code>文本和图标默认颜色</li>
+<li><code>iconTheme</code>：图标主题</li>
+<li><code>actionsIconTheme</code>：操作列表图标主题</li>
+<li><code>textTheme</code>：文本主题</li>
+<li><code>primary</code>：与<code>Scaffold</code>的<code>primary</code>一致</li>
+<li><code>toolbarOpacity</code>：应用程序栏透明度，默认为 1</li>
+<li><code>bottomOpacity</code>：<code>bottom</code>透明度，默认为 1</li>
+<li><code>toolbarHeight</code>：应用程序栏高度</li>
+<li><code>toolbarTextStyle</code>：应用程序栏文本样式</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-keyword">import</span> <span class="hljs-symbol">&#x27;package</span>:flutter/material.dart&#x27;;
+
+void main() {
+  runApp(<span class="hljs-type">App</span>());
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">App</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatelessWidget</span> </span>{
+  <span class="hljs-meta">@override</span>
+  <span class="hljs-type">Widget</span> build(<span class="hljs-type">BuildContext</span> context) {
+    <span class="hljs-keyword">return</span> <span class="hljs-type">MaterialApp</span>(
+      title: <span class="hljs-string">&quot;Material组件学习&quot;</span>,
+      home: <span class="hljs-type">Home</span>(),
+      theme: <span class="hljs-type">ThemeData</span>(
+          primaryColor: <span class="hljs-type">Colors</span>.yellow,
+          floatingActionButtonTheme: <span class="hljs-type">FloatingActionButtonThemeData</span>(
+              backgroundColor: <span class="hljs-type">Colors</span>.yellow, foregroundColor: <span class="hljs-type">Colors</span>.black)),
+    );
+  }
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Home</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatelessWidget</span> </span>{
+  <span class="hljs-meta">@override</span>
+  <span class="hljs-type">Widget</span> build(<span class="hljs-type">BuildContext</span> context) {
+    <span class="hljs-keyword">return</span> <span class="hljs-type">Scaffold</span>(
+      appBar: <span class="hljs-type">AppBar</span>(
+        automaticallyImplyLeading: <span class="hljs-literal">false</span>,
+        title: <span class="hljs-type">Text</span>(<span class="hljs-symbol">&#x27;Material</span>组件&#x27;),
+        titleSpacing: <span class="hljs-number">0</span>,
+        actions: [
+          <span class="hljs-type">IconButton</span>(icon: <span class="hljs-type">Icon</span>(<span class="hljs-type">Icons</span>.search), onPressed: () {}),
+          <span class="hljs-type">IconButton</span>(icon: <span class="hljs-type">Icon</span>(<span class="hljs-type">Icons</span>.menu), onPressed: () {})
+        ],
+        bottom: <span class="hljs-type">PreferredSize</span>(
+          child: <span class="hljs-type">Text</span>(<span class="hljs-symbol">&#x27;botto</span>m&#x27;),
+          preferredSize: <span class="hljs-type">Size</span>(<span class="hljs-number">30</span>, <span class="hljs-number">30</span>),
+        ),
+      ),
+      drawer: <span class="hljs-type">Container</span>(
+        color: <span class="hljs-type">Colors</span>.white,
+        height: double.infinity,
+        width: <span class="hljs-number">300</span>,
+        child: <span class="hljs-type">Text</span>(<span class="hljs-symbol">&#x27;asds</span>d&#x27;),
+      ),
+    );
+  }
+}
+</code></pre>
+<h3 id="bottomnavigationbar">BottomNavigationBar</h3>
+<ul>
+<li><code>items</code>：列表项(必填且 length&gt;=2)</li>
+<li><code>onTap</code>：点击事件</li>
+<li><code>currentIndex</code>：当前激活项的索引，默认为 0</li>
+<li><code>elevation</code>：阴影</li>
+<li><code>type</code>：布局类型，默认为：<code>BottomNavigationBarType.shifting</code>(排列不开就隐藏)，一般当超过三个之后需要将<code>type</code>指定为<code>BottomNavigationBarType.fixed</code></li>
+<li><code>fixedColor</code>：当前激活项颜色，与<code>selectedItemColor</code>不能同时存在</li>
+<li><code>backgroundColor</code>：背景色</li>
+<li><code>iconSize</code>：图标大小，默认为 24</li>
+<li><code>selectedItemColor</code>：选中选项的颜色，与<code>fixedColor</code>不能同时存在</li>
+<li><code>unselectedItemColor</code>：未选中选项的颜色</li>
+<li><code>selectedIconTheme</code>：选中选项的图标主题</li>
+<li><code>unselectedIconTheme</code>：未选中选项的图标主题</li>
+<li><code>selectedFontSize</code>：选中选项文字大小，默认为 14</li>
+<li><code>unselectedFontSize</code>：未选中选项文字大小，默认为 12</li>
+<li><code>selectedLabelStyle</code>：选中项<code>label</code>样式</li>
+<li><code>unselectedLabelStyle</code>：未选中项<code>label</code>样式</li>
+<li><code>showSelectedLabels</code>：是否显示选中选项的<code>label</code></li>
+<li><code>showUnselectedLabels</code>：是否显示未选中选项的<code>label</code></li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-keyword">import</span> <span class="hljs-symbol">&#x27;package</span>:flutter/material.dart&#x27;;
+
+void main() {
+  runApp(<span class="hljs-type">App</span>());
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">App</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatelessWidget</span> </span>{
+  <span class="hljs-meta">@override</span>
+  <span class="hljs-type">Widget</span> build(<span class="hljs-type">BuildContext</span> context) {
+    <span class="hljs-keyword">return</span> <span class="hljs-type">MaterialApp</span>(
+      title: <span class="hljs-string">&quot;Material组件学习&quot;</span>,
+      home: <span class="hljs-type">Home</span>(),
+      theme: <span class="hljs-type">ThemeData</span>(
+          primaryColor: <span class="hljs-type">Colors</span>.yellow,
+          floatingActionButtonTheme: <span class="hljs-type">FloatingActionButtonThemeData</span>(
+              backgroundColor: <span class="hljs-type">Colors</span>.yellow, foregroundColor: <span class="hljs-type">Colors</span>.black)),
+    );
+  }
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Home</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatefulWidget</span> </span>{
+  <span class="hljs-type">Home</span>({<span class="hljs-type">Key</span>? key}) : <span class="hljs-keyword">super</span>(key: key);
+
+  <span class="hljs-meta">@override</span>
+  _HomeState createState() =&gt; _HomeState();
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">_HomeState</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">State&lt;Home&gt;</span> </span>{
+  int _index = <span class="hljs-number">0</span>;
+
+  static <span class="hljs-type">List</span>&lt;<span class="hljs-type">IconData</span>&gt; icons = [
+    <span class="hljs-type">Icons</span>.home,
+    <span class="hljs-type">Icons</span>.camera,
+    <span class="hljs-type">Icons</span>.shopping_bag,
+    <span class="hljs-type">Icons</span>.person
+  ];
+
+  <span class="hljs-meta">@override</span>
+  <span class="hljs-type">Widget</span> build(<span class="hljs-type">BuildContext</span> context) {
+    <span class="hljs-keyword">return</span> <span class="hljs-type">Scaffold</span>(
+      body: <span class="hljs-type">Center</span>(
+        child: <span class="hljs-type">Icon</span>(
+          icons[_index],
+          size: <span class="hljs-number">60</span>,
+        ),
+      ),
+      bottomNavigationBar: <span class="hljs-type">BottomNavigationBar</span>(
+        items: [
+          <span class="hljs-type">BottomNavigationBarItem</span>(icon: <span class="hljs-type">Icon</span>(<span class="hljs-type">Icons</span>.home), label: <span class="hljs-string">&quot;首页&quot;</span>),
+          <span class="hljs-type">BottomNavigationBarItem</span>(icon: <span class="hljs-type">Icon</span>(<span class="hljs-type">Icons</span>.camera), label: <span class="hljs-string">&quot;动态&quot;</span>),
+          <span class="hljs-type">BottomNavigationBarItem</span>(icon: <span class="hljs-type">Icon</span>(<span class="hljs-type">Icons</span>.shopping_bag), label: <span class="hljs-string">&quot;购物车&quot;</span>),
+          <span class="hljs-type">BottomNavigationBarItem</span>(icon: <span class="hljs-type">Icon</span>(<span class="hljs-type">Icons</span>.person), label: <span class="hljs-string">&quot;我的&quot;</span>),
+        ],
+        currentIndex: _index,
+        onTap: (index) {
+          setState(() {
+            _index = index;
+          });
+        },
+        <span class="hljs-class"><span class="hljs-keyword">type</span></span>: <span class="hljs-type">BottomNavigationBarType</span>.fixed,
+      ),
+    );
+  }
+}
+</code></pre>
+</div>
+</section></main>
+</section></main>
+	
+<div class="back-top svelte-9c9s8u" style="bottom: 5rem;right: 0.625rem;display: none"><i class="iconfont icon-back-top"></i>
+</div>
+</section>
+
+
+
+	<script type="svelte-data" url="20210628191811.json">{"status":200,"statusText":"","headers":{"content-type":"text/plain;charset=UTF-8"},"body":"{\"title\":\"Wigets学习之Material组件\",\"slug\":\"Flutter Wiget\",\"time\":\"2021-06-28T19:18:38.000Z\",\"author\":\"PingTouG\",\"html\":\"\u003Cp\u003EFlutter 提供了一套 Material 组件，一般 Material 应用都是以\u003Ccode\u003EMaterialApp\u003C\u002Fcode\u003E这个部件开始的。\u003C\u002Fp\u003E\\n\u003Ch2 id=\\\"materialapp\\\"\u003EMaterialApp\u003C\u002Fh2\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003Etitle\u003C\u002Fcode\u003E：标题，此标题是任务管理器中的标题\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EonGenerateTitle\u003C\u002Fcode\u003E：动态设置标题，指定则使用返回的字符串，未指定则使用\u003Ccode\u003Etitle\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Ehome\u003C\u002Fcode\u003E：应用首页\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EinitialRoute\u003C\u002Fcode\u003E：初始路由\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Eroutes\u003C\u002Fcode\u003E：路由列表\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EonGenerateRoute\u003C\u002Fcode\u003E：动态路由构造函数\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EonGenerateInitialRoutes\u003C\u002Fcode\u003E：如果提供了\u003Ccode\u003EinitialRoute\u003C\u002Fcode\u003E，则作为初始路由的路由生成构造函数\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EonUnknownRoute\u003C\u002Fcode\u003E：未找到指定的路由时跳转的路由\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Ecolor\u003C\u002Fcode\u003E：应用的主色\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Etheme\u003C\u002Fcode\u003E：浅色主题，可用\u003Ccode\u003ETheme\u003C\u002Fcode\u003E指定\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EdarkTheme\u003C\u002Fcode\u003E：深色主题\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EhighContrastTheme\u003C\u002Fcode\u003E：高对比浅色主题\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EhighContrastDarkTheme\u003C\u002Fcode\u003E：高对比深色主题\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Elocale\u003C\u002Fcode\u003E：多语言配置\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EdebugShowMaterialGrid\u003C\u002Fcode\u003E：是否显示调试网格，默认为\u003Ccode\u003Efalse\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EshowPerformanceOverlay\u003C\u002Fcode\u003E：是否显示性能面板，默认为\u003Ccode\u003Efalse\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EshowSemanticsDebugger\u003C\u002Fcode\u003E：是否显示报告可访问性的覆盖，默认为\u003Ccode\u003Efalse\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EdebugShowCheckedModeBanner\u003C\u002Fcode\u003E：是否显示右侧顶部\u003Ccode\u003Edebug\u003C\u002Fcode\u003E标签，开发环境默认为\u003Ccode\u003Etrue\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Eshortcuts\u003C\u002Fcode\u003E：快捷键配置\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Eactions\u003C\u002Fcode\u003E：行为配置\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-dart\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;package\u003C\u002Fspan\u003E:flutter\u002Fmaterial.dart&#x27;;\\n\\nvoid main() {\\n  runApp(\u003Cspan class=\\\"hljs-type\\\"\u003EApp\u003C\u002Fspan\u003E());\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EApp\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EStatelessWidget\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EWidget\u003C\u002Fspan\u003E build(\u003Cspan class=\\\"hljs-type\\\"\u003EBuildContext\u003C\u002Fspan\u003E context) {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-type\\\"\u003EMaterialApp\u003C\u002Fspan\u003E(\\n      title: \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;Material组件学习&quot;\u003C\u002Fspan\u003E,\\n      home: \u003Cspan class=\\\"hljs-type\\\"\u003EHome\u003C\u002Fspan\u003E(),\\n    );\\n  }\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EHome\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EStatelessWidget\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EWidget\u003C\u002Fspan\u003E build(\u003Cspan class=\\\"hljs-type\\\"\u003EBuildContext\u003C\u002Fspan\u003E context) {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-type\\\"\u003EScaffold\u003C\u002Fspan\u003E(\\n      appBar: \u003Cspan class=\\\"hljs-type\\\"\u003EAppBar\u003C\u002Fspan\u003E(\\n        title: \u003Cspan class=\\\"hljs-type\\\"\u003EText\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;Material\u003C\u002Fspan\u003E组件&#x27;),\\n      ),\\n    );\\n  }\\n}\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch2 id=\\\"scaffold：material风格布局\\\"\u003EScaffold：\u003Ccode\u003EMaterial\u003C\u002Fcode\u003E风格布局\u003C\u002Fh2\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E\u003Ccode\u003EScaffold\u003C\u002Fcode\u003E布局提供了一些预留位置，比如：\u003Ccode\u003EappBar\u003C\u002Fcode\u003E、\u003Ccode\u003Ebody\u003C\u002Fcode\u003E、\u003Ccode\u003EfloatingActionButton\u003C\u002Fcode\u003E、\u003Ccode\u003EbottomNavigationBar\u003C\u002Fcode\u003E等\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003EappBar\u003C\u002Fcode\u003E：顶部应用程序栏，通过\u003Ccode\u003EAppBar\u003C\u002Fcode\u003E指定\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Ebody\u003C\u002Fcode\u003E：主体\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EbackgroundColor\u003C\u002Fcode\u003E：背景色\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EfloatingActionButton\u003C\u002Fcode\u003E：右底部悬停按钮\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Edrawer\u003C\u002Fcode\u003E：左侧抽屉，如果指定了，则在\u003Ccode\u003EappBar\u003C\u002Fcode\u003E左侧会出现一个菜单图标，点击之后可以在左侧打开抽屉\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EonDrawerChanged\u003C\u002Fcode\u003E：抽屉显示改变事件，接受一个\u003Ccode\u003Ebool\u003C\u002Fcode\u003E类型的参数，抽屉是否打开\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EendDrawer\u003C\u002Fcode\u003E：右侧抽屉，如果指定了，则在\u003Ccode\u003EappBar\u003C\u002Fcode\u003E右侧会出现一个菜单图标，点击之后可以在右侧打开抽屉\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EdrawerScrimColor\u003C\u002Fcode\u003E：抽屉的遮罩颜色\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EdrawerEdgeDragWidth\u003C\u002Fcode\u003E：抽屉打开的默认宽度\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EbottomNavigationBar\u003C\u002Fcode\u003E：底部\u003Ccode\u003Etabbar\u003C\u002Fcode\u003E，通过\u003Ccode\u003EBottomNavigationBar\u003C\u002Fcode\u003E指定\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EpersistentFooterButtons\u003C\u002Fcode\u003E：底部按钮组，在\u003Ccode\u003EbottomNavigationBar\u003C\u002Fcode\u003E上方显示\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EbottomSheet\u003C\u002Fcode\u003E：底部区域，在\u003Ccode\u003EpersistentFooterButtons\u003C\u002Fcode\u003E上方显示\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EresizeToAvoidBottomInset\u003C\u002Fcode\u003E：\u003Ccode\u003Ebody\u003C\u002Fcode\u003E和浮动小部件自动调整大小，避免键盘弹起遮挡，默认为\u003Ccode\u003Etrue\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Eprimary\u003C\u002Fcode\u003E：是否使用屏幕状态栏高度，如果为\u003Ccode\u003Etrue\u003C\u002Fcode\u003E则\u003Ccode\u003EappBar\u003C\u002Fcode\u003E的高度会扩展屏幕状态栏的高度，默认为\u003Ccode\u003Etrue\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EdrawerDragStartBehavior\u003C\u002Fcode\u003E：设置抽屉拖动行为，\u003Ccode\u003EDragStartBehavior.start\u003C\u002Fcode\u003E: 检测拖动手势开始，\u003Ccode\u003EDragStartBehavior.end\u003C\u002Fcode\u003E：检测首次\u003Ccode\u003Edown\u003C\u002Fcode\u003E事件开始，默认为\u003Ccode\u003EDragStartBehavior.start\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EextendBody\u003C\u002Fcode\u003E：是否扩展\u003Ccode\u003Ebody\u003C\u002Fcode\u003E，如果为\u003Ccode\u003Etrue\u003C\u002Fcode\u003E，则\u003Ccode\u003Ebody\u003C\u002Fcode\u003E则会充满除\u003Ccode\u003EappBar\u003C\u002Fcode\u003E和\u003Ccode\u003EbottomNavigationBar\u003C\u002Fcode\u003E区域，默认为\u003Ccode\u003Efalse\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EdrawerEnableOpenDragGesture\u003C\u002Fcode\u003E：是否可手势拖动打开左侧抽屉，默认为\u003Ccode\u003Etrue\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EendDrawerEnableOpenDragGesture\u003C\u002Fcode\u003E：是否可手势拖动打开右侧侧抽屉，默认为\u003Ccode\u003Etrue\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-dart\\\"\u003E\u003Cspan class=\\\"hljs-string\\\"\u003Eimport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;package:flutter\u002Fgestures.dart&#x27;\u003C\u002Fspan\u003E\u003Cspan class=\\\"hljs-string\\\"\u003E;\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-string\\\"\u003Eimport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;package:flutter\u002Fmaterial.dart&#x27;\u003C\u002Fspan\u003E\u003Cspan class=\\\"hljs-string\\\"\u003E;\u003C\u002Fspan\u003E\\n\\n\u003Cspan class=\\\"hljs-string\\\"\u003Evoid\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003Emain()\u003C\u002Fspan\u003E {\\n  \u003Cspan class=\\\"hljs-string\\\"\u003ErunApp(App());\u003C\u002Fspan\u003E\\n}\\n\\n\u003Cspan class=\\\"hljs-string\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003EApp\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003EStatelessWidget\u003C\u002Fspan\u003E {\\n  \u003Cspan class=\\\"hljs-string\\\"\u003E@override\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-string\\\"\u003EWidget\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003Ebuild(BuildContext\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003Econtext)\u003C\u002Fspan\u003E {\\n    \u003Cspan class=\\\"hljs-string\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003EMaterialApp(\u003C\u002Fspan\u003E\\n      \u003Cspan class=\\\"hljs-attr\\\"\u003Etitle:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;Material组件学习&quot;\u003C\u002Fspan\u003E,\\n      \u003Cspan class=\\\"hljs-attr\\\"\u003Ehome:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003EHome()\u003C\u002Fspan\u003E,\\n      \u003Cspan class=\\\"hljs-attr\\\"\u003Etheme:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003EThemeData(\u003C\u002Fspan\u003E\\n          \u003Cspan class=\\\"hljs-attr\\\"\u003EprimaryColor:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003EColors.yellow\u003C\u002Fspan\u003E,\\n          \u003Cspan class=\\\"hljs-attr\\\"\u003EfloatingActionButtonTheme:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003EFloatingActionButtonThemeData(\u003C\u002Fspan\u003E\\n              \u003Cspan class=\\\"hljs-attr\\\"\u003EbackgroundColor:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003EColors.yellow\u003C\u002Fspan\u003E, \u003Cspan class=\\\"hljs-attr\\\"\u003EforegroundColor:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003EColors.black))\u003C\u002Fspan\u003E,\\n    \u003Cspan class=\\\"hljs-string\\\"\u003E);\u003C\u002Fspan\u003E\\n  }\\n}\\n\\n\u003Cspan class=\\\"hljs-string\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003EHome\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003EStatelessWidget\u003C\u002Fspan\u003E {\\n  \u003Cspan class=\\\"hljs-string\\\"\u003E@override\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-string\\\"\u003EWidget\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003Ebuild(BuildContext\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003Econtext)\u003C\u002Fspan\u003E {\\n    \u003Cspan class=\\\"hljs-string\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003EScaffold(\u003C\u002Fspan\u003E\\n        \u003Cspan class=\\\"hljs-attr\\\"\u003EappBar:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003EAppBar(\u003C\u002Fspan\u003E\\n          \u003Cspan class=\\\"hljs-attr\\\"\u003Etitle:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003EText(&#x27;Material组件&#x27;)\u003C\u002Fspan\u003E,\\n        \u003Cspan class=\\\"hljs-string\\\"\u003E)\u003C\u002Fspan\u003E,\\n        \u003Cspan class=\\\"hljs-attr\\\"\u003Ebody:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003EContainer(\u003C\u002Fspan\u003E\\n          \u003Cspan class=\\\"hljs-attr\\\"\u003Ecolor:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003EColors.blue\u003C\u002Fspan\u003E,\\n        \u003Cspan class=\\\"hljs-string\\\"\u003E)\u003C\u002Fspan\u003E,\\n        \u003Cspan class=\\\"hljs-attr\\\"\u003EfloatingActionButton:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003EFloatingActionButton(\u003C\u002Fspan\u003E\\n          \u003Cspan class=\\\"hljs-attr\\\"\u003EonPressed:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E()\u003C\u002Fspan\u003E {},\\n          \u003Cspan class=\\\"hljs-attr\\\"\u003Echild:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003EIcon(Icons.add)\u003C\u002Fspan\u003E,\\n        \u003Cspan class=\\\"hljs-string\\\"\u003E)\u003C\u002Fspan\u003E,\\n        \u003Cspan class=\\\"hljs-attr\\\"\u003Edrawer:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003EContainer(\u003C\u002Fspan\u003E\\n          \u003Cspan class=\\\"hljs-attr\\\"\u003Ewidth:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-number\\\"\u003E300\u003C\u002Fspan\u003E,\\n          \u003Cspan class=\\\"hljs-attr\\\"\u003Eheight:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003Edouble.infinity\u003C\u002Fspan\u003E,\\n          \u003Cspan class=\\\"hljs-attr\\\"\u003Epadding:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003EEdgeInsets.all(24)\u003C\u002Fspan\u003E,\\n          \u003Cspan class=\\\"hljs-attr\\\"\u003Ecolor:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003EColors.white\u003C\u002Fspan\u003E,\\n          \u003Cspan class=\\\"hljs-attr\\\"\u003Echild:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003EText(&#x27;这是一个左侧抽屉&#x27;)\u003C\u002Fspan\u003E,\\n        \u003Cspan class=\\\"hljs-string\\\"\u003E)\u003C\u002Fspan\u003E,\\n        \u003Cspan class=\\\"hljs-attr\\\"\u003EonDrawerChanged:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E(bool\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003EisOpened)\u003C\u002Fspan\u003E {\\n          \u003Cspan class=\\\"hljs-string\\\"\u003Eprint(&#x27;左侧抽屉：\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E$isOpened&#x27;);\u003C\u002Fspan\u003E\\n        },\\n        \u003Cspan class=\\\"hljs-attr\\\"\u003EendDrawer:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003EContainer(\u003C\u002Fspan\u003E\\n          \u003Cspan class=\\\"hljs-attr\\\"\u003Ewidth:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-number\\\"\u003E300\u003C\u002Fspan\u003E,\\n          \u003Cspan class=\\\"hljs-attr\\\"\u003Eheight:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003Edouble.infinity\u003C\u002Fspan\u003E,\\n          \u003Cspan class=\\\"hljs-attr\\\"\u003Epadding:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003EEdgeInsets.all(24)\u003C\u002Fspan\u003E,\\n          \u003Cspan class=\\\"hljs-attr\\\"\u003Ecolor:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003EColors.white\u003C\u002Fspan\u003E,\\n          \u003Cspan class=\\\"hljs-attr\\\"\u003Echild:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003EText(&#x27;这是一个右侧抽屉&#x27;)\u003C\u002Fspan\u003E,\\n        \u003Cspan class=\\\"hljs-string\\\"\u003E)\u003C\u002Fspan\u003E,\\n        \u003Cspan class=\\\"hljs-attr\\\"\u003EonEndDrawerChanged:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E(bool\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003EisOpened)\u003C\u002Fspan\u003E {\\n          \u003Cspan class=\\\"hljs-string\\\"\u003Eprint(&#x27;右侧抽屉：\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E$isOpened&#x27;);\u003C\u002Fspan\u003E\\n        },\\n        \u003Cspan class=\\\"hljs-attr\\\"\u003EbottomSheet:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003EContainer(\u003C\u002Fspan\u003E\\n          \u003Cspan class=\\\"hljs-attr\\\"\u003Ewidth:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003Edouble.infinity\u003C\u002Fspan\u003E,\\n          \u003Cspan class=\\\"hljs-attr\\\"\u003Echild:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003EText(&#x27;这是bottomSheet区域&#x27;)\u003C\u002Fspan\u003E,\\n        \u003Cspan class=\\\"hljs-string\\\"\u003E)\u003C\u002Fspan\u003E,\\n        \u003Cspan class=\\\"hljs-attr\\\"\u003EpersistentFooterButtons:\u003C\u002Fspan\u003E [\\n          \u003Cspan class=\\\"hljs-string\\\"\u003EOutlinedButton(onPressed:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-literal\\\"\u003Enull\u003C\u002Fspan\u003E, \u003Cspan class=\\\"hljs-attr\\\"\u003Echild:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003EText(&#x27;按钮1&#x27;))\u003C\u002Fspan\u003E,\\n          \u003Cspan class=\\\"hljs-string\\\"\u003EOutlinedButton(onPressed:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-literal\\\"\u003Enull\u003C\u002Fspan\u003E, \u003Cspan class=\\\"hljs-attr\\\"\u003Echild:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003EText(&#x27;按钮2&#x27;))\u003C\u002Fspan\u003E,\\n          \u003Cspan class=\\\"hljs-string\\\"\u003EOutlinedButton(onPressed:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-literal\\\"\u003Enull\u003C\u002Fspan\u003E, \u003Cspan class=\\\"hljs-attr\\\"\u003Echild:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003EText(&#x27;按钮3&#x27;))\u003C\u002Fspan\u003E,\\n          \u003Cspan class=\\\"hljs-string\\\"\u003EOutlinedButton(onPressed:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-literal\\\"\u003Enull\u003C\u002Fspan\u003E, \u003Cspan class=\\\"hljs-attr\\\"\u003Echild:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003EText(&#x27;按钮4&#x27;))\u003C\u002Fspan\u003E,\\n        ],\\n        \u003Cspan class=\\\"hljs-attr\\\"\u003EbottomNavigationBar:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003EBottomNavigationBar(\u003C\u002Fspan\u003E\\n          \u003Cspan class=\\\"hljs-attr\\\"\u003Etype:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003EBottomNavigationBarType.fixed\u003C\u002Fspan\u003E,\\n          \u003Cspan class=\\\"hljs-attr\\\"\u003Eitems:\u003C\u002Fspan\u003E [\\n            \u003Cspan class=\\\"hljs-string\\\"\u003EBottomNavigationBarItem(icon:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003EIcon(Icons.home)\u003C\u002Fspan\u003E, \u003Cspan class=\\\"hljs-attr\\\"\u003Elabel:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;首页&quot;\u003C\u002Fspan\u003E\u003Cspan class=\\\"hljs-string\\\"\u003E)\u003C\u002Fspan\u003E,\\n            \u003Cspan class=\\\"hljs-string\\\"\u003EBottomNavigationBarItem(icon:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003EIcon(Icons.camera)\u003C\u002Fspan\u003E, \u003Cspan class=\\\"hljs-attr\\\"\u003Elabel:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;圈子&quot;\u003C\u002Fspan\u003E\u003Cspan class=\\\"hljs-string\\\"\u003E)\u003C\u002Fspan\u003E,\\n            \u003Cspan class=\\\"hljs-string\\\"\u003EBottomNavigationBarItem(icon:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003EIcon(Icons.weekend)\u003C\u002Fspan\u003E, \u003Cspan class=\\\"hljs-attr\\\"\u003Elabel:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;生活&quot;\u003C\u002Fspan\u003E\u003Cspan class=\\\"hljs-string\\\"\u003E)\u003C\u002Fspan\u003E,\\n            \u003Cspan class=\\\"hljs-string\\\"\u003EBottomNavigationBarItem(\u003C\u002Fspan\u003E\\n                \u003Cspan class=\\\"hljs-attr\\\"\u003Eicon:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003EIcon(Icons.shopping_bag)\u003C\u002Fspan\u003E, \u003Cspan class=\\\"hljs-attr\\\"\u003Elabel:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;返利优惠&quot;\u003C\u002Fspan\u003E\u003Cspan class=\\\"hljs-string\\\"\u003E)\u003C\u002Fspan\u003E,\\n            \u003Cspan class=\\\"hljs-string\\\"\u003EBottomNavigationBarItem(icon:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003EIcon(Icons.person)\u003C\u002Fspan\u003E, \u003Cspan class=\\\"hljs-attr\\\"\u003Elabel:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;我的&quot;\u003C\u002Fspan\u003E\u003Cspan class=\\\"hljs-string\\\"\u003E)\u003C\u002Fspan\u003E\\n          ],\\n        \u003Cspan class=\\\"hljs-string\\\"\u003E)\u003C\u002Fspan\u003E,\\n        \u003Cspan class=\\\"hljs-attr\\\"\u003EbackgroundColor:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003EColors.blue.shade50\u003C\u002Fspan\u003E,\\n        \u003Cspan class=\\\"hljs-attr\\\"\u003EdrawerEdgeDragWidth:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-number\\\"\u003E20\u003C\u002Fspan\u003E\u003Cspan class=\\\"hljs-string\\\"\u003E);\u003C\u002Fspan\u003E\\n  }\\n}\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch3 id=\\\"appbar\\\"\u003EAppBar\u003C\u002Fh3\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003Eleading\u003C\u002Fcode\u003E：应用程序栏左侧图标\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EleadingWidth\u003C\u002Fcode\u003E：左侧宽度\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EautomaticallyImplyLeading\u003C\u002Fcode\u003E：是否尝试自动展示 leading 部件，如果\u003Ccode\u003Eleading\u003C\u002Fcode\u003E没有指定，则此参数生效，为\u003Ccode\u003Etrue\u003C\u002Fcode\u003E时，如果指定了\u003Ccode\u003EScaffold\u003C\u002Fcode\u003E的\u003Ccode\u003Edrawer\u003C\u002Fcode\u003E则会\u003Ccode\u003Eleading\u003C\u002Fcode\u003E会自动展示为一个菜单按钮，为\u003Ccode\u003Efalse\u003C\u002Fcode\u003E则不展示\u003Ccode\u003Eleading\u003C\u002Fcode\u003E，除非指定\u003Ccode\u003Eleading\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Etitle\u003C\u002Fcode\u003E：标题\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EcenterTitle\u003C\u002Fcode\u003E：标题是否居中，默认为\u003Ccode\u003Efalse\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EtitleSpacing\u003C\u002Fcode\u003E：标题左右间距\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EtitleTextStyle\u003C\u002Fcode\u003E：标题样式\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Eactions\u003C\u002Fcode\u003E：右侧操作列表\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EflexibleSpace\u003C\u002Fcode\u003E：绝对定位在屏幕状态栏和应用程序栏上，高度和应用程序栏高度相同\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Ebottom\u003C\u002Fcode\u003E：位于应用程序栏下的位置，一般用于放置\u003Ccode\u003EtabBar\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Eelevation\u003C\u002Fcode\u003E：阴影\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EshadowColor\u003C\u002Fcode\u003E：阴影颜色\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EbackgroundColor\u003C\u002Fcode\u003E：背景色\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EforegroundColor\u003C\u002Fcode\u003E文本和图标默认颜色\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EiconTheme\u003C\u002Fcode\u003E：图标主题\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EactionsIconTheme\u003C\u002Fcode\u003E：操作列表图标主题\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EtextTheme\u003C\u002Fcode\u003E：文本主题\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Eprimary\u003C\u002Fcode\u003E：与\u003Ccode\u003EScaffold\u003C\u002Fcode\u003E的\u003Ccode\u003Eprimary\u003C\u002Fcode\u003E一致\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EtoolbarOpacity\u003C\u002Fcode\u003E：应用程序栏透明度，默认为 1\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EbottomOpacity\u003C\u002Fcode\u003E：\u003Ccode\u003Ebottom\u003C\u002Fcode\u003E透明度，默认为 1\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EtoolbarHeight\u003C\u002Fcode\u003E：应用程序栏高度\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EtoolbarTextStyle\u003C\u002Fcode\u003E：应用程序栏文本样式\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-dart\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;package\u003C\u002Fspan\u003E:flutter\u002Fmaterial.dart&#x27;;\\n\\nvoid main() {\\n  runApp(\u003Cspan class=\\\"hljs-type\\\"\u003EApp\u003C\u002Fspan\u003E());\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EApp\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EStatelessWidget\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EWidget\u003C\u002Fspan\u003E build(\u003Cspan class=\\\"hljs-type\\\"\u003EBuildContext\u003C\u002Fspan\u003E context) {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-type\\\"\u003EMaterialApp\u003C\u002Fspan\u003E(\\n      title: \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;Material组件学习&quot;\u003C\u002Fspan\u003E,\\n      home: \u003Cspan class=\\\"hljs-type\\\"\u003EHome\u003C\u002Fspan\u003E(),\\n      theme: \u003Cspan class=\\\"hljs-type\\\"\u003EThemeData\u003C\u002Fspan\u003E(\\n          primaryColor: \u003Cspan class=\\\"hljs-type\\\"\u003EColors\u003C\u002Fspan\u003E.yellow,\\n          floatingActionButtonTheme: \u003Cspan class=\\\"hljs-type\\\"\u003EFloatingActionButtonThemeData\u003C\u002Fspan\u003E(\\n              backgroundColor: \u003Cspan class=\\\"hljs-type\\\"\u003EColors\u003C\u002Fspan\u003E.yellow, foregroundColor: \u003Cspan class=\\\"hljs-type\\\"\u003EColors\u003C\u002Fspan\u003E.black)),\\n    );\\n  }\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EHome\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EStatelessWidget\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EWidget\u003C\u002Fspan\u003E build(\u003Cspan class=\\\"hljs-type\\\"\u003EBuildContext\u003C\u002Fspan\u003E context) {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-type\\\"\u003EScaffold\u003C\u002Fspan\u003E(\\n      appBar: \u003Cspan class=\\\"hljs-type\\\"\u003EAppBar\u003C\u002Fspan\u003E(\\n        automaticallyImplyLeading: \u003Cspan class=\\\"hljs-literal\\\"\u003Efalse\u003C\u002Fspan\u003E,\\n        title: \u003Cspan class=\\\"hljs-type\\\"\u003EText\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;Material\u003C\u002Fspan\u003E组件&#x27;),\\n        titleSpacing: \u003Cspan class=\\\"hljs-number\\\"\u003E0\u003C\u002Fspan\u003E,\\n        actions: [\\n          \u003Cspan class=\\\"hljs-type\\\"\u003EIconButton\u003C\u002Fspan\u003E(icon: \u003Cspan class=\\\"hljs-type\\\"\u003EIcon\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-type\\\"\u003EIcons\u003C\u002Fspan\u003E.search), onPressed: () {}),\\n          \u003Cspan class=\\\"hljs-type\\\"\u003EIconButton\u003C\u002Fspan\u003E(icon: \u003Cspan class=\\\"hljs-type\\\"\u003EIcon\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-type\\\"\u003EIcons\u003C\u002Fspan\u003E.menu), onPressed: () {})\\n        ],\\n        bottom: \u003Cspan class=\\\"hljs-type\\\"\u003EPreferredSize\u003C\u002Fspan\u003E(\\n          child: \u003Cspan class=\\\"hljs-type\\\"\u003EText\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;botto\u003C\u002Fspan\u003Em&#x27;),\\n          preferredSize: \u003Cspan class=\\\"hljs-type\\\"\u003ESize\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-number\\\"\u003E30\u003C\u002Fspan\u003E, \u003Cspan class=\\\"hljs-number\\\"\u003E30\u003C\u002Fspan\u003E),\\n        ),\\n      ),\\n      drawer: \u003Cspan class=\\\"hljs-type\\\"\u003EContainer\u003C\u002Fspan\u003E(\\n        color: \u003Cspan class=\\\"hljs-type\\\"\u003EColors\u003C\u002Fspan\u003E.white,\\n        height: double.infinity,\\n        width: \u003Cspan class=\\\"hljs-number\\\"\u003E300\u003C\u002Fspan\u003E,\\n        child: \u003Cspan class=\\\"hljs-type\\\"\u003EText\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;asds\u003C\u002Fspan\u003Ed&#x27;),\\n      ),\\n    );\\n  }\\n}\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch3 id=\\\"bottomnavigationbar\\\"\u003EBottomNavigationBar\u003C\u002Fh3\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003Eitems\u003C\u002Fcode\u003E：列表项(必填且 length&gt;=2)\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EonTap\u003C\u002Fcode\u003E：点击事件\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EcurrentIndex\u003C\u002Fcode\u003E：当前激活项的索引，默认为 0\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Eelevation\u003C\u002Fcode\u003E：阴影\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Etype\u003C\u002Fcode\u003E：布局类型，默认为：\u003Ccode\u003EBottomNavigationBarType.shifting\u003C\u002Fcode\u003E(排列不开就隐藏)，一般当超过三个之后需要将\u003Ccode\u003Etype\u003C\u002Fcode\u003E指定为\u003Ccode\u003EBottomNavigationBarType.fixed\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EfixedColor\u003C\u002Fcode\u003E：当前激活项颜色，与\u003Ccode\u003EselectedItemColor\u003C\u002Fcode\u003E不能同时存在\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EbackgroundColor\u003C\u002Fcode\u003E：背景色\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EiconSize\u003C\u002Fcode\u003E：图标大小，默认为 24\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EselectedItemColor\u003C\u002Fcode\u003E：选中选项的颜色，与\u003Ccode\u003EfixedColor\u003C\u002Fcode\u003E不能同时存在\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EunselectedItemColor\u003C\u002Fcode\u003E：未选中选项的颜色\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EselectedIconTheme\u003C\u002Fcode\u003E：选中选项的图标主题\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EunselectedIconTheme\u003C\u002Fcode\u003E：未选中选项的图标主题\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EselectedFontSize\u003C\u002Fcode\u003E：选中选项文字大小，默认为 14\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EunselectedFontSize\u003C\u002Fcode\u003E：未选中选项文字大小，默认为 12\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EselectedLabelStyle\u003C\u002Fcode\u003E：选中项\u003Ccode\u003Elabel\u003C\u002Fcode\u003E样式\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EunselectedLabelStyle\u003C\u002Fcode\u003E：未选中项\u003Ccode\u003Elabel\u003C\u002Fcode\u003E样式\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EshowSelectedLabels\u003C\u002Fcode\u003E：是否显示选中选项的\u003Ccode\u003Elabel\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EshowUnselectedLabels\u003C\u002Fcode\u003E：是否显示未选中选项的\u003Ccode\u003Elabel\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-dart\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;package\u003C\u002Fspan\u003E:flutter\u002Fmaterial.dart&#x27;;\\n\\nvoid main() {\\n  runApp(\u003Cspan class=\\\"hljs-type\\\"\u003EApp\u003C\u002Fspan\u003E());\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EApp\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EStatelessWidget\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EWidget\u003C\u002Fspan\u003E build(\u003Cspan class=\\\"hljs-type\\\"\u003EBuildContext\u003C\u002Fspan\u003E context) {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-type\\\"\u003EMaterialApp\u003C\u002Fspan\u003E(\\n      title: \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;Material组件学习&quot;\u003C\u002Fspan\u003E,\\n      home: \u003Cspan class=\\\"hljs-type\\\"\u003EHome\u003C\u002Fspan\u003E(),\\n      theme: \u003Cspan class=\\\"hljs-type\\\"\u003EThemeData\u003C\u002Fspan\u003E(\\n          primaryColor: \u003Cspan class=\\\"hljs-type\\\"\u003EColors\u003C\u002Fspan\u003E.yellow,\\n          floatingActionButtonTheme: \u003Cspan class=\\\"hljs-type\\\"\u003EFloatingActionButtonThemeData\u003C\u002Fspan\u003E(\\n              backgroundColor: \u003Cspan class=\\\"hljs-type\\\"\u003EColors\u003C\u002Fspan\u003E.yellow, foregroundColor: \u003Cspan class=\\\"hljs-type\\\"\u003EColors\u003C\u002Fspan\u003E.black)),\\n    );\\n  }\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EHome\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EStatefulWidget\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EHome\u003C\u002Fspan\u003E({\u003Cspan class=\\\"hljs-type\\\"\u003EKey\u003C\u002Fspan\u003E? key}) : \u003Cspan class=\\\"hljs-keyword\\\"\u003Esuper\u003C\u002Fspan\u003E(key: key);\\n\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  _HomeState createState() =&gt; _HomeState();\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003E_HomeState\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EState&lt;Home&gt;\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  int _index = \u003Cspan class=\\\"hljs-number\\\"\u003E0\u003C\u002Fspan\u003E;\\n\\n  static \u003Cspan class=\\\"hljs-type\\\"\u003EList\u003C\u002Fspan\u003E&lt;\u003Cspan class=\\\"hljs-type\\\"\u003EIconData\u003C\u002Fspan\u003E&gt; icons = [\\n    \u003Cspan class=\\\"hljs-type\\\"\u003EIcons\u003C\u002Fspan\u003E.home,\\n    \u003Cspan class=\\\"hljs-type\\\"\u003EIcons\u003C\u002Fspan\u003E.camera,\\n    \u003Cspan class=\\\"hljs-type\\\"\u003EIcons\u003C\u002Fspan\u003E.shopping_bag,\\n    \u003Cspan class=\\\"hljs-type\\\"\u003EIcons\u003C\u002Fspan\u003E.person\\n  ];\\n\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EWidget\u003C\u002Fspan\u003E build(\u003Cspan class=\\\"hljs-type\\\"\u003EBuildContext\u003C\u002Fspan\u003E context) {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-type\\\"\u003EScaffold\u003C\u002Fspan\u003E(\\n      body: \u003Cspan class=\\\"hljs-type\\\"\u003ECenter\u003C\u002Fspan\u003E(\\n        child: \u003Cspan class=\\\"hljs-type\\\"\u003EIcon\u003C\u002Fspan\u003E(\\n          icons[_index],\\n          size: \u003Cspan class=\\\"hljs-number\\\"\u003E60\u003C\u002Fspan\u003E,\\n        ),\\n      ),\\n      bottomNavigationBar: \u003Cspan class=\\\"hljs-type\\\"\u003EBottomNavigationBar\u003C\u002Fspan\u003E(\\n        items: [\\n          \u003Cspan class=\\\"hljs-type\\\"\u003EBottomNavigationBarItem\u003C\u002Fspan\u003E(icon: \u003Cspan class=\\\"hljs-type\\\"\u003EIcon\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-type\\\"\u003EIcons\u003C\u002Fspan\u003E.home), label: \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;首页&quot;\u003C\u002Fspan\u003E),\\n          \u003Cspan class=\\\"hljs-type\\\"\u003EBottomNavigationBarItem\u003C\u002Fspan\u003E(icon: \u003Cspan class=\\\"hljs-type\\\"\u003EIcon\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-type\\\"\u003EIcons\u003C\u002Fspan\u003E.camera), label: \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;动态&quot;\u003C\u002Fspan\u003E),\\n          \u003Cspan class=\\\"hljs-type\\\"\u003EBottomNavigationBarItem\u003C\u002Fspan\u003E(icon: \u003Cspan class=\\\"hljs-type\\\"\u003EIcon\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-type\\\"\u003EIcons\u003C\u002Fspan\u003E.shopping_bag), label: \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;购物车&quot;\u003C\u002Fspan\u003E),\\n          \u003Cspan class=\\\"hljs-type\\\"\u003EBottomNavigationBarItem\u003C\u002Fspan\u003E(icon: \u003Cspan class=\\\"hljs-type\\\"\u003EIcon\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-type\\\"\u003EIcons\u003C\u002Fspan\u003E.person), label: \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;我的&quot;\u003C\u002Fspan\u003E),\\n        ],\\n        currentIndex: _index,\\n        onTap: (index) {\\n          setState(() {\\n            _index = index;\\n          });\\n        },\\n        \u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Etype\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-type\\\"\u003EBottomNavigationBarType\u003C\u002Fspan\u003E.fixed,\\n      ),\\n    );\\n  }\\n}\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\"}"}</script>
+</div>
+	</body>
+</html>
