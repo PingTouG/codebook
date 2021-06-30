@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" content="#333333" />
+		<link rel="stylesheet" href="/assets/styles/global.css" />
+		<title>Wigets学习之图片</title>
+
+		
+
+		<link rel="modulepreload" href="/./_app/start-bf43ee66.js">
+		<link rel="modulepreload" href="/./_app/chunks/vendor-d00531f1.js">
+		<link rel="modulepreload" href="/./_app/pages/__layout.svelte-2c475058.js">
+		<link rel="modulepreload" href="/./_app/pages/article/__layout.svelte-42f46e6c.js">
+		<link rel="modulepreload" href="/./_app/pages/article/[category]/[id].svelte-f684a407.js">
+		<link rel="modulepreload" href="/./_app/chunks/utils-a81d5505.js">
+		<link rel="stylesheet" href="/./_app/assets/start-a8cd1609.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/__layout.svelte-dfbf40bb.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/article/__layout.svelte-1448dd73.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/article/[category]/[id].svelte-7f79f039.css">
+
+		<script type="module">
+			import { start } from "/./_app/start-bf43ee66.js";
+			start({
+				target: document.querySelector("#svelte"),
+				paths: {"base":"","assets":"/."},
+				session: {},
+				host: location.host,
+				route: true,
+				spa: false,
+				trailing_slash: "never",
+				hydrate: {
+					status: 200,
+					error: null,
+					nodes: [
+						import("/./_app/pages/__layout.svelte-2c475058.js"),
+						import("/./_app/pages/article/__layout.svelte-42f46e6c.js"),
+						import("/./_app/pages/article/[category]/[id].svelte-f684a407.js")
+					],
+					page: {
+						host: location.host, // TODO this is redundant
+						path: "/article/flutter/20210629190439",
+						query: new URLSearchParams(""),
+						params: {"category":"flutter","id":"20210629190439"}
+					}
+				}
+			});
+		</script>
+	</head>
+	<body>
+		<div id="svelte">
+
+
+
+<section class="svelte-jbk32v"><header class="svelte-jbk32v"><a href="/"><img class="logo svelte-jbk32v" src="/assets/images/logo.png" alt="code book logo"></a>
+<a class="github svelte-jbk32v" href="https://github.com/PingTouG" target="_blank"><i class="iconfont icon-github svelte-jbk32v"></i></a></header>
+	<main><section><main class="svelte-1fbldbu">
+
+<section class="md"><h1 class="title">Wigets学习之图片</h1>
+  <div class="info svelte-1vg5uky"><div class="author svelte-1vg5uky">作者：PingTouG</div>
+    <div class="time">时间：2021-06-29 19:10:40</div></div>
+
+  <div class="md-content"><p>在<code>Flutter</code>中图片分为：<code>本地图片</code>和<code>网络图片</code></p>
+<h2 id="image">Image</h2>
+<blockquote>
+<p>用于显示图片</p>
+</blockquote>
+<ul>
+<li><code>image</code>：图片<code>Widget</code>，本地图片可以使用<code>AssetImage</code>，网络图片可以使用<code>NetworkImage</code></li>
+<li><code>frameBuilder</code>：图片帧构造器，可用于设置图片样式，<code>BuildContext context</code>是构建上下文，<code>Widget child</code>为当前图片，<code>int? frame</code>为渲染<code>Image</code>帧数的下标(默认首帧)</li>
+<li><code>loadingBuilder</code>：图片加载构造器，用于设置加载样式</li>
+<li><code>errorBuilder</code>：图片加载失败构造器，用于设置加载失败样式</li>
+<li><code>semanticLabel</code>：语义化描述</li>
+<li><code>excludeFromSemantics</code>：是否从语义化中排除</li>
+<li><code>width</code>：宽度</li>
+<li><code>height</code>：高度</li>
+<li><code>color</code>：颜色</li>
+<li><code>colorBlendMode</code>：颜色混合模式，默认为<code>BlendMode.srcIn</code></li>
+<li><code>fit</code>：图片裁剪，默认为<code>BoxFit.contain</code><ul>
+<li><code>BoxFit.contain</code>：等比例显示，确保长边完全显示</li>
+<li><code>BoxFit.cover</code>：等比例显示，确保短边完全显示</li>
+<li><code>BoxFit.fill</code>：拉伸显示确保完全显示</li>
+<li><code>BoxFit.fitHeight</code>：等比显示，以高度为准显示</li>
+<li><code>BoxFit.fitWidth</code>：等比显示，以宽度度为准显示</li>
+</ul>
+</li>
+<li><code>repeat</code>：重复方式</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-keyword">import</span> <span class="hljs-symbol">&#x27;package</span>:flutter/material.dart&#x27;;
+
+void main() {
+  runApp(<span class="hljs-type">App</span>());
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">App</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatelessWidget</span> </span>{
+  <span class="hljs-meta">@override</span>
+  <span class="hljs-type">Widget</span> build(<span class="hljs-type">BuildContext</span> context) {
+    <span class="hljs-keyword">return</span> <span class="hljs-type">Column</span>(
+      mainAxisAlignment: <span class="hljs-type">MainAxisAlignment</span>.center,
+      children: [
+        <span class="hljs-type">Image</span>(
+          image: <span class="hljs-type">AssetImage</span>(<span class="hljs-symbol">&#x27;assets</span>/images/logo.png&#x27;),
+          width: <span class="hljs-number">200</span>,
+          frameBuilder: (
+            <span class="hljs-type">BuildContext</span> context,
+            <span class="hljs-type">Widget</span> child,
+            int? frame,
+            bool wasSynchronouslyLoaded,
+          ) {
+            <span class="hljs-keyword">return</span> <span class="hljs-type">Container</span>(
+                padding: <span class="hljs-type">EdgeInsets</span>.all(<span class="hljs-number">9</span>),
+                color: <span class="hljs-type">Colors</span>.red.shade100,
+                child: child);
+          },
+        ),
+        <span class="hljs-type">SizedBox</span>(
+          height: <span class="hljs-number">10</span>,
+        ),
+        <span class="hljs-type">Image</span>(
+            image: <span class="hljs-type">NetworkImage</span>(
+                <span class="hljs-symbol">&#x27;https</span>:<span class="hljs-comment">//img0.baidu.com/it/u=2592042537,1864064944&amp;fm=26&amp;fmt=auto&amp;gp=0.jpg&#x27;),</span>
+            width: <span class="hljs-number">200</span>,
+            height: <span class="hljs-number">300</span>,
+            repeat: <span class="hljs-type">ImageRepeat</span>.repeat),
+      ],
+    );
+  }
+}
+</code></pre>
+<h3 id="imageasset">Image.asset</h3>
+<blockquote>
+<p>显示一个本地图片</p>
+</blockquote>
+<ul>
+<li><code>name</code>：图片路径(必填)</li>
+</ul>
+<p>其他属性和<code>Image</code>一致</p>
+<pre><code class="language-dart"><span class="hljs-keyword">import</span> <span class="hljs-symbol">&#x27;package</span>:flutter/material.dart&#x27;;
+
+void main() {
+  runApp(<span class="hljs-type">App</span>());
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">App</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatelessWidget</span> </span>{
+  <span class="hljs-meta">@override</span>
+  <span class="hljs-type">Widget</span> build(<span class="hljs-type">BuildContext</span> context) {
+    <span class="hljs-keyword">return</span> <span class="hljs-type">Center</span>(
+      child: <span class="hljs-type">Image</span>.asset(
+        <span class="hljs-symbol">&#x27;assets</span>/images/logo.png&#x27;,
+        width: <span class="hljs-number">200</span>,
+      ),
+    );
+  }
+}
+</code></pre>
+<h3 id="imagenetwork">Image.network</h3>
+<blockquote>
+<p>显示一个网络图片</p>
+</blockquote>
+<ul>
+<li><code>src</code>：图片地址(必填)</li>
+</ul>
+<p>其他属性和<code>Image</code>一致</p>
+<pre><code class="language-dart"><span class="hljs-keyword">import</span> <span class="hljs-symbol">&#x27;package</span>:flutter/material.dart&#x27;;
+
+void main() {
+  runApp(<span class="hljs-type">App</span>());
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">App</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatelessWidget</span> </span>{
+  <span class="hljs-meta">@override</span>
+  <span class="hljs-type">Widget</span> build(<span class="hljs-type">BuildContext</span> context) {
+    <span class="hljs-keyword">return</span> <span class="hljs-type">Center</span>(
+      child: <span class="hljs-type">Image</span>.network(
+        <span class="hljs-symbol">&#x27;https</span>:<span class="hljs-comment">//img0.baidu.com/it/u=2592042537,1864064944&amp;fm=26&amp;fmt=auto&amp;gp=0.jpg&#x27;,</span>
+        width: <span class="hljs-number">200</span>,
+      ),
+    );
+  }
+}
+</code></pre>
+<h3 id="圆角图片">圆角图片</h3>
+<p>实现圆角图片可以配合<code>ClipRRect</code>部件</p>
+<h4 id="cliprrect">ClipRRect</h4>
+<blockquote>
+<p>使用圆角裁剪子部件</p>
+</blockquote>
+<ul>
+<li><code>child</code>：子部件</li>
+<li><code>borderRadius</code>：圆角弧度</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-keyword">import</span> <span class="hljs-symbol">&#x27;package</span>:flutter/material.dart&#x27;;
+
+void main() {
+  runApp(<span class="hljs-type">App</span>());
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">App</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatelessWidget</span> </span>{
+  <span class="hljs-meta">@override</span>
+  <span class="hljs-type">Widget</span> build(<span class="hljs-type">BuildContext</span> context) {
+    <span class="hljs-keyword">return</span> <span class="hljs-type">Center</span>(
+      child: <span class="hljs-type">ClipRRect</span>(
+        child: <span class="hljs-type">Image</span>.network(
+          <span class="hljs-symbol">&#x27;https</span>:<span class="hljs-comment">//img0.baidu.com/it/u=2592042537,1864064944&amp;fm=26&amp;fmt=auto&amp;gp=0.jpg&#x27;,</span>
+          width: <span class="hljs-number">200</span>,
+        ),
+        borderRadius: <span class="hljs-type">BorderRadius</span>.circular(<span class="hljs-number">16</span>),
+      ),
+    );
+  }
+}
+</code></pre>
+<h3 id="圆形图片">圆形图片</h3>
+<p>实现圆形图片可以配合<code>ClipOval</code>部件</p>
+<h4 id="clipoval">ClipOval</h4>
+<blockquote>
+<p>创建一个圆形裁剪</p>
+</blockquote>
+<ul>
+<li><code>child</code>：裁剪的部件</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-keyword">import</span> <span class="hljs-symbol">&#x27;package</span>:flutter/material.dart&#x27;;
+
+void main() {
+  runApp(<span class="hljs-type">App</span>());
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">App</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatelessWidget</span> </span>{
+  <span class="hljs-meta">@override</span>
+  <span class="hljs-type">Widget</span> build(<span class="hljs-type">BuildContext</span> context) {
+    <span class="hljs-keyword">return</span> <span class="hljs-type">Center</span>(
+      child: <span class="hljs-type">ClipOval</span>(
+        child: <span class="hljs-type">Image</span>.network(
+          <span class="hljs-symbol">&#x27;https</span>:<span class="hljs-comment">//img0.baidu.com/it/u=2592042537,1864064944&amp;fm=26&amp;fmt=auto&amp;gp=0.jpg&#x27;,</span>
+          width: <span class="hljs-number">200</span>,
+        ),
+      ),
+    );
+  }
+}
+</code></pre>
+<h2 id="圆形头像">圆形头像</h2>
+<blockquote>
+<p>用于展示圆形头像</p>
+</blockquote>
+<ul>
+<li><code>child</code>：头像内容，可以指定文字，如果指定为图片则需要手动设置图片圆角</li>
+<li><code>backgroundColor</code>：背景色</li>
+<li><code>backgroundImage</code>：背景图</li>
+<li><code>radius</code>：大小</li>
+<li><code>minRadius</code>：最小</li>
+<li><code>maxRadius</code>：最大</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-keyword">import</span> <span class="hljs-symbol">&#x27;package</span>:flutter/material.dart&#x27;;
+
+void main() {
+  runApp(<span class="hljs-type">App</span>());
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">App</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatelessWidget</span> </span>{
+  <span class="hljs-meta">@override</span>
+  <span class="hljs-type">Widget</span> build(<span class="hljs-type">BuildContext</span> context) {
+    <span class="hljs-keyword">return</span> <span class="hljs-type">MaterialApp</span>(
+      home: <span class="hljs-type">Scaffold</span>(
+        body: <span class="hljs-type">Center</span>(
+          child: <span class="hljs-type">CircleAvatar</span>(
+            child: <span class="hljs-type">Text</span>(<span class="hljs-symbol">&#x27;Cod</span>e&#x27;),
+          ),
+        ),
+      ),
+    );
+  }
+}
+</code></pre>
+</div>
+</section></main>
+</section></main>
+	
+<div class="back-top svelte-9c9s8u" style="bottom: 5rem;right: 0.625rem;display: none"><i class="iconfont icon-back-top"></i>
+</div>
+</section>
+
+
+
+	<script type="svelte-data" url="20210629190439.json">{"status":200,"statusText":"","headers":{"content-type":"text/plain;charset=UTF-8"},"body":"{\"title\":\"Wigets学习之图片\",\"slug\":\"Flutter Wiget\",\"time\":\"2021-06-29T19:10:40.000Z\",\"author\":\"PingTouG\",\"html\":\"\u003Cp\u003E在\u003Ccode\u003EFlutter\u003C\u002Fcode\u003E中图片分为：\u003Ccode\u003E本地图片\u003C\u002Fcode\u003E和\u003Ccode\u003E网络图片\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003Ch2 id=\\\"image\\\"\u003EImage\u003C\u002Fh2\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E用于显示图片\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003Eimage\u003C\u002Fcode\u003E：图片\u003Ccode\u003EWidget\u003C\u002Fcode\u003E，本地图片可以使用\u003Ccode\u003EAssetImage\u003C\u002Fcode\u003E，网络图片可以使用\u003Ccode\u003ENetworkImage\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EframeBuilder\u003C\u002Fcode\u003E：图片帧构造器，可用于设置图片样式，\u003Ccode\u003EBuildContext context\u003C\u002Fcode\u003E是构建上下文，\u003Ccode\u003EWidget child\u003C\u002Fcode\u003E为当前图片，\u003Ccode\u003Eint? frame\u003C\u002Fcode\u003E为渲染\u003Ccode\u003EImage\u003C\u002Fcode\u003E帧数的下标(默认首帧)\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EloadingBuilder\u003C\u002Fcode\u003E：图片加载构造器，用于设置加载样式\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EerrorBuilder\u003C\u002Fcode\u003E：图片加载失败构造器，用于设置加载失败样式\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EsemanticLabel\u003C\u002Fcode\u003E：语义化描述\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EexcludeFromSemantics\u003C\u002Fcode\u003E：是否从语义化中排除\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Ewidth\u003C\u002Fcode\u003E：宽度\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Eheight\u003C\u002Fcode\u003E：高度\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Ecolor\u003C\u002Fcode\u003E：颜色\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EcolorBlendMode\u003C\u002Fcode\u003E：颜色混合模式，默认为\u003Ccode\u003EBlendMode.srcIn\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Efit\u003C\u002Fcode\u003E：图片裁剪，默认为\u003Ccode\u003EBoxFit.contain\u003C\u002Fcode\u003E\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003EBoxFit.contain\u003C\u002Fcode\u003E：等比例显示，确保长边完全显示\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EBoxFit.cover\u003C\u002Fcode\u003E：等比例显示，确保短边完全显示\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EBoxFit.fill\u003C\u002Fcode\u003E：拉伸显示确保完全显示\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EBoxFit.fitHeight\u003C\u002Fcode\u003E：等比显示，以高度为准显示\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EBoxFit.fitWidth\u003C\u002Fcode\u003E：等比显示，以宽度度为准显示\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Erepeat\u003C\u002Fcode\u003E：重复方式\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-dart\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;package\u003C\u002Fspan\u003E:flutter\u002Fmaterial.dart&#x27;;\\n\\nvoid main() {\\n  runApp(\u003Cspan class=\\\"hljs-type\\\"\u003EApp\u003C\u002Fspan\u003E());\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EApp\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EStatelessWidget\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EWidget\u003C\u002Fspan\u003E build(\u003Cspan class=\\\"hljs-type\\\"\u003EBuildContext\u003C\u002Fspan\u003E context) {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-type\\\"\u003EColumn\u003C\u002Fspan\u003E(\\n      mainAxisAlignment: \u003Cspan class=\\\"hljs-type\\\"\u003EMainAxisAlignment\u003C\u002Fspan\u003E.center,\\n      children: [\\n        \u003Cspan class=\\\"hljs-type\\\"\u003EImage\u003C\u002Fspan\u003E(\\n          image: \u003Cspan class=\\\"hljs-type\\\"\u003EAssetImage\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;assets\u003C\u002Fspan\u003E\u002Fimages\u002Flogo.png&#x27;),\\n          width: \u003Cspan class=\\\"hljs-number\\\"\u003E200\u003C\u002Fspan\u003E,\\n          frameBuilder: (\\n            \u003Cspan class=\\\"hljs-type\\\"\u003EBuildContext\u003C\u002Fspan\u003E context,\\n            \u003Cspan class=\\\"hljs-type\\\"\u003EWidget\u003C\u002Fspan\u003E child,\\n            int? frame,\\n            bool wasSynchronouslyLoaded,\\n          ) {\\n            \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-type\\\"\u003EContainer\u003C\u002Fspan\u003E(\\n                padding: \u003Cspan class=\\\"hljs-type\\\"\u003EEdgeInsets\u003C\u002Fspan\u003E.all(\u003Cspan class=\\\"hljs-number\\\"\u003E9\u003C\u002Fspan\u003E),\\n                color: \u003Cspan class=\\\"hljs-type\\\"\u003EColors\u003C\u002Fspan\u003E.red.shade100,\\n                child: child);\\n          },\\n        ),\\n        \u003Cspan class=\\\"hljs-type\\\"\u003ESizedBox\u003C\u002Fspan\u003E(\\n          height: \u003Cspan class=\\\"hljs-number\\\"\u003E10\u003C\u002Fspan\u003E,\\n        ),\\n        \u003Cspan class=\\\"hljs-type\\\"\u003EImage\u003C\u002Fspan\u003E(\\n            image: \u003Cspan class=\\\"hljs-type\\\"\u003ENetworkImage\u003C\u002Fspan\u003E(\\n                \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;https\u003C\u002Fspan\u003E:\u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002Fimg0.baidu.com\u002Fit\u002Fu=2592042537,1864064944&amp;fm=26&amp;fmt=auto&amp;gp=0.jpg&#x27;),\u003C\u002Fspan\u003E\\n            width: \u003Cspan class=\\\"hljs-number\\\"\u003E200\u003C\u002Fspan\u003E,\\n            height: \u003Cspan class=\\\"hljs-number\\\"\u003E300\u003C\u002Fspan\u003E,\\n            repeat: \u003Cspan class=\\\"hljs-type\\\"\u003EImageRepeat\u003C\u002Fspan\u003E.repeat),\\n      ],\\n    );\\n  }\\n}\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch3 id=\\\"imageasset\\\"\u003EImage.asset\u003C\u002Fh3\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E显示一个本地图片\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003Ename\u003C\u002Fcode\u003E：图片路径(必填)\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Cp\u003E其他属性和\u003Ccode\u003EImage\u003C\u002Fcode\u003E一致\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-dart\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;package\u003C\u002Fspan\u003E:flutter\u002Fmaterial.dart&#x27;;\\n\\nvoid main() {\\n  runApp(\u003Cspan class=\\\"hljs-type\\\"\u003EApp\u003C\u002Fspan\u003E());\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EApp\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EStatelessWidget\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EWidget\u003C\u002Fspan\u003E build(\u003Cspan class=\\\"hljs-type\\\"\u003EBuildContext\u003C\u002Fspan\u003E context) {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-type\\\"\u003ECenter\u003C\u002Fspan\u003E(\\n      child: \u003Cspan class=\\\"hljs-type\\\"\u003EImage\u003C\u002Fspan\u003E.asset(\\n        \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;assets\u003C\u002Fspan\u003E\u002Fimages\u002Flogo.png&#x27;,\\n        width: \u003Cspan class=\\\"hljs-number\\\"\u003E200\u003C\u002Fspan\u003E,\\n      ),\\n    );\\n  }\\n}\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch3 id=\\\"imagenetwork\\\"\u003EImage.network\u003C\u002Fh3\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E显示一个网络图片\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003Esrc\u003C\u002Fcode\u003E：图片地址(必填)\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Cp\u003E其他属性和\u003Ccode\u003EImage\u003C\u002Fcode\u003E一致\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-dart\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;package\u003C\u002Fspan\u003E:flutter\u002Fmaterial.dart&#x27;;\\n\\nvoid main() {\\n  runApp(\u003Cspan class=\\\"hljs-type\\\"\u003EApp\u003C\u002Fspan\u003E());\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EApp\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EStatelessWidget\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EWidget\u003C\u002Fspan\u003E build(\u003Cspan class=\\\"hljs-type\\\"\u003EBuildContext\u003C\u002Fspan\u003E context) {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-type\\\"\u003ECenter\u003C\u002Fspan\u003E(\\n      child: \u003Cspan class=\\\"hljs-type\\\"\u003EImage\u003C\u002Fspan\u003E.network(\\n        \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;https\u003C\u002Fspan\u003E:\u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002Fimg0.baidu.com\u002Fit\u002Fu=2592042537,1864064944&amp;fm=26&amp;fmt=auto&amp;gp=0.jpg&#x27;,\u003C\u002Fspan\u003E\\n        width: \u003Cspan class=\\\"hljs-number\\\"\u003E200\u003C\u002Fspan\u003E,\\n      ),\\n    );\\n  }\\n}\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch3 id=\\\"圆角图片\\\"\u003E圆角图片\u003C\u002Fh3\u003E\\n\u003Cp\u003E实现圆角图片可以配合\u003Ccode\u003EClipRRect\u003C\u002Fcode\u003E部件\u003C\u002Fp\u003E\\n\u003Ch4 id=\\\"cliprrect\\\"\u003EClipRRect\u003C\u002Fh4\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E使用圆角裁剪子部件\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003Echild\u003C\u002Fcode\u003E：子部件\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EborderRadius\u003C\u002Fcode\u003E：圆角弧度\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-dart\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;package\u003C\u002Fspan\u003E:flutter\u002Fmaterial.dart&#x27;;\\n\\nvoid main() {\\n  runApp(\u003Cspan class=\\\"hljs-type\\\"\u003EApp\u003C\u002Fspan\u003E());\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EApp\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EStatelessWidget\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EWidget\u003C\u002Fspan\u003E build(\u003Cspan class=\\\"hljs-type\\\"\u003EBuildContext\u003C\u002Fspan\u003E context) {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-type\\\"\u003ECenter\u003C\u002Fspan\u003E(\\n      child: \u003Cspan class=\\\"hljs-type\\\"\u003EClipRRect\u003C\u002Fspan\u003E(\\n        child: \u003Cspan class=\\\"hljs-type\\\"\u003EImage\u003C\u002Fspan\u003E.network(\\n          \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;https\u003C\u002Fspan\u003E:\u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002Fimg0.baidu.com\u002Fit\u002Fu=2592042537,1864064944&amp;fm=26&amp;fmt=auto&amp;gp=0.jpg&#x27;,\u003C\u002Fspan\u003E\\n          width: \u003Cspan class=\\\"hljs-number\\\"\u003E200\u003C\u002Fspan\u003E,\\n        ),\\n        borderRadius: \u003Cspan class=\\\"hljs-type\\\"\u003EBorderRadius\u003C\u002Fspan\u003E.circular(\u003Cspan class=\\\"hljs-number\\\"\u003E16\u003C\u002Fspan\u003E),\\n      ),\\n    );\\n  }\\n}\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch3 id=\\\"圆形图片\\\"\u003E圆形图片\u003C\u002Fh3\u003E\\n\u003Cp\u003E实现圆形图片可以配合\u003Ccode\u003EClipOval\u003C\u002Fcode\u003E部件\u003C\u002Fp\u003E\\n\u003Ch4 id=\\\"clipoval\\\"\u003EClipOval\u003C\u002Fh4\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E创建一个圆形裁剪\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003Echild\u003C\u002Fcode\u003E：裁剪的部件\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-dart\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;package\u003C\u002Fspan\u003E:flutter\u002Fmaterial.dart&#x27;;\\n\\nvoid main() {\\n  runApp(\u003Cspan class=\\\"hljs-type\\\"\u003EApp\u003C\u002Fspan\u003E());\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EApp\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EStatelessWidget\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EWidget\u003C\u002Fspan\u003E build(\u003Cspan class=\\\"hljs-type\\\"\u003EBuildContext\u003C\u002Fspan\u003E context) {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-type\\\"\u003ECenter\u003C\u002Fspan\u003E(\\n      child: \u003Cspan class=\\\"hljs-type\\\"\u003EClipOval\u003C\u002Fspan\u003E(\\n        child: \u003Cspan class=\\\"hljs-type\\\"\u003EImage\u003C\u002Fspan\u003E.network(\\n          \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;https\u003C\u002Fspan\u003E:\u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002Fimg0.baidu.com\u002Fit\u002Fu=2592042537,1864064944&amp;fm=26&amp;fmt=auto&amp;gp=0.jpg&#x27;,\u003C\u002Fspan\u003E\\n          width: \u003Cspan class=\\\"hljs-number\\\"\u003E200\u003C\u002Fspan\u003E,\\n        ),\\n      ),\\n    );\\n  }\\n}\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch2 id=\\\"圆形头像\\\"\u003E圆形头像\u003C\u002Fh2\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E用于展示圆形头像\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003Echild\u003C\u002Fcode\u003E：头像内容，可以指定文字，如果指定为图片则需要手动设置图片圆角\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EbackgroundColor\u003C\u002Fcode\u003E：背景色\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EbackgroundImage\u003C\u002Fcode\u003E：背景图\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Eradius\u003C\u002Fcode\u003E：大小\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EminRadius\u003C\u002Fcode\u003E：最小\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EmaxRadius\u003C\u002Fcode\u003E：最大\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-dart\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;package\u003C\u002Fspan\u003E:flutter\u002Fmaterial.dart&#x27;;\\n\\nvoid main() {\\n  runApp(\u003Cspan class=\\\"hljs-type\\\"\u003EApp\u003C\u002Fspan\u003E());\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EApp\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EStatelessWidget\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EWidget\u003C\u002Fspan\u003E build(\u003Cspan class=\\\"hljs-type\\\"\u003EBuildContext\u003C\u002Fspan\u003E context) {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-type\\\"\u003EMaterialApp\u003C\u002Fspan\u003E(\\n      home: \u003Cspan class=\\\"hljs-type\\\"\u003EScaffold\u003C\u002Fspan\u003E(\\n        body: \u003Cspan class=\\\"hljs-type\\\"\u003ECenter\u003C\u002Fspan\u003E(\\n          child: \u003Cspan class=\\\"hljs-type\\\"\u003ECircleAvatar\u003C\u002Fspan\u003E(\\n            child: \u003Cspan class=\\\"hljs-type\\\"\u003EText\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;Cod\u003C\u002Fspan\u003Ee&#x27;),\\n          ),\\n        ),\\n      ),\\n    );\\n  }\\n}\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\"}"}</script>
+</div>
+	</body>
+</html>
