@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" content="#333333" />
+		<link rel="stylesheet" href="/assets/styles/global.css" />
+		<title>Wigets学习之流式布局</title>
+
+		
+
+		<link rel="modulepreload" href="/./_app/start-bf43ee66.js">
+		<link rel="modulepreload" href="/./_app/chunks/vendor-d00531f1.js">
+		<link rel="modulepreload" href="/./_app/pages/__layout.svelte-2c475058.js">
+		<link rel="modulepreload" href="/./_app/pages/article/__layout.svelte-42f46e6c.js">
+		<link rel="modulepreload" href="/./_app/pages/article/[category]/[id].svelte-f684a407.js">
+		<link rel="modulepreload" href="/./_app/chunks/utils-a81d5505.js">
+		<link rel="stylesheet" href="/./_app/assets/start-a8cd1609.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/__layout.svelte-dfbf40bb.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/article/__layout.svelte-1448dd73.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/article/[category]/[id].svelte-7f79f039.css">
+
+		<script type="module">
+			import { start } from "/./_app/start-bf43ee66.js";
+			start({
+				target: document.querySelector("#svelte"),
+				paths: {"base":"","assets":"/."},
+				session: {},
+				host: location.host,
+				route: true,
+				spa: false,
+				trailing_slash: "never",
+				hydrate: {
+					status: 200,
+					error: null,
+					nodes: [
+						import("/./_app/pages/__layout.svelte-2c475058.js"),
+						import("/./_app/pages/article/__layout.svelte-42f46e6c.js"),
+						import("/./_app/pages/article/[category]/[id].svelte-f684a407.js")
+					],
+					page: {
+						host: location.host, // TODO this is redundant
+						path: "/article/flutter/20210630165656",
+						query: new URLSearchParams(""),
+						params: {"category":"flutter","id":"20210630165656"}
+					}
+				}
+			});
+		</script>
+	</head>
+	<body>
+		<div id="svelte">
+
+
+
+<section class="svelte-jbk32v"><header class="svelte-jbk32v"><a href="/"><img class="logo svelte-jbk32v" src="/assets/images/logo.png" alt="code book logo"></a>
+<a class="github svelte-jbk32v" href="https://github.com/PingTouG" target="_blank"><i class="iconfont icon-github svelte-jbk32v"></i></a></header>
+	<main><section><main class="svelte-1fbldbu">
+
+<section class="md"><h1 class="title">Wigets学习之流式布局</h1>
+  <div class="info svelte-1vg5uky"><div class="author svelte-1vg5uky">作者：PingTouG</div>
+    <div class="time">时间：2021-06-30 16:57:26</div></div>
+
+  <div class="md-content"><h2 id="wrap">Wrap</h2>
+<blockquote>
+<p>创建一个可以换行的布局，即：一行放不下自动换行</p>
+</blockquote>
+<ul>
+<li><code>children</code>：子部件</li>
+<li><code>direction</code>：排列方式，默认为<code>Axis.horizontal(横向)</code></li>
+<li><code>alignment</code>：横轴对齐方式</li>
+<li><code>runAlignment</code>：交叉轴对齐方式</li>
+<li><code>crossAxisAlignment</code>：子部件在交叉轴的对齐方式</li>
+<li><code>spacing</code>：交叉轴间隙</li>
+<li><code>runSpacing</code>：横轴间隙</li>
+<li><code>textDirection</code>：文本排列方式</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-keyword">import</span> <span class="hljs-symbol">&#x27;package</span>:flutter/material.dart&#x27;;
+
+void main() {
+  runApp(<span class="hljs-type">App</span>());
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">App</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatelessWidget</span> </span>{
+  <span class="hljs-keyword">final</span> <span class="hljs-type">List</span>&lt;<span class="hljs-type">Widget</span>&gt; list = <span class="hljs-type">List</span>.generate(
+      <span class="hljs-number">8</span>,
+      (index) =&gt; <span class="hljs-type">Container</span>(
+            width: <span class="hljs-number">100</span>,
+            height: <span class="hljs-number">100</span>,
+            color: <span class="hljs-type">Colors</span>.blue,
+          ));
+
+  <span class="hljs-meta">@override</span>
+  <span class="hljs-type">Widget</span> build(<span class="hljs-type">BuildContext</span> context) {
+    <span class="hljs-keyword">return</span> <span class="hljs-type">MaterialApp</span>(
+      home: <span class="hljs-type">Scaffold</span>(
+        appBar: <span class="hljs-type">AppBar</span>(
+          title: <span class="hljs-type">Text</span>(&#x27;流式布局&#x27;),
+        ),
+        body: <span class="hljs-type">Wrap</span>(
+          spacing: <span class="hljs-number">12</span>,
+          runSpacing: <span class="hljs-number">12</span>,
+          alignment: <span class="hljs-type">WrapAlignment</span>.spaceAround,
+          crossAxisAlignment: <span class="hljs-type">WrapCrossAlignment</span>.center,
+          children: list,
+        ),
+      ),
+    );
+  }
+}
+</code></pre>
+<h2 id="flow">Flow</h2>
+<blockquote>
+<p>创建一个流式布局</p>
+</blockquote>
+<p>此部件过于复杂，需要自实现子部件的位置转换，但是性能好灵活。目前不曾遇见使用场景，以后用过了再更新此部件文档</p>
+</div>
+</section></main>
+</section></main>
+	
+<div class="back-top svelte-9c9s8u" style="bottom: 5rem;right: 0.625rem;display: none"><i class="iconfont icon-back-top"></i>
+</div>
+</section>
+
+
+
+	<script type="svelte-data" url="20210630165656.json">{"status":200,"statusText":"","headers":{"content-type":"text/plain;charset=UTF-8"},"body":"{\"title\":\"Wigets学习之流式布局\",\"slug\":\"Flutter Wiget\",\"time\":\"2021-06-30T16:57:26.000Z\",\"author\":\"PingTouG\",\"html\":\"\u003Ch2 id=\\\"wrap\\\"\u003EWrap\u003C\u002Fh2\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E创建一个可以换行的布局，即：一行放不下自动换行\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003Echildren\u003C\u002Fcode\u003E：子部件\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Edirection\u003C\u002Fcode\u003E：排列方式，默认为\u003Ccode\u003EAxis.horizontal(横向)\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Ealignment\u003C\u002Fcode\u003E：横轴对齐方式\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003ErunAlignment\u003C\u002Fcode\u003E：交叉轴对齐方式\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EcrossAxisAlignment\u003C\u002Fcode\u003E：子部件在交叉轴的对齐方式\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Espacing\u003C\u002Fcode\u003E：交叉轴间隙\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003ErunSpacing\u003C\u002Fcode\u003E：横轴间隙\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EtextDirection\u003C\u002Fcode\u003E：文本排列方式\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-dart\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;package\u003C\u002Fspan\u003E:flutter\u002Fmaterial.dart&#x27;;\\n\\nvoid main() {\\n  runApp(\u003Cspan class=\\\"hljs-type\\\"\u003EApp\u003C\u002Fspan\u003E());\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EApp\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EStatelessWidget\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-type\\\"\u003EList\u003C\u002Fspan\u003E&lt;\u003Cspan class=\\\"hljs-type\\\"\u003EWidget\u003C\u002Fspan\u003E&gt; list = \u003Cspan class=\\\"hljs-type\\\"\u003EList\u003C\u002Fspan\u003E.generate(\\n      \u003Cspan class=\\\"hljs-number\\\"\u003E8\u003C\u002Fspan\u003E,\\n      (index) =&gt; \u003Cspan class=\\\"hljs-type\\\"\u003EContainer\u003C\u002Fspan\u003E(\\n            width: \u003Cspan class=\\\"hljs-number\\\"\u003E100\u003C\u002Fspan\u003E,\\n            height: \u003Cspan class=\\\"hljs-number\\\"\u003E100\u003C\u002Fspan\u003E,\\n            color: \u003Cspan class=\\\"hljs-type\\\"\u003EColors\u003C\u002Fspan\u003E.blue,\\n          ));\\n\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EWidget\u003C\u002Fspan\u003E build(\u003Cspan class=\\\"hljs-type\\\"\u003EBuildContext\u003C\u002Fspan\u003E context) {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-type\\\"\u003EMaterialApp\u003C\u002Fspan\u003E(\\n      home: \u003Cspan class=\\\"hljs-type\\\"\u003EScaffold\u003C\u002Fspan\u003E(\\n        appBar: \u003Cspan class=\\\"hljs-type\\\"\u003EAppBar\u003C\u002Fspan\u003E(\\n          title: \u003Cspan class=\\\"hljs-type\\\"\u003EText\u003C\u002Fspan\u003E(&#x27;流式布局&#x27;),\\n        ),\\n        body: \u003Cspan class=\\\"hljs-type\\\"\u003EWrap\u003C\u002Fspan\u003E(\\n          spacing: \u003Cspan class=\\\"hljs-number\\\"\u003E12\u003C\u002Fspan\u003E,\\n          runSpacing: \u003Cspan class=\\\"hljs-number\\\"\u003E12\u003C\u002Fspan\u003E,\\n          alignment: \u003Cspan class=\\\"hljs-type\\\"\u003EWrapAlignment\u003C\u002Fspan\u003E.spaceAround,\\n          crossAxisAlignment: \u003Cspan class=\\\"hljs-type\\\"\u003EWrapCrossAlignment\u003C\u002Fspan\u003E.center,\\n          children: list,\\n        ),\\n      ),\\n    );\\n  }\\n}\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch2 id=\\\"flow\\\"\u003EFlow\u003C\u002Fh2\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E创建一个流式布局\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cp\u003E此部件过于复杂，需要自实现子部件的位置转换，但是性能好灵活。目前不曾遇见使用场景，以后用过了再更新此部件文档\u003C\u002Fp\u003E\\n\"}"}</script>
+</div>
+	</body>
+</html>
