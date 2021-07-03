@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" content="#333333" />
+		<link rel="stylesheet" href="/assets/styles/global.css" />
+		<title>React Native常见问题</title>
+
+		
+
+		<link rel="modulepreload" href="/./_app/start-bf43ee66.js">
+		<link rel="modulepreload" href="/./_app/chunks/vendor-d00531f1.js">
+		<link rel="modulepreload" href="/./_app/pages/__layout.svelte-2c475058.js">
+		<link rel="modulepreload" href="/./_app/pages/article/__layout.svelte-42f46e6c.js">
+		<link rel="modulepreload" href="/./_app/pages/article/[category]/[id].svelte-f684a407.js">
+		<link rel="modulepreload" href="/./_app/chunks/utils-a81d5505.js">
+		<link rel="stylesheet" href="/./_app/assets/start-a8cd1609.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/__layout.svelte-dfbf40bb.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/article/__layout.svelte-1448dd73.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/article/[category]/[id].svelte-7f79f039.css">
+
+		<script type="module">
+			import { start } from "/./_app/start-bf43ee66.js";
+			start({
+				target: document.querySelector("#svelte"),
+				paths: {"base":"","assets":"/."},
+				session: {},
+				host: location.host,
+				route: true,
+				spa: false,
+				trailing_slash: "never",
+				hydrate: {
+					status: 200,
+					error: null,
+					nodes: [
+						import("/./_app/pages/__layout.svelte-2c475058.js"),
+						import("/./_app/pages/article/__layout.svelte-42f46e6c.js"),
+						import("/./_app/pages/article/[category]/[id].svelte-f684a407.js")
+					],
+					page: {
+						host: location.host, // TODO this is redundant
+						path: "/article/react/20210703183026",
+						query: new URLSearchParams(""),
+						params: {"category":"react","id":"20210703183026"}
+					}
+				}
+			});
+		</script>
+	</head>
+	<body>
+		<div id="svelte">
+
+
+
+<section class="svelte-jbk32v"><header class="svelte-jbk32v"><a href="/"><img class="logo svelte-jbk32v" src="/assets/images/logo.png" alt="code book logo"></a>
+<a class="github svelte-jbk32v" href="https://github.com/PingTouG" target="_blank"><i class="iconfont icon-github svelte-jbk32v"></i></a></header>
+	<main><section><main class="svelte-1fbldbu">
+
+<section class="md"><h1 class="title">React Native常见问题</h1>
+  <div class="info svelte-1vg5uky"><div class="author svelte-1vg5uky">作者：PingTouG</div>
+    <div class="time">时间：2021-07-03 18:31:24</div></div>
+
+  <div class="md-content"><h2 id="连接真机或模拟器调试">连接真机或模拟器调试</h2>
+<h3 id="输入命令查看可用设备adb-devices，出现xxx-device即可">输入命令查看可用设备<code>adb devices</code>，出现<code>xxx device</code>即可</h3>
+<pre><code class="language-bash">&gt; adb devices
+
+adb server <span class="hljs-keyword">is</span> <span class="hljs-keyword">out of</span> <span class="hljs-built_in">date</span>.  killing...
+* daemon started successfully *
+List <span class="hljs-keyword">of</span> devices attached
+fed54da device
+</code></pre>
+<h2 id="-what-went-wrong-could-not-determine-the-dependencies-of-task-appinstalldebug--failed-to-find-build-tools-revision-2902">* What went wrong: Could not determine the dependencies of task &#39;:app:installDebug&#39;. &gt; Failed to find Build Tools revision 29.0.2</h2>
+<p>此问题是因为打包使用的<code>Android SDK</code>和当前电脑上的不一致，当前电脑的版本可通过<code>Android Studio</code>查看或者有<code>Flutter</code>环境可直接在命令行输入<code>Flutter doctor</code>查看。</p>
+<h3 id="得到android-sdk版本号之后，修改androidbuildgradle文件，修改如下">得到<code>Android SDK</code>版本号之后，修改<code>android/build.gradle</code>文件，修改如下</h3>
+<pre><code class="language-diff"><span class="hljs-comment">// Top-level build file where you can add configuration options common to all sub-projects/modules.</span>
+
+<span class="hljs-variable">buildscript</span> {
+    <span class="hljs-variable">ext</span> {
+-        <span class="hljs-variable">buildToolsVersion</span> = <span class="hljs-string">&quot;29.0.3&quot;</span>
++        <span class="hljs-variable">buildToolsVersion</span> = <span class="hljs-string">&quot;30.0.3&quot;</span>
+        <span class="hljs-variable">minSdkVersion</span> = <span class="hljs-number">21</span>
+-        <span class="hljs-variable">compileSdkVersion</span> = <span class="hljs-number">29</span>
+-        <span class="hljs-variable">targetSdkVersion</span> = <span class="hljs-number">29</span>
++        <span class="hljs-variable">compileSdkVersion</span> = <span class="hljs-number">30</span>
++        <span class="hljs-variable">targetSdkVersion</span> = <span class="hljs-number">30</span>
+        <span class="hljs-variable">ndkVersion</span> = <span class="hljs-string">&quot;20.1.5948944&quot;</span>
++        <span class="hljs-variable">buildToolsVersion</span> = <span class="hljs-string">&quot;30.0.3&quot;</span>
+    }
+    <span class="hljs-variable">repositories</span> {
+        <span class="hljs-function"><span class="hljs-title">google</span>()</span>
+        <span class="hljs-function"><span class="hljs-title">jcenter</span>()</span>
+    }
+    <span class="hljs-variable">dependencies</span> {
+        <span class="hljs-function"><span class="hljs-title">classpath</span>(<span class="hljs-string">&quot;com.android.tools.build:gradle:4.1.0&quot;</span>)</span>
+        <span class="hljs-comment">// <span class="hljs-doctag">NOTE</span>: Do not place your application dependencies here; they belong</span>
+        <span class="hljs-comment">// in the individual module build.gradle files</span>
+    }
+}
+
+<span class="hljs-variable">allprojects</span> {
+    <span class="hljs-variable">repositories</span> {
+        <span class="hljs-function"><span class="hljs-title">mavenLocal</span>()</span>
+        <span class="hljs-variable">maven</span> {
+            <span class="hljs-comment">// All of React Native (JS, Obj-C sources, Android binaries) is installed from npm</span>
+            <span class="hljs-function"><span class="hljs-title">url</span>(<span class="hljs-string">&quot;$rootDir/../node_modules/react-native/android&quot;</span>)</span>
+        }
+        <span class="hljs-variable">maven</span> {
+            <span class="hljs-comment">// Android JSC is installed from npm</span>
+            <span class="hljs-function"><span class="hljs-title">url</span>(<span class="hljs-string">&quot;$rootDir/../node_modules/jsc-android/dist&quot;</span>)</span>
+        }
+
+        <span class="hljs-function"><span class="hljs-title">google</span>()</span>
+        <span class="hljs-function"><span class="hljs-title">jcenter</span>()</span>
+        <span class="hljs-variable">maven</span> { <span class="hljs-variable">url</span> <span class="hljs-string">&#x27;https://www.jitpack.io&#x27;</span> }
+    }
+}
+</code></pre>
+<h3 id="然后再修改androidappbuildgradle，修改如下：">然后再修改<code>android/app/build.gradle</code>，修改如下：</h3>
+<pre><code class="language-diff">apply plugin: <span class="hljs-string">&quot;com.android.application&quot;</span>
+
+<span class="hljs-keyword">import</span> com.android.build.OutputFile
+
+<span class="hljs-comment">/**
+ * The react.gradle file registers a task for each build variant (e.g. bundleDebugJsAndAssets
+ * and bundleReleaseJsAndAssets).
+ * These basically call `react-native bundle` with the correct arguments during the Android build
+ * cycle. By default, bundleDebugJsAndAssets is skipped, as in debug/dev mode we prefer to load the
+ * bundle directly from the development server. Below you can see all the possible configurations
+ * and their defaults. If you decide to add a configuration block, make sure to add it before the
+ * `apply from: &quot;../../node_modules/react-native/react.gradle&quot;` line.
+ *
+ * project.ext.react = [
+ *   // the name of the generated asset file containing your JS bundle
+ *   bundleAssetName: &quot;index.android.bundle&quot;,
+ *
+ *   // the entry file for bundle generation. If none specified and
+ *   // &quot;index.android.js&quot; exists, it will be used. Otherwise &quot;index.js&quot; is
+ *   // default. Can be overridden with ENTRY_FILE environment variable.
+ *   entryFile: &quot;index.android.js&quot;,
+ *
+ *   // https://reactnative.dev/docs/performance#enable-the-ram-format
+ *   bundleCommand: &quot;ram-bundle&quot;,
+ *
+ *   // whether to bundle JS and assets in debug mode
+ *   bundleInDe<span class="hljs-doctag">bug:</span> false,
+ *
+ *   // whether to bundle JS and assets in release mode
+ *   bundleInRelease: true,
+ *
+ *   // whether to bundle JS and assets in another build variant (if configured).
+ *   // See http://tools.android.com/tech-docs/new-build-system/user-guide#TOC-Build-Variants
+ *   // The configuration property can be in the following formats
+ *   //         &#x27;bundleIn${productFlavor}${buildType}&#x27;
+ *   //         &#x27;bundleIn${buildType}&#x27;
+ *   // bundleInFreeDe<span class="hljs-doctag">bug:</span> true,
+ *   // bundleInPaidRelease: true,
+ *   // bundleInBeta: true,
+ *
+ *   // whether to disable dev mode in custom build variants (by default only disabled in release)
+ *   // for example: to disable dev mode in the staging build type (if configured)
+ *   devDisabledInStaging: true,
+ *   // The configuration property can be in the following formats
+ *   //         &#x27;devDisabledIn${productFlavor}${buildType}&#x27;
+ *   //         &#x27;devDisabledIn${buildType}&#x27;
+ *
+ *   // the root of your project, i.e. where &quot;package.json&quot; lives
+ *   root: &quot;../../&quot;,
+ *
+ *   // where to put the JS bundle asset in debug mode
+ *   jsBundleDirDe<span class="hljs-doctag">bug:</span> &quot;$buildDir/intermediates/assets/debug&quot;,
+ *
+ *   // where to put the JS bundle asset in release mode
+ *   jsBundleDirRelease: &quot;$buildDir/intermediates/assets/release&quot;,
+ *
+ *   // where to put drawable resources / React Native assets, e.g. the ones you use via
+ *   // require(&#x27;./image.png&#x27;)), in debug mode
+ *   resourcesDirDe<span class="hljs-doctag">bug:</span> &quot;$buildDir/intermediates/res/merged/debug&quot;,
+ *
+ *   // where to put drawable resources / React Native assets, e.g. the ones you use via
+ *   // require(&#x27;./image.png&#x27;)), in release mode
+ *   resourcesDirRelease: &quot;$buildDir/intermediates/res/merged/release&quot;,
+ *
+ *   // by default the gradle tasks are skipped if none of the JS files or assets change; this means
+ *   // that we don&#x27;t look at files in android/ or ios/ to determine whether the tasks are up to
+ *   // date; if you have any other folders that you want to ignore for performance reasons (gradle
+ *   // indexes the entire tree), add them here. Alternatively, if you have JS files in android/
+ *   // for example, you might want to remove it from here.
+ *   inputExcludes: [&quot;android/**&quot;, &quot;ios/**&quot;],
+ *
+ *   // override which node gets called and with what additional arguments
+ *   nodeExecutableAndArgs: [&quot;node&quot;],
+ *
+ *   // supply additional arguments to the packager
+ *   extraPackagerArgs: []
+ * ]
+ */</span>
+
+<span class="hljs-keyword">project</span>.ext.react = [
+    enableHermes: <span class="hljs-keyword">false</span>,  <span class="hljs-comment">// clean and rebuild if changing</span>
+]
+
+apply <span class="hljs-keyword">from</span>: <span class="hljs-string">&quot;../../node_modules/react-native/react.gradle&quot;</span>
+
+<span class="hljs-comment">/**
+ * Set this to true to create two separate APKs instead of one:
+ *   - An APK that only works on ARM devices
+ *   - An APK that only works on x86 devices
+ * The advantage is the size of the APK is reduced by about 4MB.
+ * Upload all the APKs to the Play Store and people will download
+ * the correct one based on the CPU architecture of their device.
+ */</span>
+<span class="hljs-keyword">def</span> enableSeparateBuildPerCPUArchitecture = <span class="hljs-keyword">false</span>
+
+<span class="hljs-comment">/**
+ * Run Proguard to shrink the Java bytecode in release builds.
+ */</span>
+<span class="hljs-keyword">def</span> enableProguardInReleaseBuilds = <span class="hljs-keyword">false</span>
+
+<span class="hljs-comment">/**
+ * The preferred build flavor of JavaScriptCore.
+ *
+ * For example, to use the international variant, you can use:
+ * `def jscFlavor = &#x27;org.webkit:android-jsc-intl:+&#x27;`
+ *
+ * The international variant includes ICU i18n library and necessary data
+ * allowing to use e.g. `Date.toLocaleString` and `String.localeCompare` that
+ * give correct results when using with locales other than en-US.  Note that
+ * this variant is about 6MiB larger per architecture than default.
+ */</span>
+<span class="hljs-keyword">def</span> jscFlavor = <span class="hljs-string">&#x27;org.webkit:android-jsc:+&#x27;</span>
+
+<span class="hljs-comment">/**
+ * Whether to enable the Hermes VM.
+ *
+ * This should be set on project.ext.react and mirrored here.  If it is not set
+ * on project.ext.react, JavaScript will not be compiled to Hermes Bytecode
+ * and the benefits of using Hermes will therefore be sharply reduced.
+ */</span>
+<span class="hljs-keyword">def</span> enableHermes = <span class="hljs-keyword">project</span>.ext.react.get(<span class="hljs-string">&quot;enableHermes&quot;</span>, <span class="hljs-keyword">false</span>);
+
+android {
+    ndkVersion rootProject.ext.ndkVersion
+
+    compileSdkVersion rootProject.ext.compileSdkVersion
++    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    compileOptions {
+        <span class="hljs-keyword">sourceCompatibility</span> JavaVersion.VERSION_1_8
+        <span class="hljs-keyword">targetCompatibility</span> JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        applicationId <span class="hljs-string">&quot;com.rn_demo&quot;</span>
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode <span class="hljs-number">1</span>
+        versionName <span class="hljs-string">&quot;1.0&quot;</span>
+    }
+    splits {
+        abi {
+            reset()
+            enable enableSeparateBuildPerCPUArchitecture
+            universalApk <span class="hljs-keyword">false</span>  <span class="hljs-comment">// If true, also generate a universal APK</span>
+            <span class="hljs-keyword">include</span> <span class="hljs-string">&quot;armeabi-v7a&quot;</span>, <span class="hljs-string">&quot;x86&quot;</span>, <span class="hljs-string">&quot;arm64-v8a&quot;</span>, <span class="hljs-string">&quot;x86_64&quot;</span>
+        }
+    }
+    signingConfigs {
+        debug {
+            storeFile <span class="hljs-keyword">file</span>(<span class="hljs-string">&#x27;debug.keystore&#x27;</span>)
+            storePassword <span class="hljs-string">&#x27;android&#x27;</span>
+            keyAlias <span class="hljs-string">&#x27;androiddebugkey&#x27;</span>
+            keyPassword <span class="hljs-string">&#x27;android&#x27;</span>
+        }
+    }
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+        }
+        release {
+            <span class="hljs-comment">// Caution! In production, you need to generate your own keystore file.</span>
+            <span class="hljs-comment">// see https://reactnative.dev/docs/signed-apk-android.</span>
+            signingConfig signingConfigs.debug
+            minifyEnabled enableProguardInReleaseBuilds
+            proguardFiles getDefaultProguardFile(<span class="hljs-string">&quot;proguard-android.txt&quot;</span>), <span class="hljs-string">&quot;proguard-rules.pro&quot;</span>
+        }
+    }
+
+    <span class="hljs-comment">// applicationVariants are e.g. debug, release</span>
+    applicationVariants.all { variant -&gt;
+        variant.outputs.<span class="hljs-keyword">each</span> { output -&gt;
+            <span class="hljs-comment">// For each separate APK per architecture, set a unique version code as described here:</span>
+            <span class="hljs-comment">// https://developer.android.com/studio/build/configure-apk-splits.html</span>
+            <span class="hljs-comment">// Example: versionCode 1 will generate 1001 for armeabi-v7a, 1002 for x86, etc.</span>
+            <span class="hljs-keyword">def</span> versionCodes = [<span class="hljs-string">&quot;armeabi-v7a&quot;</span>: <span class="hljs-number">1</span>, <span class="hljs-string">&quot;x86&quot;</span>: <span class="hljs-number">2</span>, <span class="hljs-string">&quot;arm64-v8a&quot;</span>: <span class="hljs-number">3</span>, <span class="hljs-string">&quot;x86_64&quot;</span>: <span class="hljs-number">4</span>]
+            <span class="hljs-keyword">def</span> abi = output.getFilter(OutputFile.ABI)
+            <span class="hljs-keyword">if</span> (abi != <span class="hljs-keyword">null</span>) {  <span class="hljs-comment">// null for the universal-debug, universal-release variants</span>
+                output.versionCodeOverride =
+                        defaultConfig.versionCode * <span class="hljs-number">1000</span> + versionCodes.get(abi)
+            }
+
+        }
+    }
+}
+
+<span class="hljs-keyword">dependencies</span> {
+    implementation <span class="hljs-keyword">fileTree</span>(dir: <span class="hljs-string">&quot;libs&quot;</span>, <span class="hljs-keyword">include</span>: [<span class="hljs-string">&quot;*.jar&quot;</span>])
+    <span class="hljs-comment">//noinspection GradleDynamicVersion</span>
+    implementation <span class="hljs-string">&quot;com.facebook.react:react-native:+&quot;</span>  <span class="hljs-comment">// From node_modules</span>
+
+    implementation <span class="hljs-string">&quot;androidx.swiperefreshlayout:swiperefreshlayout:1.0.0&quot;</span>
+
+    debugImplementation(<span class="hljs-string">&quot;com.facebook.flipper:flipper:${FLIPPER_VERSION}&quot;</span>) {
+      <span class="hljs-keyword">exclude</span> <span class="hljs-keyword">group</span>:<span class="hljs-string">&#x27;com.facebook.fbjni&#x27;</span>
+    }
+
+    debugImplementation(<span class="hljs-string">&quot;com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}&quot;</span>) {
+        <span class="hljs-keyword">exclude</span> <span class="hljs-keyword">group</span>:<span class="hljs-string">&#x27;com.facebook.flipper&#x27;</span>
+        <span class="hljs-keyword">exclude</span> <span class="hljs-keyword">group</span>:<span class="hljs-string">&#x27;com.squareup.okhttp3&#x27;</span>, module:<span class="hljs-string">&#x27;okhttp&#x27;</span>
+    }
+
+    debugImplementation(<span class="hljs-string">&quot;com.facebook.flipper:flipper-fresco-plugin:${FLIPPER_VERSION}&quot;</span>) {
+        <span class="hljs-keyword">exclude</span> <span class="hljs-keyword">group</span>:<span class="hljs-string">&#x27;com.facebook.flipper&#x27;</span>
+    }
+
+    <span class="hljs-keyword">if</span> (enableHermes) {
+        <span class="hljs-keyword">def</span> hermesPath = <span class="hljs-string">&quot;../../node_modules/hermes-engine/android/&quot;</span>;
+        debugImplementation files(hermesPath + <span class="hljs-string">&quot;hermes-debug.aar&quot;</span>)
+        releaseImplementation files(hermesPath + <span class="hljs-string">&quot;hermes-release.aar&quot;</span>)
+    } <span class="hljs-keyword">else</span> {
+        implementation jscFlavor
+    }
+}
+
+<span class="hljs-comment">// Run this once to be able to run the application with BUCK</span>
+<span class="hljs-comment">// puts all compile dependencies into folder libs for BUCK to use</span>
+<span class="hljs-keyword">task</span> copyDownloadableDepsToLibs(type: <span class="hljs-keyword">Copy</span>) {
+    <span class="hljs-keyword">from</span> <span class="hljs-keyword">configurations</span>.<span class="hljs-keyword">compile</span>
+    <span class="hljs-keyword">into</span> <span class="hljs-string">&#x27;libs&#x27;</span>
+}
+
+apply <span class="hljs-keyword">from</span>: <span class="hljs-keyword">file</span>(<span class="hljs-string">&quot;../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle&quot;</span>); applyNativeModulesAppBuildGradle(<span class="hljs-keyword">project</span>)
+</code></pre>
+<p>然后再次运行：<code>npm run android</code>即可成功。</p>
+</div>
+</section></main>
+</section></main>
+	
+<div class="back-top svelte-9c9s8u" style="bottom: 5rem;right: 0.625rem;display: none"><i class="iconfont icon-back-top"></i>
+</div>
+</section>
+
+
+
+	<script type="svelte-data" url="20210703183026.json">{"status":200,"statusText":"","headers":{"content-type":"text/plain;charset=UTF-8"},"body":"{\"title\":\"React Native常见问题\",\"slug\":\"react\",\"time\":\"2021-07-03T18:31:24.000Z\",\"author\":\"PingTouG\",\"html\":\"\u003Ch2 id=\\\"连接真机或模拟器调试\\\"\u003E连接真机或模拟器调试\u003C\u002Fh2\u003E\\n\u003Ch3 id=\\\"输入命令查看可用设备adb-devices，出现xxx-device即可\\\"\u003E输入命令查看可用设备\u003Ccode\u003Eadb devices\u003C\u002Fcode\u003E，出现\u003Ccode\u003Exxx device\u003C\u002Fcode\u003E即可\u003C\u002Fh3\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-bash\\\"\u003E&gt; adb devices\\n\\nadb server \u003Cspan class=\\\"hljs-keyword\\\"\u003Eis\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eout of\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-built_in\\\"\u003Edate\u003C\u002Fspan\u003E.  killing...\\n* daemon started successfully *\\nList \u003Cspan class=\\\"hljs-keyword\\\"\u003Eof\u003C\u002Fspan\u003E devices attached\\nfed54da device\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch2 id=\\\"-what-went-wrong-could-not-determine-the-dependencies-of-task-appinstalldebug--failed-to-find-build-tools-revision-2902\\\"\u003E* What went wrong: Could not determine the dependencies of task &#39;:app:installDebug&#39;. &gt; Failed to find Build Tools revision 29.0.2\u003C\u002Fh2\u003E\\n\u003Cp\u003E此问题是因为打包使用的\u003Ccode\u003EAndroid SDK\u003C\u002Fcode\u003E和当前电脑上的不一致，当前电脑的版本可通过\u003Ccode\u003EAndroid Studio\u003C\u002Fcode\u003E查看或者有\u003Ccode\u003EFlutter\u003C\u002Fcode\u003E环境可直接在命令行输入\u003Ccode\u003EFlutter doctor\u003C\u002Fcode\u003E查看。\u003C\u002Fp\u003E\\n\u003Ch3 id=\\\"得到android-sdk版本号之后，修改androidbuildgradle文件，修改如下\\\"\u003E得到\u003Ccode\u003EAndroid SDK\u003C\u002Fcode\u003E版本号之后，修改\u003Ccode\u003Eandroid\u002Fbuild.gradle\u003C\u002Fcode\u003E文件，修改如下\u003C\u002Fh3\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-diff\\\"\u003E\u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F Top-level build file where you can add configuration options common to all sub-projects\u002Fmodules.\u003C\u002Fspan\u003E\\n\\n\u003Cspan class=\\\"hljs-variable\\\"\u003Ebuildscript\u003C\u002Fspan\u003E {\\n    \u003Cspan class=\\\"hljs-variable\\\"\u003Eext\u003C\u002Fspan\u003E {\\n-        \u003Cspan class=\\\"hljs-variable\\\"\u003EbuildToolsVersion\u003C\u002Fspan\u003E = \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;29.0.3&quot;\u003C\u002Fspan\u003E\\n+        \u003Cspan class=\\\"hljs-variable\\\"\u003EbuildToolsVersion\u003C\u002Fspan\u003E = \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;30.0.3&quot;\u003C\u002Fspan\u003E\\n        \u003Cspan class=\\\"hljs-variable\\\"\u003EminSdkVersion\u003C\u002Fspan\u003E = \u003Cspan class=\\\"hljs-number\\\"\u003E21\u003C\u002Fspan\u003E\\n-        \u003Cspan class=\\\"hljs-variable\\\"\u003EcompileSdkVersion\u003C\u002Fspan\u003E = \u003Cspan class=\\\"hljs-number\\\"\u003E29\u003C\u002Fspan\u003E\\n-        \u003Cspan class=\\\"hljs-variable\\\"\u003EtargetSdkVersion\u003C\u002Fspan\u003E = \u003Cspan class=\\\"hljs-number\\\"\u003E29\u003C\u002Fspan\u003E\\n+        \u003Cspan class=\\\"hljs-variable\\\"\u003EcompileSdkVersion\u003C\u002Fspan\u003E = \u003Cspan class=\\\"hljs-number\\\"\u003E30\u003C\u002Fspan\u003E\\n+        \u003Cspan class=\\\"hljs-variable\\\"\u003EtargetSdkVersion\u003C\u002Fspan\u003E = \u003Cspan class=\\\"hljs-number\\\"\u003E30\u003C\u002Fspan\u003E\\n        \u003Cspan class=\\\"hljs-variable\\\"\u003EndkVersion\u003C\u002Fspan\u003E = \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;20.1.5948944&quot;\u003C\u002Fspan\u003E\\n+        \u003Cspan class=\\\"hljs-variable\\\"\u003EbuildToolsVersion\u003C\u002Fspan\u003E = \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;30.0.3&quot;\u003C\u002Fspan\u003E\\n    }\\n    \u003Cspan class=\\\"hljs-variable\\\"\u003Erepositories\u003C\u002Fspan\u003E {\\n        \u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-title\\\"\u003Egoogle\u003C\u002Fspan\u003E()\u003C\u002Fspan\u003E\\n        \u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-title\\\"\u003Ejcenter\u003C\u002Fspan\u003E()\u003C\u002Fspan\u003E\\n    }\\n    \u003Cspan class=\\\"hljs-variable\\\"\u003Edependencies\u003C\u002Fspan\u003E {\\n        \u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-title\\\"\u003Eclasspath\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-string\\\"\u003E&quot;com.android.tools.build:gradle:4.1.0&quot;\u003C\u002Fspan\u003E)\u003C\u002Fspan\u003E\\n        \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F \u003Cspan class=\\\"hljs-doctag\\\"\u003ENOTE\u003C\u002Fspan\u003E: Do not place your application dependencies here; they belong\u003C\u002Fspan\u003E\\n        \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F in the individual module build.gradle files\u003C\u002Fspan\u003E\\n    }\\n}\\n\\n\u003Cspan class=\\\"hljs-variable\\\"\u003Eallprojects\u003C\u002Fspan\u003E {\\n    \u003Cspan class=\\\"hljs-variable\\\"\u003Erepositories\u003C\u002Fspan\u003E {\\n        \u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-title\\\"\u003EmavenLocal\u003C\u002Fspan\u003E()\u003C\u002Fspan\u003E\\n        \u003Cspan class=\\\"hljs-variable\\\"\u003Emaven\u003C\u002Fspan\u003E {\\n            \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F All of React Native (JS, Obj-C sources, Android binaries) is installed from npm\u003C\u002Fspan\u003E\\n            \u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-title\\\"\u003Eurl\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-string\\\"\u003E&quot;$rootDir\u002F..\u002Fnode_modules\u002Freact-native\u002Fandroid&quot;\u003C\u002Fspan\u003E)\u003C\u002Fspan\u003E\\n        }\\n        \u003Cspan class=\\\"hljs-variable\\\"\u003Emaven\u003C\u002Fspan\u003E {\\n            \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F Android JSC is installed from npm\u003C\u002Fspan\u003E\\n            \u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-title\\\"\u003Eurl\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-string\\\"\u003E&quot;$rootDir\u002F..\u002Fnode_modules\u002Fjsc-android\u002Fdist&quot;\u003C\u002Fspan\u003E)\u003C\u002Fspan\u003E\\n        }\\n\\n        \u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-title\\\"\u003Egoogle\u003C\u002Fspan\u003E()\u003C\u002Fspan\u003E\\n        \u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-title\\\"\u003Ejcenter\u003C\u002Fspan\u003E()\u003C\u002Fspan\u003E\\n        \u003Cspan class=\\\"hljs-variable\\\"\u003Emaven\u003C\u002Fspan\u003E { \u003Cspan class=\\\"hljs-variable\\\"\u003Eurl\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;https:\u002F\u002Fwww.jitpack.io&#x27;\u003C\u002Fspan\u003E }\\n    }\\n}\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch3 id=\\\"然后再修改androidappbuildgradle，修改如下：\\\"\u003E然后再修改\u003Ccode\u003Eandroid\u002Fapp\u002Fbuild.gradle\u003C\u002Fcode\u003E，修改如下：\u003C\u002Fh3\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-diff\\\"\u003Eapply plugin: \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;com.android.application&quot;\u003C\u002Fspan\u003E\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E com.android.build.OutputFile\\n\\n\u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F**\\n * The react.gradle file registers a task for each build variant (e.g. bundleDebugJsAndAssets\\n * and bundleReleaseJsAndAssets).\\n * These basically call `react-native bundle` with the correct arguments during the Android build\\n * cycle. By default, bundleDebugJsAndAssets is skipped, as in debug\u002Fdev mode we prefer to load the\\n * bundle directly from the development server. Below you can see all the possible configurations\\n * and their defaults. If you decide to add a configuration block, make sure to add it before the\\n * `apply from: &quot;..\u002F..\u002Fnode_modules\u002Freact-native\u002Freact.gradle&quot;` line.\\n *\\n * project.ext.react = [\\n *   \u002F\u002F the name of the generated asset file containing your JS bundle\\n *   bundleAssetName: &quot;index.android.bundle&quot;,\\n *\\n *   \u002F\u002F the entry file for bundle generation. If none specified and\\n *   \u002F\u002F &quot;index.android.js&quot; exists, it will be used. Otherwise &quot;index.js&quot; is\\n *   \u002F\u002F default. Can be overridden with ENTRY_FILE environment variable.\\n *   entryFile: &quot;index.android.js&quot;,\\n *\\n *   \u002F\u002F https:\u002F\u002Freactnative.dev\u002Fdocs\u002Fperformance#enable-the-ram-format\\n *   bundleCommand: &quot;ram-bundle&quot;,\\n *\\n *   \u002F\u002F whether to bundle JS and assets in debug mode\\n *   bundleInDe\u003Cspan class=\\\"hljs-doctag\\\"\u003Ebug:\u003C\u002Fspan\u003E false,\\n *\\n *   \u002F\u002F whether to bundle JS and assets in release mode\\n *   bundleInRelease: true,\\n *\\n *   \u002F\u002F whether to bundle JS and assets in another build variant (if configured).\\n *   \u002F\u002F See http:\u002F\u002Ftools.android.com\u002Ftech-docs\u002Fnew-build-system\u002Fuser-guide#TOC-Build-Variants\\n *   \u002F\u002F The configuration property can be in the following formats\\n *   \u002F\u002F         &#x27;bundleIn${productFlavor}${buildType}&#x27;\\n *   \u002F\u002F         &#x27;bundleIn${buildType}&#x27;\\n *   \u002F\u002F bundleInFreeDe\u003Cspan class=\\\"hljs-doctag\\\"\u003Ebug:\u003C\u002Fspan\u003E true,\\n *   \u002F\u002F bundleInPaidRelease: true,\\n *   \u002F\u002F bundleInBeta: true,\\n *\\n *   \u002F\u002F whether to disable dev mode in custom build variants (by default only disabled in release)\\n *   \u002F\u002F for example: to disable dev mode in the staging build type (if configured)\\n *   devDisabledInStaging: true,\\n *   \u002F\u002F The configuration property can be in the following formats\\n *   \u002F\u002F         &#x27;devDisabledIn${productFlavor}${buildType}&#x27;\\n *   \u002F\u002F         &#x27;devDisabledIn${buildType}&#x27;\\n *\\n *   \u002F\u002F the root of your project, i.e. where &quot;package.json&quot; lives\\n *   root: &quot;..\u002F..\u002F&quot;,\\n *\\n *   \u002F\u002F where to put the JS bundle asset in debug mode\\n *   jsBundleDirDe\u003Cspan class=\\\"hljs-doctag\\\"\u003Ebug:\u003C\u002Fspan\u003E &quot;$buildDir\u002Fintermediates\u002Fassets\u002Fdebug&quot;,\\n *\\n *   \u002F\u002F where to put the JS bundle asset in release mode\\n *   jsBundleDirRelease: &quot;$buildDir\u002Fintermediates\u002Fassets\u002Frelease&quot;,\\n *\\n *   \u002F\u002F where to put drawable resources \u002F React Native assets, e.g. the ones you use via\\n *   \u002F\u002F require(&#x27;.\u002Fimage.png&#x27;)), in debug mode\\n *   resourcesDirDe\u003Cspan class=\\\"hljs-doctag\\\"\u003Ebug:\u003C\u002Fspan\u003E &quot;$buildDir\u002Fintermediates\u002Fres\u002Fmerged\u002Fdebug&quot;,\\n *\\n *   \u002F\u002F where to put drawable resources \u002F React Native assets, e.g. the ones you use via\\n *   \u002F\u002F require(&#x27;.\u002Fimage.png&#x27;)), in release mode\\n *   resourcesDirRelease: &quot;$buildDir\u002Fintermediates\u002Fres\u002Fmerged\u002Frelease&quot;,\\n *\\n *   \u002F\u002F by default the gradle tasks are skipped if none of the JS files or assets change; this means\\n *   \u002F\u002F that we don&#x27;t look at files in android\u002F or ios\u002F to determine whether the tasks are up to\\n *   \u002F\u002F date; if you have any other folders that you want to ignore for performance reasons (gradle\\n *   \u002F\u002F indexes the entire tree), add them here. Alternatively, if you have JS files in android\u002F\\n *   \u002F\u002F for example, you might want to remove it from here.\\n *   inputExcludes: [&quot;android\u002F**&quot;, &quot;ios\u002F**&quot;],\\n *\\n *   \u002F\u002F override which node gets called and with what additional arguments\\n *   nodeExecutableAndArgs: [&quot;node&quot;],\\n *\\n *   \u002F\u002F supply additional arguments to the packager\\n *   extraPackagerArgs: []\\n * ]\\n *\u002F\u003C\u002Fspan\u003E\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eproject\u003C\u002Fspan\u003E.ext.react = [\\n    enableHermes: \u003Cspan class=\\\"hljs-keyword\\\"\u003Efalse\u003C\u002Fspan\u003E,  \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F clean and rebuild if changing\u003C\u002Fspan\u003E\\n]\\n\\napply \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;..\u002F..\u002Fnode_modules\u002Freact-native\u002Freact.gradle&quot;\u003C\u002Fspan\u003E\\n\\n\u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F**\\n * Set this to true to create two separate APKs instead of one:\\n *   - An APK that only works on ARM devices\\n *   - An APK that only works on x86 devices\\n * The advantage is the size of the APK is reduced by about 4MB.\\n * Upload all the APKs to the Play Store and people will download\\n * the correct one based on the CPU architecture of their device.\\n *\u002F\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Edef\u003C\u002Fspan\u003E enableSeparateBuildPerCPUArchitecture = \u003Cspan class=\\\"hljs-keyword\\\"\u003Efalse\u003C\u002Fspan\u003E\\n\\n\u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F**\\n * Run Proguard to shrink the Java bytecode in release builds.\\n *\u002F\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Edef\u003C\u002Fspan\u003E enableProguardInReleaseBuilds = \u003Cspan class=\\\"hljs-keyword\\\"\u003Efalse\u003C\u002Fspan\u003E\\n\\n\u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F**\\n * The preferred build flavor of JavaScriptCore.\\n *\\n * For example, to use the international variant, you can use:\\n * `def jscFlavor = &#x27;org.webkit:android-jsc-intl:+&#x27;`\\n *\\n * The international variant includes ICU i18n library and necessary data\\n * allowing to use e.g. `Date.toLocaleString` and `String.localeCompare` that\\n * give correct results when using with locales other than en-US.  Note that\\n * this variant is about 6MiB larger per architecture than default.\\n *\u002F\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Edef\u003C\u002Fspan\u003E jscFlavor = \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;org.webkit:android-jsc:+&#x27;\u003C\u002Fspan\u003E\\n\\n\u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F**\\n * Whether to enable the Hermes VM.\\n *\\n * This should be set on project.ext.react and mirrored here.  If it is not set\\n * on project.ext.react, JavaScript will not be compiled to Hermes Bytecode\\n * and the benefits of using Hermes will therefore be sharply reduced.\\n *\u002F\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Edef\u003C\u002Fspan\u003E enableHermes = \u003Cspan class=\\\"hljs-keyword\\\"\u003Eproject\u003C\u002Fspan\u003E.ext.react.get(\u003Cspan class=\\\"hljs-string\\\"\u003E&quot;enableHermes&quot;\u003C\u002Fspan\u003E, \u003Cspan class=\\\"hljs-keyword\\\"\u003Efalse\u003C\u002Fspan\u003E);\\n\\nandroid {\\n    ndkVersion rootProject.ext.ndkVersion\\n\\n    compileSdkVersion rootProject.ext.compileSdkVersion\\n+    buildToolsVersion rootProject.ext.buildToolsVersion\\n\\n    compileOptions {\\n        \u003Cspan class=\\\"hljs-keyword\\\"\u003EsourceCompatibility\u003C\u002Fspan\u003E JavaVersion.VERSION_1_8\\n        \u003Cspan class=\\\"hljs-keyword\\\"\u003EtargetCompatibility\u003C\u002Fspan\u003E JavaVersion.VERSION_1_8\\n    }\\n\\n    defaultConfig {\\n        applicationId \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;com.rn_demo&quot;\u003C\u002Fspan\u003E\\n        minSdkVersion rootProject.ext.minSdkVersion\\n        targetSdkVersion rootProject.ext.targetSdkVersion\\n        versionCode \u003Cspan class=\\\"hljs-number\\\"\u003E1\u003C\u002Fspan\u003E\\n        versionName \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;1.0&quot;\u003C\u002Fspan\u003E\\n    }\\n    splits {\\n        abi {\\n            reset()\\n            enable enableSeparateBuildPerCPUArchitecture\\n            universalApk \u003Cspan class=\\\"hljs-keyword\\\"\u003Efalse\u003C\u002Fspan\u003E  \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F If true, also generate a universal APK\u003C\u002Fspan\u003E\\n            \u003Cspan class=\\\"hljs-keyword\\\"\u003Einclude\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;armeabi-v7a&quot;\u003C\u002Fspan\u003E, \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;x86&quot;\u003C\u002Fspan\u003E, \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;arm64-v8a&quot;\u003C\u002Fspan\u003E, \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;x86_64&quot;\u003C\u002Fspan\u003E\\n        }\\n    }\\n    signingConfigs {\\n        debug {\\n            storeFile \u003Cspan class=\\\"hljs-keyword\\\"\u003Efile\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;debug.keystore&#x27;\u003C\u002Fspan\u003E)\\n            storePassword \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;android&#x27;\u003C\u002Fspan\u003E\\n            keyAlias \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;androiddebugkey&#x27;\u003C\u002Fspan\u003E\\n            keyPassword \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;android&#x27;\u003C\u002Fspan\u003E\\n        }\\n    }\\n    buildTypes {\\n        debug {\\n            signingConfig signingConfigs.debug\\n        }\\n        release {\\n            \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F Caution! In production, you need to generate your own keystore file.\u003C\u002Fspan\u003E\\n            \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F see https:\u002F\u002Freactnative.dev\u002Fdocs\u002Fsigned-apk-android.\u003C\u002Fspan\u003E\\n            signingConfig signingConfigs.debug\\n            minifyEnabled enableProguardInReleaseBuilds\\n            proguardFiles getDefaultProguardFile(\u003Cspan class=\\\"hljs-string\\\"\u003E&quot;proguard-android.txt&quot;\u003C\u002Fspan\u003E), \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;proguard-rules.pro&quot;\u003C\u002Fspan\u003E\\n        }\\n    }\\n\\n    \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F applicationVariants are e.g. debug, release\u003C\u002Fspan\u003E\\n    applicationVariants.all { variant -&gt;\\n        variant.outputs.\u003Cspan class=\\\"hljs-keyword\\\"\u003Eeach\u003C\u002Fspan\u003E { output -&gt;\\n            \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F For each separate APK per architecture, set a unique version code as described here:\u003C\u002Fspan\u003E\\n            \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F https:\u002F\u002Fdeveloper.android.com\u002Fstudio\u002Fbuild\u002Fconfigure-apk-splits.html\u003C\u002Fspan\u003E\\n            \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F Example: versionCode 1 will generate 1001 for armeabi-v7a, 1002 for x86, etc.\u003C\u002Fspan\u003E\\n            \u003Cspan class=\\\"hljs-keyword\\\"\u003Edef\u003C\u002Fspan\u003E versionCodes = [\u003Cspan class=\\\"hljs-string\\\"\u003E&quot;armeabi-v7a&quot;\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-number\\\"\u003E1\u003C\u002Fspan\u003E, \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;x86&quot;\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-number\\\"\u003E2\u003C\u002Fspan\u003E, \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;arm64-v8a&quot;\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-number\\\"\u003E3\u003C\u002Fspan\u003E, \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;x86_64&quot;\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-number\\\"\u003E4\u003C\u002Fspan\u003E]\\n            \u003Cspan class=\\\"hljs-keyword\\\"\u003Edef\u003C\u002Fspan\u003E abi = output.getFilter(OutputFile.ABI)\\n            \u003Cspan class=\\\"hljs-keyword\\\"\u003Eif\u003C\u002Fspan\u003E (abi != \u003Cspan class=\\\"hljs-keyword\\\"\u003Enull\u003C\u002Fspan\u003E) {  \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F null for the universal-debug, universal-release variants\u003C\u002Fspan\u003E\\n                output.versionCodeOverride =\\n                        defaultConfig.versionCode * \u003Cspan class=\\\"hljs-number\\\"\u003E1000\u003C\u002Fspan\u003E + versionCodes.get(abi)\\n            }\\n\\n        }\\n    }\\n}\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Edependencies\u003C\u002Fspan\u003E {\\n    implementation \u003Cspan class=\\\"hljs-keyword\\\"\u003EfileTree\u003C\u002Fspan\u003E(dir: \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;libs&quot;\u003C\u002Fspan\u003E, \u003Cspan class=\\\"hljs-keyword\\\"\u003Einclude\u003C\u002Fspan\u003E: [\u003Cspan class=\\\"hljs-string\\\"\u003E&quot;*.jar&quot;\u003C\u002Fspan\u003E])\\n    \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002Fnoinspection GradleDynamicVersion\u003C\u002Fspan\u003E\\n    implementation \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;com.facebook.react:react-native:+&quot;\u003C\u002Fspan\u003E  \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F From node_modules\u003C\u002Fspan\u003E\\n\\n    implementation \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;androidx.swiperefreshlayout:swiperefreshlayout:1.0.0&quot;\u003C\u002Fspan\u003E\\n\\n    debugImplementation(\u003Cspan class=\\\"hljs-string\\\"\u003E&quot;com.facebook.flipper:flipper:${FLIPPER_VERSION}&quot;\u003C\u002Fspan\u003E) {\\n      \u003Cspan class=\\\"hljs-keyword\\\"\u003Eexclude\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Egroup\u003C\u002Fspan\u003E:\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;com.facebook.fbjni&#x27;\u003C\u002Fspan\u003E\\n    }\\n\\n    debugImplementation(\u003Cspan class=\\\"hljs-string\\\"\u003E&quot;com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}&quot;\u003C\u002Fspan\u003E) {\\n        \u003Cspan class=\\\"hljs-keyword\\\"\u003Eexclude\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Egroup\u003C\u002Fspan\u003E:\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;com.facebook.flipper&#x27;\u003C\u002Fspan\u003E\\n        \u003Cspan class=\\\"hljs-keyword\\\"\u003Eexclude\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Egroup\u003C\u002Fspan\u003E:\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;com.squareup.okhttp3&#x27;\u003C\u002Fspan\u003E, module:\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;okhttp&#x27;\u003C\u002Fspan\u003E\\n    }\\n\\n    debugImplementation(\u003Cspan class=\\\"hljs-string\\\"\u003E&quot;com.facebook.flipper:flipper-fresco-plugin:${FLIPPER_VERSION}&quot;\u003C\u002Fspan\u003E) {\\n        \u003Cspan class=\\\"hljs-keyword\\\"\u003Eexclude\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Egroup\u003C\u002Fspan\u003E:\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;com.facebook.flipper&#x27;\u003C\u002Fspan\u003E\\n    }\\n\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Eif\u003C\u002Fspan\u003E (enableHermes) {\\n        \u003Cspan class=\\\"hljs-keyword\\\"\u003Edef\u003C\u002Fspan\u003E hermesPath = \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;..\u002F..\u002Fnode_modules\u002Fhermes-engine\u002Fandroid\u002F&quot;\u003C\u002Fspan\u003E;\\n        debugImplementation files(hermesPath + \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;hermes-debug.aar&quot;\u003C\u002Fspan\u003E)\\n        releaseImplementation files(hermesPath + \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;hermes-release.aar&quot;\u003C\u002Fspan\u003E)\\n    } \u003Cspan class=\\\"hljs-keyword\\\"\u003Eelse\u003C\u002Fspan\u003E {\\n        implementation jscFlavor\\n    }\\n}\\n\\n\u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F Run this once to be able to run the application with BUCK\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F puts all compile dependencies into folder libs for BUCK to use\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Etask\u003C\u002Fspan\u003E copyDownloadableDepsToLibs(type: \u003Cspan class=\\\"hljs-keyword\\\"\u003ECopy\u003C\u002Fspan\u003E) {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Econfigurations\u003C\u002Fspan\u003E.\u003Cspan class=\\\"hljs-keyword\\\"\u003Ecompile\u003C\u002Fspan\u003E\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Einto\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;libs&#x27;\u003C\u002Fspan\u003E\\n}\\n\\napply \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-keyword\\\"\u003Efile\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-string\\\"\u003E&quot;..\u002F..\u002Fnode_modules\u002F@react-native-community\u002Fcli-platform-android\u002Fnative_modules.gradle&quot;\u003C\u002Fspan\u003E); applyNativeModulesAppBuildGradle(\u003Cspan class=\\\"hljs-keyword\\\"\u003Eproject\u003C\u002Fspan\u003E)\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cp\u003E然后再次运行：\u003Ccode\u003Enpm run android\u003C\u002Fcode\u003E即可成功。\u003C\u002Fp\u003E\\n\"}"}</script>
+</div>
+	</body>
+</html>
