@@ -139,10 +139,252 @@ void main() {
 <p>注意：此实现父部件一定要是一个<code>StatefulWidget</code>，否则使用<code>Overlay.of(context)</code>获取<code>OverlayState</code>时总是为<code>null</code>，等找到解决办法再更新一下代码。</p>
 </blockquote>
 <p><code>toast.dart</code></p>
-<pre><code class="language-dart"><span class="hljs-keyword">import</span> <span class="hljs-string">&#x27;package:flutter/material.dart&#x27;</span>;
+<pre><code class="language-dart"><span class="hljs-keyword">import</span> <span class="hljs-string">&#x27;dart:async&#x27;</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-string">&#x27;package:flutter/material.dart&#x27;</span>;
 
-<span class="hljs-comment">// 位置枚举</span>
+class Toast {
+  Toast(
+      {required <span class="hljs-keyword">this</span>.context,
+      <span class="hljs-keyword">this</span>.child,
+      <span class="hljs-keyword">this</span>.message,
+      <span class="hljs-keyword">this</span>.position = ToastPosition.center,
+      <span class="hljs-keyword">this</span>.icon,
+      <span class="hljs-keyword">this</span>.duration = <span class="hljs-number">2000</span>,
+      <span class="hljs-keyword">this</span>.<span class="hljs-built_in">color</span> = Colors.black,
+      <span class="hljs-keyword">this</span>.textColor = Colors.white})
+      : <span class="hljs-keyword">assert</span>(child == <span class="hljs-keyword">null</span> || message == <span class="hljs-keyword">null</span>,
+            <span class="hljs-string">&#x27;child != null || message != null&#x27;</span>),
+        <span class="hljs-keyword">assert</span>(message != <span class="hljs-keyword">null</span> &amp;&amp; child == <span class="hljs-keyword">null</span>,
+            <span class="hljs-string">&#x27;message != null &amp;&amp; child == null&#x27;</span>) {
+    OverlayState overlay = Overlay.of(context)!;
+
+    <span class="hljs-comment">// 屏幕大小</span>
+    <span class="hljs-keyword">final</span> offset = MediaQuery.of(context).<span class="hljs-built_in">size</span>.<span class="hljs-built_in">height</span> * <span class="hljs-number">0.2</span>;
+    <span class="hljs-comment">// 距顶部距离</span>
+    <span class="hljs-keyword">final</span> <span class="hljs-keyword">double</span>? top = position == ToastPosition.top ? offset : <span class="hljs-keyword">null</span>;
+    <span class="hljs-comment">// 距底部距离</span>
+    <span class="hljs-keyword">final</span> <span class="hljs-keyword">double</span>? bottom = position == ToastPosition.bottom ? offset : <span class="hljs-keyword">null</span>;
+
+    <span class="hljs-keyword">final</span> Widget iconText = icon != <span class="hljs-keyword">null</span>
+        ? Column(
+            mainAxisSize: MainAxisSize.<span class="hljs-built_in">min</span>,
+            children: [
+              SizedBox(
+                <span class="hljs-built_in">height</span>: <span class="hljs-number">4</span>,
+              ),
+              icon!,
+              SizedBox(
+                <span class="hljs-built_in">height</span>: <span class="hljs-number">4</span>,
+              ),
+              Text(message!)
+            ],
+          )
+        : Text(message!);
+
+    <span class="hljs-comment">// 提示信息</span>
+    <span class="hljs-keyword">final</span> <span class="hljs-built_in">text</span> = child ?? iconText;
+
+    <span class="hljs-keyword">if</span> (_overlayEntry != <span class="hljs-keyword">null</span>) {
+      <span class="hljs-built_in">clear</span>();
+    }
+
+    _overlayEntry = OverlayEntry(builder: (BuildContext context) {
+      <span class="hljs-comment">// 如果是Toast.loading则icon一定是_LoadingIcon类型</span>
+      <span class="hljs-keyword">final</span> isDisabledTap = icon != <span class="hljs-keyword">null</span> &amp;&amp; icon is _LoadingIcon;
+
+      <span class="hljs-keyword">final</span> body = _Body(
+        <span class="hljs-built_in">text</span>,
+        <span class="hljs-built_in">color</span>: <span class="hljs-built_in">color</span>,
+      );
+
+      <span class="hljs-keyword">final</span> absorbPointer = AbsorbPointer(
+        ignoringSemantics: <span class="hljs-keyword">true</span>,
+        child: body,
+      );
+
+      <span class="hljs-keyword">return</span> Positioned(
+          top: top,
+          bottom: bottom,
+          child: _MessageDefaultStyle(
+            isDisabledTap ? absorbPointer : body,
+            <span class="hljs-built_in">color</span>: textColor,
+          ));
+    });
+
+    overlay.insert(_overlayEntry!);
+
+    <span class="hljs-comment">// 展示时长为0，则为不关闭</span>
+    <span class="hljs-keyword">if</span> (duration != <span class="hljs-number">0</span>) {
+      _timer = Timer(Duration(milliseconds: duration!), <span class="hljs-built_in">clear</span>);
+    }
+  }
+
+  <span class="hljs-keyword">final</span> BuildContext context;
+  <span class="hljs-comment">// 自定义内容</span>
+  <span class="hljs-keyword">final</span> Widget? child;
+  <span class="hljs-comment">// 提示内容</span>
+  <span class="hljs-keyword">final</span> <span class="hljs-keyword">String</span>? message;
+  <span class="hljs-comment">// 位置</span>
+  <span class="hljs-keyword">final</span> ToastPosition? position;
+  <span class="hljs-comment">// 图标</span>
+  <span class="hljs-keyword">final</span> Widget? icon;
+  <span class="hljs-comment">// 展示时长(ms)</span>
+  <span class="hljs-keyword">final</span> <span class="hljs-built_in">int</span>? duration;
+  <span class="hljs-comment">// 背景色</span>
+  <span class="hljs-keyword">final</span> Color? <span class="hljs-built_in">color</span>;
+  <span class="hljs-comment">// 文本颜色</span>
+  <span class="hljs-keyword">final</span> Color? textColor;
+
+  factory Toast.loading(
+      {required BuildContext context,
+      Widget? child,
+      <span class="hljs-keyword">String</span>? message,
+      <span class="hljs-built_in">int</span>? duration,
+      Color? <span class="hljs-built_in">color</span>,
+      Color? textColor}) = _ToastLoading;
+
+  factory Toast.success(
+      {required BuildContext context,
+      Widget? child,
+      <span class="hljs-keyword">String</span>? message,
+      <span class="hljs-built_in">int</span>? duration,
+      Color? <span class="hljs-built_in">color</span>,
+      Color? textColor}) = _ToastSuccess;
+
+  factory Toast.error(
+      {required BuildContext context,
+      Widget? child,
+      <span class="hljs-keyword">String</span>? message,
+      <span class="hljs-built_in">int</span>? duration,
+      Color? <span class="hljs-built_in">color</span>,
+      Color? textColor}) = _ToastError;
+
+  <span class="hljs-comment">// 清除</span>
+  <span class="hljs-keyword">static</span> <span class="hljs-built_in">clear</span>() {
+    _timer?.cancel();
+    _timer = <span class="hljs-keyword">null</span>;
+    _overlayEntry?.remove();
+    _overlayEntry = <span class="hljs-keyword">null</span>;
+  }
+}
+
 <span class="hljs-keyword">enum</span> ToastPosition { top, center, bottom }
+
+OverlayEntry? _overlayEntry;
+Timer? _timer;
+
+class _ToastLoading extends Toast {
+  _ToastLoading(
+      {required <span class="hljs-keyword">this</span>.context,
+      <span class="hljs-keyword">this</span>.child,
+      <span class="hljs-keyword">this</span>.message,
+      <span class="hljs-keyword">this</span>.duration = <span class="hljs-number">2000</span>,
+      <span class="hljs-keyword">this</span>.<span class="hljs-built_in">color</span> = Colors.black,
+      <span class="hljs-keyword">this</span>.textColor = Colors.white,
+      <span class="hljs-keyword">this</span>.iconBackgroupColor = Colors.white,
+      <span class="hljs-keyword">this</span>.iconColor = Colors.black12})
+      : <span class="hljs-keyword">super</span>(
+            context: context,
+            child: child,
+            message: message,
+            duration: duration,
+            icon: _LoadingIcon(
+              backgroundColor: iconBackgroupColor!,
+              <span class="hljs-built_in">color</span>: iconColor!,
+            ),
+            <span class="hljs-built_in">color</span>: <span class="hljs-built_in">color</span>,
+            textColor: textColor);
+
+  <span class="hljs-keyword">final</span> BuildContext context;
+  <span class="hljs-comment">// 自定义内容</span>
+  <span class="hljs-keyword">final</span> Widget? child;
+  <span class="hljs-comment">// 提示内容</span>
+  <span class="hljs-keyword">final</span> <span class="hljs-keyword">String</span>? message;
+  <span class="hljs-comment">// 展示时长(ms)</span>
+  <span class="hljs-keyword">final</span> <span class="hljs-built_in">int</span>? duration;
+  <span class="hljs-comment">// 背景色</span>
+  <span class="hljs-keyword">final</span> Color? <span class="hljs-built_in">color</span>;
+  <span class="hljs-comment">// 文本颜色</span>
+  <span class="hljs-keyword">final</span> Color? textColor;
+  <span class="hljs-comment">// loading背景色</span>
+  <span class="hljs-keyword">final</span> Color? iconBackgroupColor;
+  <span class="hljs-comment">// loading颜色</span>
+  <span class="hljs-keyword">final</span> Color? iconColor;
+}
+
+class _ToastSuccess extends Toast {
+  _ToastSuccess(
+      {required <span class="hljs-keyword">this</span>.context,
+      <span class="hljs-keyword">this</span>.child,
+      <span class="hljs-keyword">this</span>.message,
+      <span class="hljs-keyword">this</span>.duration = <span class="hljs-number">2000</span>,
+      <span class="hljs-keyword">this</span>.<span class="hljs-built_in">color</span> = Colors.black,
+      <span class="hljs-keyword">this</span>.textColor = Colors.white,
+      <span class="hljs-keyword">this</span>.iconColor = Colors.white})
+      : <span class="hljs-keyword">super</span>(
+            context: context,
+            child: child,
+            message: message,
+            duration: duration,
+            icon: Icon(
+              Icons.check_circle,
+              <span class="hljs-built_in">color</span>: iconColor,
+              <span class="hljs-built_in">size</span>: <span class="hljs-number">36</span>,
+            ),
+            <span class="hljs-built_in">color</span>: <span class="hljs-built_in">color</span>,
+            textColor: textColor);
+
+  <span class="hljs-keyword">final</span> BuildContext context;
+  <span class="hljs-comment">// 自定义内容</span>
+  <span class="hljs-keyword">final</span> Widget? child;
+  <span class="hljs-comment">// 提示内容</span>
+  <span class="hljs-keyword">final</span> <span class="hljs-keyword">String</span>? message;
+  <span class="hljs-comment">// 展示时长(ms)</span>
+  <span class="hljs-keyword">final</span> <span class="hljs-built_in">int</span>? duration;
+  <span class="hljs-comment">// 背景色</span>
+  <span class="hljs-keyword">final</span> Color? <span class="hljs-built_in">color</span>;
+  <span class="hljs-comment">// 文本颜色</span>
+  <span class="hljs-keyword">final</span> Color? textColor;
+  <span class="hljs-comment">// icon颜色</span>
+  <span class="hljs-keyword">final</span> Color? iconColor;
+}
+
+class _ToastError extends Toast {
+  _ToastError(
+      {required <span class="hljs-keyword">this</span>.context,
+      <span class="hljs-keyword">this</span>.child,
+      <span class="hljs-keyword">this</span>.message,
+      <span class="hljs-keyword">this</span>.duration = <span class="hljs-number">2000</span>,
+      <span class="hljs-keyword">this</span>.<span class="hljs-built_in">color</span> = Colors.black,
+      <span class="hljs-keyword">this</span>.textColor = Colors.white,
+      <span class="hljs-keyword">this</span>.iconColor = Colors.white})
+      : <span class="hljs-keyword">super</span>(
+            context: context,
+            child: child,
+            message: message,
+            duration: duration,
+            icon: Icon(
+              Icons.cancel,
+              <span class="hljs-built_in">color</span>: iconColor,
+              <span class="hljs-built_in">size</span>: <span class="hljs-number">36</span>,
+            ),
+            <span class="hljs-built_in">color</span>: <span class="hljs-built_in">color</span>,
+            textColor: textColor);
+
+  <span class="hljs-keyword">final</span> BuildContext context;
+  <span class="hljs-comment">// 自定义内容</span>
+  <span class="hljs-keyword">final</span> Widget? child;
+  <span class="hljs-comment">// 提示内容</span>
+  <span class="hljs-keyword">final</span> <span class="hljs-keyword">String</span>? message;
+  <span class="hljs-comment">// 展示时长(ms)</span>
+  <span class="hljs-keyword">final</span> <span class="hljs-built_in">int</span>? duration;
+  <span class="hljs-comment">// 背景色</span>
+  <span class="hljs-keyword">final</span> Color? <span class="hljs-built_in">color</span>;
+  <span class="hljs-comment">// 文本颜色</span>
+  <span class="hljs-keyword">final</span> Color? textColor;
+  <span class="hljs-comment">// icon颜色</span>
+  <span class="hljs-keyword">final</span> Color? iconColor;
+}
 
 <span class="hljs-comment">// 文本默认样式</span>
 class _MessageDefaultStyle extends StatelessWidget {
@@ -191,81 +433,24 @@ class _Body extends StatelessWidget {
   }
 }
 
-class Toast {
-  Toast(
-      {required <span class="hljs-keyword">this</span>.context,
-      <span class="hljs-keyword">this</span>.child,
-      <span class="hljs-keyword">this</span>.message,
-      <span class="hljs-keyword">this</span>.position = ToastPosition.center,
-      <span class="hljs-keyword">this</span>.icon,
-      <span class="hljs-keyword">this</span>.duration = <span class="hljs-number">2000</span>,
-      <span class="hljs-keyword">this</span>.<span class="hljs-built_in">color</span> = Colors.black,
-      <span class="hljs-keyword">this</span>.textColor = Colors.white})
-      : <span class="hljs-keyword">assert</span>(child == <span class="hljs-keyword">null</span> || message == <span class="hljs-keyword">null</span>,
-            <span class="hljs-string">&#x27;child != null || message != null&#x27;</span>),
-        <span class="hljs-keyword">assert</span>(message != <span class="hljs-keyword">null</span> &amp;&amp; child == <span class="hljs-keyword">null</span>,
-            <span class="hljs-string">&#x27;message != null &amp;&amp; child == null&#x27;</span>) {
-    OverlayState overlay = Overlay.of(context)!;
+<span class="hljs-comment">// 加载Icon</span>
+class _LoadingIcon extends StatelessWidget {
+  _LoadingIcon(
+      {Key? <span class="hljs-built_in">key</span>,
+      <span class="hljs-keyword">this</span>.backgroundColor = Colors.white,
+      <span class="hljs-keyword">this</span>.<span class="hljs-built_in">color</span> = Colors.black12})
+      : <span class="hljs-keyword">super</span>(<span class="hljs-built_in">key</span>: <span class="hljs-built_in">key</span>);
 
-    <span class="hljs-comment">// 屏幕大小</span>
-    <span class="hljs-keyword">final</span> offset = MediaQuery.of(context).<span class="hljs-built_in">size</span>.<span class="hljs-built_in">height</span> * <span class="hljs-number">0.2</span>;
-    <span class="hljs-comment">// 距顶部距离</span>
-    <span class="hljs-keyword">final</span> <span class="hljs-keyword">double</span>? top = position == ToastPosition.top ? offset : <span class="hljs-keyword">null</span>;
-    <span class="hljs-comment">// 距底部距离</span>
-    <span class="hljs-keyword">final</span> <span class="hljs-keyword">double</span>? bottom = position == ToastPosition.bottom ? offset : <span class="hljs-keyword">null</span>;
+  <span class="hljs-keyword">final</span> Color backgroundColor;
+  <span class="hljs-keyword">final</span> Color <span class="hljs-built_in">color</span>;
 
-    <span class="hljs-keyword">final</span> Widget iconText = icon != <span class="hljs-keyword">null</span>
-        ? Column(
-            children: [
-              icon!,
-              SizedBox(
-                <span class="hljs-built_in">height</span>: <span class="hljs-number">8</span>,
-              ),
-              Text(message!)
-            ],
-          )
-        : Text(message!);
-
-    <span class="hljs-comment">// 提示信息</span>
-    <span class="hljs-keyword">final</span> <span class="hljs-built_in">text</span> = child ?? iconText;
-
-    OverlayEntry overlayEntry = OverlayEntry(builder: (BuildContext context) {
-      <span class="hljs-keyword">return</span> Positioned(
-          top: top,
-          bottom: bottom,
-          child: _MessageDefaultStyle(
-            _Body(
-              <span class="hljs-built_in">text</span>,
-              <span class="hljs-built_in">color</span>: <span class="hljs-built_in">color</span>,
-            ),
-            <span class="hljs-built_in">color</span>: textColor,
-          ));
-    });
-
-    overlay.insert(overlayEntry);
-
-    <span class="hljs-comment">// 展示时长为0，则为不关闭</span>
-    <span class="hljs-keyword">if</span> (duration != <span class="hljs-number">0</span>) {
-      Future.delayed(
-          Duration(milliseconds: duration!), () =&gt; overlayEntry.remove());
-    }
+  @override
+  Widget build(BuildContext context) {
+    <span class="hljs-keyword">return</span> CircularProgressIndicator(
+      valueColor: AlwaysStoppedAnimation(<span class="hljs-built_in">color</span>),
+      backgroundColor: backgroundColor,
+    );
   }
-
-  <span class="hljs-keyword">final</span> BuildContext context;
-  <span class="hljs-comment">// 自定义内容</span>
-  <span class="hljs-keyword">final</span> Widget? child;
-  <span class="hljs-comment">// 提示内容</span>
-  <span class="hljs-keyword">final</span> <span class="hljs-keyword">String</span>? message;
-  <span class="hljs-comment">// 位置</span>
-  <span class="hljs-keyword">final</span> ToastPosition? position;
-  <span class="hljs-comment">// 图标</span>
-  <span class="hljs-keyword">final</span> Icon? icon;
-  <span class="hljs-comment">// 展示时长(ms)</span>
-  <span class="hljs-keyword">final</span> <span class="hljs-built_in">int</span>? duration;
-  <span class="hljs-comment">// 背景色</span>
-  <span class="hljs-keyword">final</span> Color? <span class="hljs-built_in">color</span>;
-  <span class="hljs-comment">// 文本颜色</span>
-  <span class="hljs-keyword">final</span> Color? textColor;
 }
 </code></pre>
 <ul>
@@ -309,7 +494,7 @@ void main() {
         appBar: <span class="hljs-type">AppBar</span>(
           title: <span class="hljs-type">Text</span>(<span class="hljs-symbol">&#x27;Toast</span>轻提示&#x27;),
         ),
-        body: <span class="hljs-type">Column</span>(
+        body: <span class="hljs-type">Wrap</span>(
           children: [
             <span class="hljs-type">OutlinedButton</span>(
               child: <span class="hljs-type">Text</span>(&#x27;显示<span class="hljs-type">Toast</span>&#x27;),
@@ -319,7 +504,100 @@ void main() {
                   message: <span class="hljs-string">&quot;这是一个toast&quot;</span>,
                 );
               },
-            )
+            ),
+            <span class="hljs-type">OutlinedButton</span>(
+              child: <span class="hljs-type">Text</span>(&#x27;显示顶部<span class="hljs-type">Toast</span>&#x27;),
+              onPressed: () {
+                <span class="hljs-type">Toast</span>(
+                    context: context,
+                    message: <span class="hljs-string">&quot;这是一个顶部toast&quot;</span>,
+                    position: <span class="hljs-type">ToastPosition</span>.top);
+              },
+            ),
+            <span class="hljs-type">OutlinedButton</span>(
+              child: <span class="hljs-type">Text</span>(&#x27;显示底部<span class="hljs-type">Toast</span>&#x27;),
+              onPressed: () {
+                <span class="hljs-type">Toast</span>(
+                    context: context,
+                    message: <span class="hljs-string">&quot;这是一个底部toast&quot;</span>,
+                    position: <span class="hljs-type">ToastPosition</span>.bottom);
+              },
+            ),
+            <span class="hljs-type">OutlinedButton</span>(
+              child: <span class="hljs-type">Text</span>(&#x27;显示自定义背景色<span class="hljs-type">Toast</span>&#x27;),
+              onPressed: () {
+                <span class="hljs-type">Toast</span>(
+                    context: context,
+                    message: <span class="hljs-string">&quot;这是一个自定义背景色toast&quot;</span>,
+                    color: <span class="hljs-type">Colors</span>.yellow.shade800);
+              },
+            ),
+            <span class="hljs-type">OutlinedButton</span>(
+              child: <span class="hljs-type">Text</span>(&#x27;显示自定义颜色<span class="hljs-type">Toast</span>&#x27;),
+              onPressed: () {
+                <span class="hljs-type">Toast</span>(
+                    context: context,
+                    message: <span class="hljs-string">&quot;这是一个自定义颜色toast&quot;</span>,
+                    textColor: <span class="hljs-type">Colors</span>.green);
+              },
+            ),
+          ],
+        ));
+  }
+}
+</code></pre>
+<p>Toast 还提供了三个命名构造函数：<code>Toast.loading</code>，<code>Toast.success</code>，<code>Toast.error</code></p>
+<pre><code class="language-dart"><span class="hljs-keyword">import</span> <span class="hljs-symbol">&#x27;package</span>:flutter/material.dart&#x27;;
+<span class="hljs-keyword">import</span> <span class="hljs-symbol">&#x27;package</span>:learn/widgets/toast.dart&#x27;;
+
+void main() {
+  runApp(<span class="hljs-type">App</span>());
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">App</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatelessWidget</span> </span>{
+  <span class="hljs-meta">@override</span>
+  <span class="hljs-type">Widget</span> build(<span class="hljs-type">BuildContext</span> context) {
+    <span class="hljs-keyword">return</span> <span class="hljs-type">MaterialApp</span>(
+      title: <span class="hljs-string">&quot;Toast轻提示&quot;</span>,
+      home: <span class="hljs-type">Home</span>(),
+    );
+  }
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Home</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatefulWidget</span> </span>{
+  <span class="hljs-type">Home</span>({<span class="hljs-type">Key</span>? key}) : <span class="hljs-keyword">super</span>(key: key);
+
+  <span class="hljs-meta">@override</span>
+  _HomeState createState() =&gt; _HomeState();
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">_HomeState</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">State&lt;Home&gt;</span> </span>{
+  <span class="hljs-meta">@override</span>
+  <span class="hljs-type">Widget</span> build(<span class="hljs-type">BuildContext</span> context) {
+    <span class="hljs-keyword">return</span> <span class="hljs-type">Scaffold</span>(
+        appBar: <span class="hljs-type">AppBar</span>(
+          title: <span class="hljs-type">Text</span>(<span class="hljs-symbol">&#x27;Toast</span>轻提示&#x27;),
+        ),
+        body: <span class="hljs-type">Wrap</span>(
+          children: [
+            <span class="hljs-type">OutlinedButton</span>(
+              child: <span class="hljs-type">Text</span>(&#x27;显示<span class="hljs-type">Loading</span> <span class="hljs-type">Toast</span>&#x27;),
+              onPressed: () {
+                <span class="hljs-type">Toast</span>.loading(context: context, message: <span class="hljs-string">&quot;这是一个Loading Toast&quot;</span>);
+              },
+            ),
+            <span class="hljs-type">OutlinedButton</span>(
+              child: <span class="hljs-type">Text</span>(&#x27;显示成功<span class="hljs-type">Toast</span>&#x27;),
+              onPressed: () {
+                <span class="hljs-type">Toast</span>.success(context: context, message: <span class="hljs-string">&quot;这是一个成功Toast&quot;</span>);
+              },
+            ),
+            <span class="hljs-type">OutlinedButton</span>(
+              child: <span class="hljs-type">Text</span>(&#x27;显示失败<span class="hljs-type">Toast</span>&#x27;),
+              onPressed: () {
+                <span class="hljs-type">Toast</span>.error(context: context, message: <span class="hljs-string">&quot;这是一个Loading Toast&quot;</span>);
+              },
+            ),
           ],
         ));
   }
@@ -335,7 +613,7 @@ void main() {
 
 
 
-	<script type="svelte-data" url="20210701155212.json">{"status":200,"statusText":"","headers":{"content-type":"text/plain;charset=UTF-8"},"body":"{\"title\":\"Wigets学习之Toast轻提示\",\"slug\":\"Flutter Wiget\",\"time\":\"2021-07-01T15:52:31.000Z\",\"author\":\"PingTouG\",\"html\":\"\u003Cp\u003E\u003Ccode\u003EFlutter\u003C\u002Fcode\u003E中只有一种轻提示\u003Ccode\u003ESnackBar\u003C\u002Fcode\u003E，所以要实现其他效果需要自实现\u003C\u002Fp\u003E\\n\u003Ch2 id=\\\"snackbar\\\"\u003ESnackBar\u003C\u002Fh2\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E从底部弹出一条提示信息\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003Econtent\u003C\u002Fcode\u003E：提示内容(必填)\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EbackgroundColor\u003C\u002Fcode\u003E：背景色\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Eelevation\u003C\u002Fcode\u003E：阴影，\u003Ccode\u003Ebehavior=SnackBarBehavior.floating\u003C\u002Fcode\u003E才能看到效果\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Emargin\u003C\u002Fcode\u003E：外边距，需要\u003Ccode\u003Ebehavior=SnackBarBehavior.floating\u003C\u002Fcode\u003E才行，否则会报错\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Epadding\u003C\u002Fcode\u003E：内边距\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Ewidth\u003C\u002Fcode\u003E：宽度，需要\u003Ccode\u003Ebehavior=SnackBarBehavior.floating &amp;&amp; margin == null\u003C\u002Fcode\u003E才行，否则会报错\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Eshape\u003C\u002Fcode\u003E：裁剪，可通过此属性设置圆角，如：\u003Ccode\u003Eshape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(48)))\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Ebehavior\u003C\u002Fcode\u003E：设置定位，默认为\u003Ccode\u003ESnackBarBehavior.fixed(紧贴底部)\u003C\u002Fcode\u003E，\u003Ccode\u003Ebehavior=SnackBarBehavior.floating(悬停底部)\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Eaction\u003C\u002Fcode\u003E：操作，可用\u003Ccode\u003ESnackBarAction\u003C\u002Fcode\u003E指定\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Eduration\u003C\u002Fcode\u003E：动画时长\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Eanimation\u003C\u002Fcode\u003E：动画\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EonVisible\u003C\u002Fcode\u003E：显示事件\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Ch3 id=\\\"snackbaraction\\\"\u003ESnackBarAction\u003C\u002Fh3\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E\u003Ccode\u003ESnackBar\u003C\u002Fcode\u003E操作\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003Elabel\u003C\u002Fcode\u003E：操作的文字\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EonPressed\u003C\u002Fcode\u003E：操作的点击事件\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EtextColor\u003C\u002Fcode\u003E：文字颜色\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EdisabledTextColor\u003C\u002Fcode\u003E：文字禁用颜色\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-dart\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;package\u003C\u002Fspan\u003E:flutter\u002Fmaterial.dart&#x27;;\\n\\nvoid main() {\\n  runApp(\u003Cspan class=\\\"hljs-type\\\"\u003EApp\u003C\u002Fspan\u003E());\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EApp\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EStatelessWidget\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E scaffoldMessengerKey = \u003Cspan class=\\\"hljs-type\\\"\u003EGlobalKey\u003C\u002Fspan\u003E&lt;\u003Cspan class=\\\"hljs-type\\\"\u003EScaffoldMessengerState\u003C\u002Fspan\u003E&gt;();\\n\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EWidget\u003C\u002Fspan\u003E build(\u003Cspan class=\\\"hljs-type\\\"\u003EBuildContext\u003C\u002Fspan\u003E context) {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-type\\\"\u003EMaterialApp\u003C\u002Fspan\u003E(\\n      scaffoldMessengerKey: scaffoldMessengerKey,\\n      title: \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;Toast\u003C\u002Fspan\u003E轻提示&#x27;,\\n      home: \u003Cspan class=\\\"hljs-type\\\"\u003EScaffold\u003C\u002Fspan\u003E(\\n        appBar: \u003Cspan class=\\\"hljs-type\\\"\u003EAppBar\u003C\u002Fspan\u003E(\\n          title: \u003Cspan class=\\\"hljs-type\\\"\u003EText\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-string\\\"\u003E&quot;Toast轻提示&quot;\u003C\u002Fspan\u003E),\\n        ),\\n        body: \u003Cspan class=\\\"hljs-type\\\"\u003ERow\u003C\u002Fspan\u003E(\\n          children: [\\n            \u003Cspan class=\\\"hljs-type\\\"\u003EOutlinedButton\u003C\u002Fspan\u003E(\\n                onPressed: () {\\n                  scaffoldMessengerKey.currentState?.showSnackBar(\u003Cspan class=\\\"hljs-type\\\"\u003ESnackBar\u003C\u002Fspan\u003E(\\n                      content: \u003Cspan class=\\\"hljs-type\\\"\u003EText\u003C\u002Fspan\u003E(&#x27;这是一条提示&#x27;),\\n                      behavior: \u003Cspan class=\\\"hljs-type\\\"\u003ESnackBarBehavior\u003C\u002Fspan\u003E.floating,\\n                      elevation: \u003Cspan class=\\\"hljs-number\\\"\u003E12\u003C\u002Fspan\u003E,\\n                      margin: \u003Cspan class=\\\"hljs-type\\\"\u003EEdgeInsets\u003C\u002Fspan\u003E.all(\u003Cspan class=\\\"hljs-number\\\"\u003E12\u003C\u002Fspan\u003E),\\n                      action: \u003Cspan class=\\\"hljs-type\\\"\u003ESnackBarAction\u003C\u002Fspan\u003E(\\n                        label: &#x27;确定&#x27;,\\n                        onPressed: () {},\\n                      ),\\n                      onVisible: () {\\n                        print(&#x27;显示&#x27;);\\n                      }));\\n                },\\n                child: \u003Cspan class=\\\"hljs-type\\\"\u003EText\u003C\u002Fspan\u003E(&#x27;显示提示&#x27;)),\\n          ],\\n        ),\\n      ),\\n    );\\n  }\\n}\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch2 id=\\\"toast自实现\\\"\u003EToast(自实现)\u003C\u002Fh2\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E注意：此实现父部件一定要是一个\u003Ccode\u003EStatefulWidget\u003C\u002Fcode\u003E，否则使用\u003Ccode\u003EOverlay.of(context)\u003C\u002Fcode\u003E获取\u003Ccode\u003EOverlayState\u003C\u002Fcode\u003E时总是为\u003Ccode\u003Enull\u003C\u002Fcode\u003E，等找到解决办法再更新一下代码。\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cp\u003E\u003Ccode\u003Etoast.dart\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-dart\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;package:flutter\u002Fmaterial.dart&#x27;\u003C\u002Fspan\u003E;\\n\\n\u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 位置枚举\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eenum\u003C\u002Fspan\u003E ToastPosition { top, center, bottom }\\n\\n\u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 文本默认样式\u003C\u002Fspan\u003E\\nclass _MessageDefaultStyle extends StatelessWidget {\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E _MessageDefaultStyle(\u003Cspan class=\\\"hljs-keyword\\\"\u003Ethis\u003C\u002Fspan\u003E.child, {Key? \u003Cspan class=\\\"hljs-built_in\\\"\u003Ekey\u003C\u002Fspan\u003E, \u003Cspan class=\\\"hljs-keyword\\\"\u003Ethis\u003C\u002Fspan\u003E.\u003Cspan class=\\\"hljs-built_in\\\"\u003Ecolor\u003C\u002Fspan\u003E})\\n      : \u003Cspan class=\\\"hljs-keyword\\\"\u003Esuper\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-built_in\\\"\u003Ekey\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-built_in\\\"\u003Ekey\u003C\u002Fspan\u003E);\\n\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E Widget child;\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E Color? \u003Cspan class=\\\"hljs-built_in\\\"\u003Ecolor\u003C\u002Fspan\u003E;\\n\\n  @override\\n  Widget build(BuildContext context) {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E DefaultTextStyle(\\n      \u003Cspan class=\\\"hljs-built_in\\\"\u003EtextAlign\u003C\u002Fspan\u003E: TextAlign.center,\\n      style: TextStyle(fontSize: \u003Cspan class=\\\"hljs-number\\\"\u003E14\u003C\u002Fspan\u003E, \u003Cspan class=\\\"hljs-built_in\\\"\u003Ecolor\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-built_in\\\"\u003Ecolor\u003C\u002Fspan\u003E!),\\n      child: child,\\n    );\\n  }\\n}\\n\\n\u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 内容主体\u003C\u002Fspan\u003E\\nclass _Body extends StatelessWidget {\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E _Body(\u003Cspan class=\\\"hljs-keyword\\\"\u003Ethis\u003C\u002Fspan\u003E.child, {Key? \u003Cspan class=\\\"hljs-built_in\\\"\u003Ekey\u003C\u002Fspan\u003E, \u003Cspan class=\\\"hljs-keyword\\\"\u003Ethis\u003C\u002Fspan\u003E.\u003Cspan class=\\\"hljs-built_in\\\"\u003Ecolor\u003C\u002Fspan\u003E}) : \u003Cspan class=\\\"hljs-keyword\\\"\u003Esuper\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-built_in\\\"\u003Ekey\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-built_in\\\"\u003Ekey\u003C\u002Fspan\u003E);\\n\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E Widget child;\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E Color? \u003Cspan class=\\\"hljs-built_in\\\"\u003Ecolor\u003C\u002Fspan\u003E;\\n\\n  @override\\n  Widget build(BuildContext context) {\\n    \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 屏幕大小\u003C\u002Fspan\u003E\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E windowWidth = MediaQuery.of(context).\u003Cspan class=\\\"hljs-built_in\\\"\u003Esize\u003C\u002Fspan\u003E.\u003Cspan class=\\\"hljs-built_in\\\"\u003Ewidth\u003C\u002Fspan\u003E;\\n    \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 最大宽度\u003C\u002Fspan\u003E\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E maxWidth = windowWidth * \u003Cspan class=\\\"hljs-number\\\"\u003E0.7\u003C\u002Fspan\u003E;\\n\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E Container(\\n        \u003Cspan class=\\\"hljs-built_in\\\"\u003Ewidth\u003C\u002Fspan\u003E: windowWidth,\\n        child: Center(\\n          child: Container(\\n              padding: EdgeInsets.symmetric(horizontal: \u003Cspan class=\\\"hljs-number\\\"\u003E12\u003C\u002Fspan\u003E, vertical: \u003Cspan class=\\\"hljs-number\\\"\u003E8\u003C\u002Fspan\u003E),\\n              decoration: BoxDecoration(\\n                  \u003Cspan class=\\\"hljs-built_in\\\"\u003Ecolor\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-built_in\\\"\u003Ecolor\u003C\u002Fspan\u003E!.withOpacity(\u003Cspan class=\\\"hljs-number\\\"\u003E0.7\u003C\u002Fspan\u003E),\\n                  borderRadius: BorderRadius.all(Radius.circular(\u003Cspan class=\\\"hljs-number\\\"\u003E4\u003C\u002Fspan\u003E))),\\n              constraints: BoxConstraints(\\n                  minWidth: \u003Cspan class=\\\"hljs-number\\\"\u003E88\u003C\u002Fspan\u003E, minHeight: \u003Cspan class=\\\"hljs-number\\\"\u003E40\u003C\u002Fspan\u003E, maxWidth: maxWidth),\\n              child: child),\\n        ));\\n  }\\n}\\n\\nclass Toast {\\n  Toast(\\n      {required \u003Cspan class=\\\"hljs-keyword\\\"\u003Ethis\u003C\u002Fspan\u003E.context,\\n      \u003Cspan class=\\\"hljs-keyword\\\"\u003Ethis\u003C\u002Fspan\u003E.child,\\n      \u003Cspan class=\\\"hljs-keyword\\\"\u003Ethis\u003C\u002Fspan\u003E.message,\\n      \u003Cspan class=\\\"hljs-keyword\\\"\u003Ethis\u003C\u002Fspan\u003E.position = ToastPosition.center,\\n      \u003Cspan class=\\\"hljs-keyword\\\"\u003Ethis\u003C\u002Fspan\u003E.icon,\\n      \u003Cspan class=\\\"hljs-keyword\\\"\u003Ethis\u003C\u002Fspan\u003E.duration = \u003Cspan class=\\\"hljs-number\\\"\u003E2000\u003C\u002Fspan\u003E,\\n      \u003Cspan class=\\\"hljs-keyword\\\"\u003Ethis\u003C\u002Fspan\u003E.\u003Cspan class=\\\"hljs-built_in\\\"\u003Ecolor\u003C\u002Fspan\u003E = Colors.black,\\n      \u003Cspan class=\\\"hljs-keyword\\\"\u003Ethis\u003C\u002Fspan\u003E.textColor = Colors.white})\\n      : \u003Cspan class=\\\"hljs-keyword\\\"\u003Eassert\u003C\u002Fspan\u003E(child == \u003Cspan class=\\\"hljs-keyword\\\"\u003Enull\u003C\u002Fspan\u003E || message == \u003Cspan class=\\\"hljs-keyword\\\"\u003Enull\u003C\u002Fspan\u003E,\\n            \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;child != null || message != null&#x27;\u003C\u002Fspan\u003E),\\n        \u003Cspan class=\\\"hljs-keyword\\\"\u003Eassert\u003C\u002Fspan\u003E(message != \u003Cspan class=\\\"hljs-keyword\\\"\u003Enull\u003C\u002Fspan\u003E &amp;&amp; child == \u003Cspan class=\\\"hljs-keyword\\\"\u003Enull\u003C\u002Fspan\u003E,\\n            \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;message != null &amp;&amp; child == null&#x27;\u003C\u002Fspan\u003E) {\\n    OverlayState overlay = Overlay.of(context)!;\\n\\n    \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 屏幕大小\u003C\u002Fspan\u003E\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E offset = MediaQuery.of(context).\u003Cspan class=\\\"hljs-built_in\\\"\u003Esize\u003C\u002Fspan\u003E.\u003Cspan class=\\\"hljs-built_in\\\"\u003Eheight\u003C\u002Fspan\u003E * \u003Cspan class=\\\"hljs-number\\\"\u003E0.2\u003C\u002Fspan\u003E;\\n    \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 距顶部距离\u003C\u002Fspan\u003E\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Edouble\u003C\u002Fspan\u003E? top = position == ToastPosition.top ? offset : \u003Cspan class=\\\"hljs-keyword\\\"\u003Enull\u003C\u002Fspan\u003E;\\n    \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 距底部距离\u003C\u002Fspan\u003E\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Edouble\u003C\u002Fspan\u003E? bottom = position == ToastPosition.bottom ? offset : \u003Cspan class=\\\"hljs-keyword\\\"\u003Enull\u003C\u002Fspan\u003E;\\n\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E Widget iconText = icon != \u003Cspan class=\\\"hljs-keyword\\\"\u003Enull\u003C\u002Fspan\u003E\\n        ? Column(\\n            children: [\\n              icon!,\\n              SizedBox(\\n                \u003Cspan class=\\\"hljs-built_in\\\"\u003Eheight\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-number\\\"\u003E8\u003C\u002Fspan\u003E,\\n              ),\\n              Text(message!)\\n            ],\\n          )\\n        : Text(message!);\\n\\n    \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 提示信息\u003C\u002Fspan\u003E\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-built_in\\\"\u003Etext\u003C\u002Fspan\u003E = child ?? iconText;\\n\\n    OverlayEntry overlayEntry = OverlayEntry(builder: (BuildContext context) {\\n      \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E Positioned(\\n          top: top,\\n          bottom: bottom,\\n          child: _MessageDefaultStyle(\\n            _Body(\\n              \u003Cspan class=\\\"hljs-built_in\\\"\u003Etext\u003C\u002Fspan\u003E,\\n              \u003Cspan class=\\\"hljs-built_in\\\"\u003Ecolor\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-built_in\\\"\u003Ecolor\u003C\u002Fspan\u003E,\\n            ),\\n            \u003Cspan class=\\\"hljs-built_in\\\"\u003Ecolor\u003C\u002Fspan\u003E: textColor,\\n          ));\\n    });\\n\\n    overlay.insert(overlayEntry);\\n\\n    \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 展示时长为0，则为不关闭\u003C\u002Fspan\u003E\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Eif\u003C\u002Fspan\u003E (duration != \u003Cspan class=\\\"hljs-number\\\"\u003E0\u003C\u002Fspan\u003E) {\\n      Future.delayed(\\n          Duration(milliseconds: duration!), () =&gt; overlayEntry.remove());\\n    }\\n  }\\n\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E BuildContext context;\\n  \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 自定义内容\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E Widget? child;\\n  \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 提示内容\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003EString\u003C\u002Fspan\u003E? message;\\n  \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 位置\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E ToastPosition? position;\\n  \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 图标\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E Icon? icon;\\n  \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 展示时长(ms)\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-built_in\\\"\u003Eint\u003C\u002Fspan\u003E? duration;\\n  \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 背景色\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E Color? \u003Cspan class=\\\"hljs-built_in\\\"\u003Ecolor\u003C\u002Fspan\u003E;\\n  \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 文本颜色\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E Color? textColor;\\n}\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003Econtext\u003C\u002Fcode\u003E：上下文(必填)\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Echild\u003C\u002Fcode\u003E：自定义内容\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Emessage\u003C\u002Fcode\u003E：提示内容\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Eposition\u003C\u002Fcode\u003E：显示位置，默认为\u003Ccode\u003EToastPosition.center\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Eicon\u003C\u002Fcode\u003E：图标\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Eduration\u003C\u002Fcode\u003E：展示时长，默认为 2000，单位：\u003Ccode\u003Ems\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Ecolor\u003C\u002Fcode\u003E：背景色\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EtextColor\u003C\u002Fcode\u003E：文本颜色\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-dart\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;package\u003C\u002Fspan\u003E:flutter\u002Fmaterial.dart&#x27;;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;package\u003C\u002Fspan\u003E:learn\u002Fwidgets\u002Ftoast.dart&#x27;;\\n\\nvoid main() {\\n  runApp(\u003Cspan class=\\\"hljs-type\\\"\u003EApp\u003C\u002Fspan\u003E());\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EApp\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EStatelessWidget\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EWidget\u003C\u002Fspan\u003E build(\u003Cspan class=\\\"hljs-type\\\"\u003EBuildContext\u003C\u002Fspan\u003E context) {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-type\\\"\u003EMaterialApp\u003C\u002Fspan\u003E(\\n      title: \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;Toast轻提示&quot;\u003C\u002Fspan\u003E,\\n      home: \u003Cspan class=\\\"hljs-type\\\"\u003EHome\u003C\u002Fspan\u003E(),\\n    );\\n  }\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EHome\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EStatefulWidget\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EHome\u003C\u002Fspan\u003E({\u003Cspan class=\\\"hljs-type\\\"\u003EKey\u003C\u002Fspan\u003E? key}) : \u003Cspan class=\\\"hljs-keyword\\\"\u003Esuper\u003C\u002Fspan\u003E(key: key);\\n\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  _HomeState createState() =&gt; _HomeState();\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003E_HomeState\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EState&lt;Home&gt;\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EWidget\u003C\u002Fspan\u003E build(\u003Cspan class=\\\"hljs-type\\\"\u003EBuildContext\u003C\u002Fspan\u003E context) {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-type\\\"\u003EScaffold\u003C\u002Fspan\u003E(\\n        appBar: \u003Cspan class=\\\"hljs-type\\\"\u003EAppBar\u003C\u002Fspan\u003E(\\n          title: \u003Cspan class=\\\"hljs-type\\\"\u003EText\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;Toast\u003C\u002Fspan\u003E轻提示&#x27;),\\n        ),\\n        body: \u003Cspan class=\\\"hljs-type\\\"\u003EColumn\u003C\u002Fspan\u003E(\\n          children: [\\n            \u003Cspan class=\\\"hljs-type\\\"\u003EOutlinedButton\u003C\u002Fspan\u003E(\\n              child: \u003Cspan class=\\\"hljs-type\\\"\u003EText\u003C\u002Fspan\u003E(&#x27;显示\u003Cspan class=\\\"hljs-type\\\"\u003EToast\u003C\u002Fspan\u003E&#x27;),\\n              onPressed: () {\\n                \u003Cspan class=\\\"hljs-type\\\"\u003EToast\u003C\u002Fspan\u003E(\\n                  context: context,\\n                  message: \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;这是一个toast&quot;\u003C\u002Fspan\u003E,\\n                );\\n              },\\n            )\\n          ],\\n        ));\\n  }\\n}\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\"}"}</script>
+	<script type="svelte-data" url="20210701155212.json">{"status":200,"statusText":"","headers":{"content-type":"text/plain;charset=UTF-8"},"body":"{\"title\":\"Wigets学习之Toast轻提示\",\"slug\":\"Flutter Wiget\",\"time\":\"2021-07-01T15:52:31.000Z\",\"author\":\"PingTouG\",\"html\":\"\u003Cp\u003E\u003Ccode\u003EFlutter\u003C\u002Fcode\u003E中只有一种轻提示\u003Ccode\u003ESnackBar\u003C\u002Fcode\u003E，所以要实现其他效果需要自实现\u003C\u002Fp\u003E\\n\u003Ch2 id=\\\"snackbar\\\"\u003ESnackBar\u003C\u002Fh2\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E从底部弹出一条提示信息\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003Econtent\u003C\u002Fcode\u003E：提示内容(必填)\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EbackgroundColor\u003C\u002Fcode\u003E：背景色\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Eelevation\u003C\u002Fcode\u003E：阴影，\u003Ccode\u003Ebehavior=SnackBarBehavior.floating\u003C\u002Fcode\u003E才能看到效果\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Emargin\u003C\u002Fcode\u003E：外边距，需要\u003Ccode\u003Ebehavior=SnackBarBehavior.floating\u003C\u002Fcode\u003E才行，否则会报错\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Epadding\u003C\u002Fcode\u003E：内边距\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Ewidth\u003C\u002Fcode\u003E：宽度，需要\u003Ccode\u003Ebehavior=SnackBarBehavior.floating &amp;&amp; margin == null\u003C\u002Fcode\u003E才行，否则会报错\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Eshape\u003C\u002Fcode\u003E：裁剪，可通过此属性设置圆角，如：\u003Ccode\u003Eshape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(48)))\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Ebehavior\u003C\u002Fcode\u003E：设置定位，默认为\u003Ccode\u003ESnackBarBehavior.fixed(紧贴底部)\u003C\u002Fcode\u003E，\u003Ccode\u003Ebehavior=SnackBarBehavior.floating(悬停底部)\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Eaction\u003C\u002Fcode\u003E：操作，可用\u003Ccode\u003ESnackBarAction\u003C\u002Fcode\u003E指定\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Eduration\u003C\u002Fcode\u003E：动画时长\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Eanimation\u003C\u002Fcode\u003E：动画\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EonVisible\u003C\u002Fcode\u003E：显示事件\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Ch3 id=\\\"snackbaraction\\\"\u003ESnackBarAction\u003C\u002Fh3\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E\u003Ccode\u003ESnackBar\u003C\u002Fcode\u003E操作\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003Elabel\u003C\u002Fcode\u003E：操作的文字\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EonPressed\u003C\u002Fcode\u003E：操作的点击事件\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EtextColor\u003C\u002Fcode\u003E：文字颜色\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EdisabledTextColor\u003C\u002Fcode\u003E：文字禁用颜色\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-dart\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;package\u003C\u002Fspan\u003E:flutter\u002Fmaterial.dart&#x27;;\\n\\nvoid main() {\\n  runApp(\u003Cspan class=\\\"hljs-type\\\"\u003EApp\u003C\u002Fspan\u003E());\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EApp\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EStatelessWidget\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E scaffoldMessengerKey = \u003Cspan class=\\\"hljs-type\\\"\u003EGlobalKey\u003C\u002Fspan\u003E&lt;\u003Cspan class=\\\"hljs-type\\\"\u003EScaffoldMessengerState\u003C\u002Fspan\u003E&gt;();\\n\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EWidget\u003C\u002Fspan\u003E build(\u003Cspan class=\\\"hljs-type\\\"\u003EBuildContext\u003C\u002Fspan\u003E context) {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-type\\\"\u003EMaterialApp\u003C\u002Fspan\u003E(\\n      scaffoldMessengerKey: scaffoldMessengerKey,\\n      title: \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;Toast\u003C\u002Fspan\u003E轻提示&#x27;,\\n      home: \u003Cspan class=\\\"hljs-type\\\"\u003EScaffold\u003C\u002Fspan\u003E(\\n        appBar: \u003Cspan class=\\\"hljs-type\\\"\u003EAppBar\u003C\u002Fspan\u003E(\\n          title: \u003Cspan class=\\\"hljs-type\\\"\u003EText\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-string\\\"\u003E&quot;Toast轻提示&quot;\u003C\u002Fspan\u003E),\\n        ),\\n        body: \u003Cspan class=\\\"hljs-type\\\"\u003ERow\u003C\u002Fspan\u003E(\\n          children: [\\n            \u003Cspan class=\\\"hljs-type\\\"\u003EOutlinedButton\u003C\u002Fspan\u003E(\\n                onPressed: () {\\n                  scaffoldMessengerKey.currentState?.showSnackBar(\u003Cspan class=\\\"hljs-type\\\"\u003ESnackBar\u003C\u002Fspan\u003E(\\n                      content: \u003Cspan class=\\\"hljs-type\\\"\u003EText\u003C\u002Fspan\u003E(&#x27;这是一条提示&#x27;),\\n                      behavior: \u003Cspan class=\\\"hljs-type\\\"\u003ESnackBarBehavior\u003C\u002Fspan\u003E.floating,\\n                      elevation: \u003Cspan class=\\\"hljs-number\\\"\u003E12\u003C\u002Fspan\u003E,\\n                      margin: \u003Cspan class=\\\"hljs-type\\\"\u003EEdgeInsets\u003C\u002Fspan\u003E.all(\u003Cspan class=\\\"hljs-number\\\"\u003E12\u003C\u002Fspan\u003E),\\n                      action: \u003Cspan class=\\\"hljs-type\\\"\u003ESnackBarAction\u003C\u002Fspan\u003E(\\n                        label: &#x27;确定&#x27;,\\n                        onPressed: () {},\\n                      ),\\n                      onVisible: () {\\n                        print(&#x27;显示&#x27;);\\n                      }));\\n                },\\n                child: \u003Cspan class=\\\"hljs-type\\\"\u003EText\u003C\u002Fspan\u003E(&#x27;显示提示&#x27;)),\\n          ],\\n        ),\\n      ),\\n    );\\n  }\\n}\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch2 id=\\\"toast自实现\\\"\u003EToast(自实现)\u003C\u002Fh2\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E注意：此实现父部件一定要是一个\u003Ccode\u003EStatefulWidget\u003C\u002Fcode\u003E，否则使用\u003Ccode\u003EOverlay.of(context)\u003C\u002Fcode\u003E获取\u003Ccode\u003EOverlayState\u003C\u002Fcode\u003E时总是为\u003Ccode\u003Enull\u003C\u002Fcode\u003E，等找到解决办法再更新一下代码。\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cp\u003E\u003Ccode\u003Etoast.dart\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-dart\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;dart:async&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;package:flutter\u002Fmaterial.dart&#x27;\u003C\u002Fspan\u003E;\\n\\nclass Toast {\\n  Toast(\\n      {required \u003Cspan class=\\\"hljs-keyword\\\"\u003Ethis\u003C\u002Fspan\u003E.context,\\n      \u003Cspan class=\\\"hljs-keyword\\\"\u003Ethis\u003C\u002Fspan\u003E.child,\\n      \u003Cspan class=\\\"hljs-keyword\\\"\u003Ethis\u003C\u002Fspan\u003E.message,\\n      \u003Cspan class=\\\"hljs-keyword\\\"\u003Ethis\u003C\u002Fspan\u003E.position = ToastPosition.center,\\n      \u003Cspan class=\\\"hljs-keyword\\\"\u003Ethis\u003C\u002Fspan\u003E.icon,\\n      \u003Cspan class=\\\"hljs-keyword\\\"\u003Ethis\u003C\u002Fspan\u003E.duration = \u003Cspan class=\\\"hljs-number\\\"\u003E2000\u003C\u002Fspan\u003E,\\n      \u003Cspan class=\\\"hljs-keyword\\\"\u003Ethis\u003C\u002Fspan\u003E.\u003Cspan class=\\\"hljs-built_in\\\"\u003Ecolor\u003C\u002Fspan\u003E = Colors.black,\\n      \u003Cspan class=\\\"hljs-keyword\\\"\u003Ethis\u003C\u002Fspan\u003E.textColor = Colors.white})\\n      : \u003Cspan class=\\\"hljs-keyword\\\"\u003Eassert\u003C\u002Fspan\u003E(child == \u003Cspan class=\\\"hljs-keyword\\\"\u003Enull\u003C\u002Fspan\u003E || message == \u003Cspan class=\\\"hljs-keyword\\\"\u003Enull\u003C\u002Fspan\u003E,\\n            \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;child != null || message != null&#x27;\u003C\u002Fspan\u003E),\\n        \u003Cspan class=\\\"hljs-keyword\\\"\u003Eassert\u003C\u002Fspan\u003E(message != \u003Cspan class=\\\"hljs-keyword\\\"\u003Enull\u003C\u002Fspan\u003E &amp;&amp; child == \u003Cspan class=\\\"hljs-keyword\\\"\u003Enull\u003C\u002Fspan\u003E,\\n            \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;message != null &amp;&amp; child == null&#x27;\u003C\u002Fspan\u003E) {\\n    OverlayState overlay = Overlay.of(context)!;\\n\\n    \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 屏幕大小\u003C\u002Fspan\u003E\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E offset = MediaQuery.of(context).\u003Cspan class=\\\"hljs-built_in\\\"\u003Esize\u003C\u002Fspan\u003E.\u003Cspan class=\\\"hljs-built_in\\\"\u003Eheight\u003C\u002Fspan\u003E * \u003Cspan class=\\\"hljs-number\\\"\u003E0.2\u003C\u002Fspan\u003E;\\n    \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 距顶部距离\u003C\u002Fspan\u003E\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Edouble\u003C\u002Fspan\u003E? top = position == ToastPosition.top ? offset : \u003Cspan class=\\\"hljs-keyword\\\"\u003Enull\u003C\u002Fspan\u003E;\\n    \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 距底部距离\u003C\u002Fspan\u003E\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Edouble\u003C\u002Fspan\u003E? bottom = position == ToastPosition.bottom ? offset : \u003Cspan class=\\\"hljs-keyword\\\"\u003Enull\u003C\u002Fspan\u003E;\\n\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E Widget iconText = icon != \u003Cspan class=\\\"hljs-keyword\\\"\u003Enull\u003C\u002Fspan\u003E\\n        ? Column(\\n            mainAxisSize: MainAxisSize.\u003Cspan class=\\\"hljs-built_in\\\"\u003Emin\u003C\u002Fspan\u003E,\\n            children: [\\n              SizedBox(\\n                \u003Cspan class=\\\"hljs-built_in\\\"\u003Eheight\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-number\\\"\u003E4\u003C\u002Fspan\u003E,\\n              ),\\n              icon!,\\n              SizedBox(\\n                \u003Cspan class=\\\"hljs-built_in\\\"\u003Eheight\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-number\\\"\u003E4\u003C\u002Fspan\u003E,\\n              ),\\n              Text(message!)\\n            ],\\n          )\\n        : Text(message!);\\n\\n    \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 提示信息\u003C\u002Fspan\u003E\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-built_in\\\"\u003Etext\u003C\u002Fspan\u003E = child ?? iconText;\\n\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Eif\u003C\u002Fspan\u003E (_overlayEntry != \u003Cspan class=\\\"hljs-keyword\\\"\u003Enull\u003C\u002Fspan\u003E) {\\n      \u003Cspan class=\\\"hljs-built_in\\\"\u003Eclear\u003C\u002Fspan\u003E();\\n    }\\n\\n    _overlayEntry = OverlayEntry(builder: (BuildContext context) {\\n      \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 如果是Toast.loading则icon一定是_LoadingIcon类型\u003C\u002Fspan\u003E\\n      \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E isDisabledTap = icon != \u003Cspan class=\\\"hljs-keyword\\\"\u003Enull\u003C\u002Fspan\u003E &amp;&amp; icon is _LoadingIcon;\\n\\n      \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E body = _Body(\\n        \u003Cspan class=\\\"hljs-built_in\\\"\u003Etext\u003C\u002Fspan\u003E,\\n        \u003Cspan class=\\\"hljs-built_in\\\"\u003Ecolor\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-built_in\\\"\u003Ecolor\u003C\u002Fspan\u003E,\\n      );\\n\\n      \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E absorbPointer = AbsorbPointer(\\n        ignoringSemantics: \u003Cspan class=\\\"hljs-keyword\\\"\u003Etrue\u003C\u002Fspan\u003E,\\n        child: body,\\n      );\\n\\n      \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E Positioned(\\n          top: top,\\n          bottom: bottom,\\n          child: _MessageDefaultStyle(\\n            isDisabledTap ? absorbPointer : body,\\n            \u003Cspan class=\\\"hljs-built_in\\\"\u003Ecolor\u003C\u002Fspan\u003E: textColor,\\n          ));\\n    });\\n\\n    overlay.insert(_overlayEntry!);\\n\\n    \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 展示时长为0，则为不关闭\u003C\u002Fspan\u003E\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Eif\u003C\u002Fspan\u003E (duration != \u003Cspan class=\\\"hljs-number\\\"\u003E0\u003C\u002Fspan\u003E) {\\n      _timer = Timer(Duration(milliseconds: duration!), \u003Cspan class=\\\"hljs-built_in\\\"\u003Eclear\u003C\u002Fspan\u003E);\\n    }\\n  }\\n\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E BuildContext context;\\n  \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 自定义内容\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E Widget? child;\\n  \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 提示内容\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003EString\u003C\u002Fspan\u003E? message;\\n  \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 位置\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E ToastPosition? position;\\n  \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 图标\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E Widget? icon;\\n  \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 展示时长(ms)\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-built_in\\\"\u003Eint\u003C\u002Fspan\u003E? duration;\\n  \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 背景色\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E Color? \u003Cspan class=\\\"hljs-built_in\\\"\u003Ecolor\u003C\u002Fspan\u003E;\\n  \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 文本颜色\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E Color? textColor;\\n\\n  factory Toast.loading(\\n      {required BuildContext context,\\n      Widget? child,\\n      \u003Cspan class=\\\"hljs-keyword\\\"\u003EString\u003C\u002Fspan\u003E? message,\\n      \u003Cspan class=\\\"hljs-built_in\\\"\u003Eint\u003C\u002Fspan\u003E? duration,\\n      Color? \u003Cspan class=\\\"hljs-built_in\\\"\u003Ecolor\u003C\u002Fspan\u003E,\\n      Color? textColor}) = _ToastLoading;\\n\\n  factory Toast.success(\\n      {required BuildContext context,\\n      Widget? child,\\n      \u003Cspan class=\\\"hljs-keyword\\\"\u003EString\u003C\u002Fspan\u003E? message,\\n      \u003Cspan class=\\\"hljs-built_in\\\"\u003Eint\u003C\u002Fspan\u003E? duration,\\n      Color? \u003Cspan class=\\\"hljs-built_in\\\"\u003Ecolor\u003C\u002Fspan\u003E,\\n      Color? textColor}) = _ToastSuccess;\\n\\n  factory Toast.error(\\n      {required BuildContext context,\\n      Widget? child,\\n      \u003Cspan class=\\\"hljs-keyword\\\"\u003EString\u003C\u002Fspan\u003E? message,\\n      \u003Cspan class=\\\"hljs-built_in\\\"\u003Eint\u003C\u002Fspan\u003E? duration,\\n      Color? \u003Cspan class=\\\"hljs-built_in\\\"\u003Ecolor\u003C\u002Fspan\u003E,\\n      Color? textColor}) = _ToastError;\\n\\n  \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 清除\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Estatic\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-built_in\\\"\u003Eclear\u003C\u002Fspan\u003E() {\\n    _timer?.cancel();\\n    _timer = \u003Cspan class=\\\"hljs-keyword\\\"\u003Enull\u003C\u002Fspan\u003E;\\n    _overlayEntry?.remove();\\n    _overlayEntry = \u003Cspan class=\\\"hljs-keyword\\\"\u003Enull\u003C\u002Fspan\u003E;\\n  }\\n}\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eenum\u003C\u002Fspan\u003E ToastPosition { top, center, bottom }\\n\\nOverlayEntry? _overlayEntry;\\nTimer? _timer;\\n\\nclass _ToastLoading extends Toast {\\n  _ToastLoading(\\n      {required \u003Cspan class=\\\"hljs-keyword\\\"\u003Ethis\u003C\u002Fspan\u003E.context,\\n      \u003Cspan class=\\\"hljs-keyword\\\"\u003Ethis\u003C\u002Fspan\u003E.child,\\n      \u003Cspan class=\\\"hljs-keyword\\\"\u003Ethis\u003C\u002Fspan\u003E.message,\\n      \u003Cspan class=\\\"hljs-keyword\\\"\u003Ethis\u003C\u002Fspan\u003E.duration = \u003Cspan class=\\\"hljs-number\\\"\u003E2000\u003C\u002Fspan\u003E,\\n      \u003Cspan class=\\\"hljs-keyword\\\"\u003Ethis\u003C\u002Fspan\u003E.\u003Cspan class=\\\"hljs-built_in\\\"\u003Ecolor\u003C\u002Fspan\u003E = Colors.black,\\n      \u003Cspan class=\\\"hljs-keyword\\\"\u003Ethis\u003C\u002Fspan\u003E.textColor = Colors.white,\\n      \u003Cspan class=\\\"hljs-keyword\\\"\u003Ethis\u003C\u002Fspan\u003E.iconBackgroupColor = Colors.white,\\n      \u003Cspan class=\\\"hljs-keyword\\\"\u003Ethis\u003C\u002Fspan\u003E.iconColor = Colors.black12})\\n      : \u003Cspan class=\\\"hljs-keyword\\\"\u003Esuper\u003C\u002Fspan\u003E(\\n            context: context,\\n            child: child,\\n            message: message,\\n            duration: duration,\\n            icon: _LoadingIcon(\\n              backgroundColor: iconBackgroupColor!,\\n              \u003Cspan class=\\\"hljs-built_in\\\"\u003Ecolor\u003C\u002Fspan\u003E: iconColor!,\\n            ),\\n            \u003Cspan class=\\\"hljs-built_in\\\"\u003Ecolor\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-built_in\\\"\u003Ecolor\u003C\u002Fspan\u003E,\\n            textColor: textColor);\\n\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E BuildContext context;\\n  \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 自定义内容\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E Widget? child;\\n  \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 提示内容\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003EString\u003C\u002Fspan\u003E? message;\\n  \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 展示时长(ms)\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-built_in\\\"\u003Eint\u003C\u002Fspan\u003E? duration;\\n  \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 背景色\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E Color? \u003Cspan class=\\\"hljs-built_in\\\"\u003Ecolor\u003C\u002Fspan\u003E;\\n  \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 文本颜色\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E Color? textColor;\\n  \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F loading背景色\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E Color? iconBackgroupColor;\\n  \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F loading颜色\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E Color? iconColor;\\n}\\n\\nclass _ToastSuccess extends Toast {\\n  _ToastSuccess(\\n      {required \u003Cspan class=\\\"hljs-keyword\\\"\u003Ethis\u003C\u002Fspan\u003E.context,\\n      \u003Cspan class=\\\"hljs-keyword\\\"\u003Ethis\u003C\u002Fspan\u003E.child,\\n      \u003Cspan class=\\\"hljs-keyword\\\"\u003Ethis\u003C\u002Fspan\u003E.message,\\n      \u003Cspan class=\\\"hljs-keyword\\\"\u003Ethis\u003C\u002Fspan\u003E.duration = \u003Cspan class=\\\"hljs-number\\\"\u003E2000\u003C\u002Fspan\u003E,\\n      \u003Cspan class=\\\"hljs-keyword\\\"\u003Ethis\u003C\u002Fspan\u003E.\u003Cspan class=\\\"hljs-built_in\\\"\u003Ecolor\u003C\u002Fspan\u003E = Colors.black,\\n      \u003Cspan class=\\\"hljs-keyword\\\"\u003Ethis\u003C\u002Fspan\u003E.textColor = Colors.white,\\n      \u003Cspan class=\\\"hljs-keyword\\\"\u003Ethis\u003C\u002Fspan\u003E.iconColor = Colors.white})\\n      : \u003Cspan class=\\\"hljs-keyword\\\"\u003Esuper\u003C\u002Fspan\u003E(\\n            context: context,\\n            child: child,\\n            message: message,\\n            duration: duration,\\n            icon: Icon(\\n              Icons.check_circle,\\n              \u003Cspan class=\\\"hljs-built_in\\\"\u003Ecolor\u003C\u002Fspan\u003E: iconColor,\\n              \u003Cspan class=\\\"hljs-built_in\\\"\u003Esize\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-number\\\"\u003E36\u003C\u002Fspan\u003E,\\n            ),\\n            \u003Cspan class=\\\"hljs-built_in\\\"\u003Ecolor\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-built_in\\\"\u003Ecolor\u003C\u002Fspan\u003E,\\n            textColor: textColor);\\n\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E BuildContext context;\\n  \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 自定义内容\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E Widget? child;\\n  \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 提示内容\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003EString\u003C\u002Fspan\u003E? message;\\n  \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 展示时长(ms)\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-built_in\\\"\u003Eint\u003C\u002Fspan\u003E? duration;\\n  \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 背景色\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E Color? \u003Cspan class=\\\"hljs-built_in\\\"\u003Ecolor\u003C\u002Fspan\u003E;\\n  \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 文本颜色\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E Color? textColor;\\n  \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F icon颜色\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E Color? iconColor;\\n}\\n\\nclass _ToastError extends Toast {\\n  _ToastError(\\n      {required \u003Cspan class=\\\"hljs-keyword\\\"\u003Ethis\u003C\u002Fspan\u003E.context,\\n      \u003Cspan class=\\\"hljs-keyword\\\"\u003Ethis\u003C\u002Fspan\u003E.child,\\n      \u003Cspan class=\\\"hljs-keyword\\\"\u003Ethis\u003C\u002Fspan\u003E.message,\\n      \u003Cspan class=\\\"hljs-keyword\\\"\u003Ethis\u003C\u002Fspan\u003E.duration = \u003Cspan class=\\\"hljs-number\\\"\u003E2000\u003C\u002Fspan\u003E,\\n      \u003Cspan class=\\\"hljs-keyword\\\"\u003Ethis\u003C\u002Fspan\u003E.\u003Cspan class=\\\"hljs-built_in\\\"\u003Ecolor\u003C\u002Fspan\u003E = Colors.black,\\n      \u003Cspan class=\\\"hljs-keyword\\\"\u003Ethis\u003C\u002Fspan\u003E.textColor = Colors.white,\\n      \u003Cspan class=\\\"hljs-keyword\\\"\u003Ethis\u003C\u002Fspan\u003E.iconColor = Colors.white})\\n      : \u003Cspan class=\\\"hljs-keyword\\\"\u003Esuper\u003C\u002Fspan\u003E(\\n            context: context,\\n            child: child,\\n            message: message,\\n            duration: duration,\\n            icon: Icon(\\n              Icons.cancel,\\n              \u003Cspan class=\\\"hljs-built_in\\\"\u003Ecolor\u003C\u002Fspan\u003E: iconColor,\\n              \u003Cspan class=\\\"hljs-built_in\\\"\u003Esize\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-number\\\"\u003E36\u003C\u002Fspan\u003E,\\n            ),\\n            \u003Cspan class=\\\"hljs-built_in\\\"\u003Ecolor\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-built_in\\\"\u003Ecolor\u003C\u002Fspan\u003E,\\n            textColor: textColor);\\n\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E BuildContext context;\\n  \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 自定义内容\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E Widget? child;\\n  \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 提示内容\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003EString\u003C\u002Fspan\u003E? message;\\n  \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 展示时长(ms)\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-built_in\\\"\u003Eint\u003C\u002Fspan\u003E? duration;\\n  \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 背景色\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E Color? \u003Cspan class=\\\"hljs-built_in\\\"\u003Ecolor\u003C\u002Fspan\u003E;\\n  \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 文本颜色\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E Color? textColor;\\n  \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F icon颜色\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E Color? iconColor;\\n}\\n\\n\u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 文本默认样式\u003C\u002Fspan\u003E\\nclass _MessageDefaultStyle extends StatelessWidget {\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E _MessageDefaultStyle(\u003Cspan class=\\\"hljs-keyword\\\"\u003Ethis\u003C\u002Fspan\u003E.child, {Key? \u003Cspan class=\\\"hljs-built_in\\\"\u003Ekey\u003C\u002Fspan\u003E, \u003Cspan class=\\\"hljs-keyword\\\"\u003Ethis\u003C\u002Fspan\u003E.\u003Cspan class=\\\"hljs-built_in\\\"\u003Ecolor\u003C\u002Fspan\u003E})\\n      : \u003Cspan class=\\\"hljs-keyword\\\"\u003Esuper\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-built_in\\\"\u003Ekey\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-built_in\\\"\u003Ekey\u003C\u002Fspan\u003E);\\n\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E Widget child;\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E Color? \u003Cspan class=\\\"hljs-built_in\\\"\u003Ecolor\u003C\u002Fspan\u003E;\\n\\n  @override\\n  Widget build(BuildContext context) {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E DefaultTextStyle(\\n      \u003Cspan class=\\\"hljs-built_in\\\"\u003EtextAlign\u003C\u002Fspan\u003E: TextAlign.center,\\n      style: TextStyle(fontSize: \u003Cspan class=\\\"hljs-number\\\"\u003E14\u003C\u002Fspan\u003E, \u003Cspan class=\\\"hljs-built_in\\\"\u003Ecolor\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-built_in\\\"\u003Ecolor\u003C\u002Fspan\u003E!),\\n      child: child,\\n    );\\n  }\\n}\\n\\n\u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 内容主体\u003C\u002Fspan\u003E\\nclass _Body extends StatelessWidget {\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E _Body(\u003Cspan class=\\\"hljs-keyword\\\"\u003Ethis\u003C\u002Fspan\u003E.child, {Key? \u003Cspan class=\\\"hljs-built_in\\\"\u003Ekey\u003C\u002Fspan\u003E, \u003Cspan class=\\\"hljs-keyword\\\"\u003Ethis\u003C\u002Fspan\u003E.\u003Cspan class=\\\"hljs-built_in\\\"\u003Ecolor\u003C\u002Fspan\u003E}) : \u003Cspan class=\\\"hljs-keyword\\\"\u003Esuper\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-built_in\\\"\u003Ekey\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-built_in\\\"\u003Ekey\u003C\u002Fspan\u003E);\\n\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E Widget child;\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E Color? \u003Cspan class=\\\"hljs-built_in\\\"\u003Ecolor\u003C\u002Fspan\u003E;\\n\\n  @override\\n  Widget build(BuildContext context) {\\n    \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 屏幕大小\u003C\u002Fspan\u003E\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E windowWidth = MediaQuery.of(context).\u003Cspan class=\\\"hljs-built_in\\\"\u003Esize\u003C\u002Fspan\u003E.\u003Cspan class=\\\"hljs-built_in\\\"\u003Ewidth\u003C\u002Fspan\u003E;\\n    \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 最大宽度\u003C\u002Fspan\u003E\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E maxWidth = windowWidth * \u003Cspan class=\\\"hljs-number\\\"\u003E0.7\u003C\u002Fspan\u003E;\\n\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E Container(\\n        \u003Cspan class=\\\"hljs-built_in\\\"\u003Ewidth\u003C\u002Fspan\u003E: windowWidth,\\n        child: Center(\\n          child: Container(\\n              padding: EdgeInsets.symmetric(horizontal: \u003Cspan class=\\\"hljs-number\\\"\u003E12\u003C\u002Fspan\u003E, vertical: \u003Cspan class=\\\"hljs-number\\\"\u003E8\u003C\u002Fspan\u003E),\\n              decoration: BoxDecoration(\\n                  \u003Cspan class=\\\"hljs-built_in\\\"\u003Ecolor\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-built_in\\\"\u003Ecolor\u003C\u002Fspan\u003E!.withOpacity(\u003Cspan class=\\\"hljs-number\\\"\u003E0.7\u003C\u002Fspan\u003E),\\n                  borderRadius: BorderRadius.all(Radius.circular(\u003Cspan class=\\\"hljs-number\\\"\u003E4\u003C\u002Fspan\u003E))),\\n              constraints: BoxConstraints(\\n                  minWidth: \u003Cspan class=\\\"hljs-number\\\"\u003E88\u003C\u002Fspan\u003E, minHeight: \u003Cspan class=\\\"hljs-number\\\"\u003E40\u003C\u002Fspan\u003E, maxWidth: maxWidth),\\n              child: child),\\n        ));\\n  }\\n}\\n\\n\u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 加载Icon\u003C\u002Fspan\u003E\\nclass _LoadingIcon extends StatelessWidget {\\n  _LoadingIcon(\\n      {Key? \u003Cspan class=\\\"hljs-built_in\\\"\u003Ekey\u003C\u002Fspan\u003E,\\n      \u003Cspan class=\\\"hljs-keyword\\\"\u003Ethis\u003C\u002Fspan\u003E.backgroundColor = Colors.white,\\n      \u003Cspan class=\\\"hljs-keyword\\\"\u003Ethis\u003C\u002Fspan\u003E.\u003Cspan class=\\\"hljs-built_in\\\"\u003Ecolor\u003C\u002Fspan\u003E = Colors.black12})\\n      : \u003Cspan class=\\\"hljs-keyword\\\"\u003Esuper\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-built_in\\\"\u003Ekey\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-built_in\\\"\u003Ekey\u003C\u002Fspan\u003E);\\n\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E Color backgroundColor;\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Efinal\u003C\u002Fspan\u003E Color \u003Cspan class=\\\"hljs-built_in\\\"\u003Ecolor\u003C\u002Fspan\u003E;\\n\\n  @override\\n  Widget build(BuildContext context) {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E CircularProgressIndicator(\\n      valueColor: AlwaysStoppedAnimation(\u003Cspan class=\\\"hljs-built_in\\\"\u003Ecolor\u003C\u002Fspan\u003E),\\n      backgroundColor: backgroundColor,\\n    );\\n  }\\n}\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003Econtext\u003C\u002Fcode\u003E：上下文(必填)\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Echild\u003C\u002Fcode\u003E：自定义内容\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Emessage\u003C\u002Fcode\u003E：提示内容\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Eposition\u003C\u002Fcode\u003E：显示位置，默认为\u003Ccode\u003EToastPosition.center\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Eicon\u003C\u002Fcode\u003E：图标\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Eduration\u003C\u002Fcode\u003E：展示时长，默认为 2000，单位：\u003Ccode\u003Ems\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Ecolor\u003C\u002Fcode\u003E：背景色\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EtextColor\u003C\u002Fcode\u003E：文本颜色\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-dart\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;package\u003C\u002Fspan\u003E:flutter\u002Fmaterial.dart&#x27;;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;package\u003C\u002Fspan\u003E:learn\u002Fwidgets\u002Ftoast.dart&#x27;;\\n\\nvoid main() {\\n  runApp(\u003Cspan class=\\\"hljs-type\\\"\u003EApp\u003C\u002Fspan\u003E());\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EApp\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EStatelessWidget\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EWidget\u003C\u002Fspan\u003E build(\u003Cspan class=\\\"hljs-type\\\"\u003EBuildContext\u003C\u002Fspan\u003E context) {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-type\\\"\u003EMaterialApp\u003C\u002Fspan\u003E(\\n      title: \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;Toast轻提示&quot;\u003C\u002Fspan\u003E,\\n      home: \u003Cspan class=\\\"hljs-type\\\"\u003EHome\u003C\u002Fspan\u003E(),\\n    );\\n  }\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EHome\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EStatefulWidget\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EHome\u003C\u002Fspan\u003E({\u003Cspan class=\\\"hljs-type\\\"\u003EKey\u003C\u002Fspan\u003E? key}) : \u003Cspan class=\\\"hljs-keyword\\\"\u003Esuper\u003C\u002Fspan\u003E(key: key);\\n\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  _HomeState createState() =&gt; _HomeState();\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003E_HomeState\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EState&lt;Home&gt;\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EWidget\u003C\u002Fspan\u003E build(\u003Cspan class=\\\"hljs-type\\\"\u003EBuildContext\u003C\u002Fspan\u003E context) {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-type\\\"\u003EScaffold\u003C\u002Fspan\u003E(\\n        appBar: \u003Cspan class=\\\"hljs-type\\\"\u003EAppBar\u003C\u002Fspan\u003E(\\n          title: \u003Cspan class=\\\"hljs-type\\\"\u003EText\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;Toast\u003C\u002Fspan\u003E轻提示&#x27;),\\n        ),\\n        body: \u003Cspan class=\\\"hljs-type\\\"\u003EWrap\u003C\u002Fspan\u003E(\\n          children: [\\n            \u003Cspan class=\\\"hljs-type\\\"\u003EOutlinedButton\u003C\u002Fspan\u003E(\\n              child: \u003Cspan class=\\\"hljs-type\\\"\u003EText\u003C\u002Fspan\u003E(&#x27;显示\u003Cspan class=\\\"hljs-type\\\"\u003EToast\u003C\u002Fspan\u003E&#x27;),\\n              onPressed: () {\\n                \u003Cspan class=\\\"hljs-type\\\"\u003EToast\u003C\u002Fspan\u003E(\\n                  context: context,\\n                  message: \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;这是一个toast&quot;\u003C\u002Fspan\u003E,\\n                );\\n              },\\n            ),\\n            \u003Cspan class=\\\"hljs-type\\\"\u003EOutlinedButton\u003C\u002Fspan\u003E(\\n              child: \u003Cspan class=\\\"hljs-type\\\"\u003EText\u003C\u002Fspan\u003E(&#x27;显示顶部\u003Cspan class=\\\"hljs-type\\\"\u003EToast\u003C\u002Fspan\u003E&#x27;),\\n              onPressed: () {\\n                \u003Cspan class=\\\"hljs-type\\\"\u003EToast\u003C\u002Fspan\u003E(\\n                    context: context,\\n                    message: \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;这是一个顶部toast&quot;\u003C\u002Fspan\u003E,\\n                    position: \u003Cspan class=\\\"hljs-type\\\"\u003EToastPosition\u003C\u002Fspan\u003E.top);\\n              },\\n            ),\\n            \u003Cspan class=\\\"hljs-type\\\"\u003EOutlinedButton\u003C\u002Fspan\u003E(\\n              child: \u003Cspan class=\\\"hljs-type\\\"\u003EText\u003C\u002Fspan\u003E(&#x27;显示底部\u003Cspan class=\\\"hljs-type\\\"\u003EToast\u003C\u002Fspan\u003E&#x27;),\\n              onPressed: () {\\n                \u003Cspan class=\\\"hljs-type\\\"\u003EToast\u003C\u002Fspan\u003E(\\n                    context: context,\\n                    message: \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;这是一个底部toast&quot;\u003C\u002Fspan\u003E,\\n                    position: \u003Cspan class=\\\"hljs-type\\\"\u003EToastPosition\u003C\u002Fspan\u003E.bottom);\\n              },\\n            ),\\n            \u003Cspan class=\\\"hljs-type\\\"\u003EOutlinedButton\u003C\u002Fspan\u003E(\\n              child: \u003Cspan class=\\\"hljs-type\\\"\u003EText\u003C\u002Fspan\u003E(&#x27;显示自定义背景色\u003Cspan class=\\\"hljs-type\\\"\u003EToast\u003C\u002Fspan\u003E&#x27;),\\n              onPressed: () {\\n                \u003Cspan class=\\\"hljs-type\\\"\u003EToast\u003C\u002Fspan\u003E(\\n                    context: context,\\n                    message: \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;这是一个自定义背景色toast&quot;\u003C\u002Fspan\u003E,\\n                    color: \u003Cspan class=\\\"hljs-type\\\"\u003EColors\u003C\u002Fspan\u003E.yellow.shade800);\\n              },\\n            ),\\n            \u003Cspan class=\\\"hljs-type\\\"\u003EOutlinedButton\u003C\u002Fspan\u003E(\\n              child: \u003Cspan class=\\\"hljs-type\\\"\u003EText\u003C\u002Fspan\u003E(&#x27;显示自定义颜色\u003Cspan class=\\\"hljs-type\\\"\u003EToast\u003C\u002Fspan\u003E&#x27;),\\n              onPressed: () {\\n                \u003Cspan class=\\\"hljs-type\\\"\u003EToast\u003C\u002Fspan\u003E(\\n                    context: context,\\n                    message: \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;这是一个自定义颜色toast&quot;\u003C\u002Fspan\u003E,\\n                    textColor: \u003Cspan class=\\\"hljs-type\\\"\u003EColors\u003C\u002Fspan\u003E.green);\\n              },\\n            ),\\n          ],\\n        ));\\n  }\\n}\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cp\u003EToast 还提供了三个命名构造函数：\u003Ccode\u003EToast.loading\u003C\u002Fcode\u003E，\u003Ccode\u003EToast.success\u003C\u002Fcode\u003E，\u003Ccode\u003EToast.error\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-dart\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;package\u003C\u002Fspan\u003E:flutter\u002Fmaterial.dart&#x27;;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;package\u003C\u002Fspan\u003E:learn\u002Fwidgets\u002Ftoast.dart&#x27;;\\n\\nvoid main() {\\n  runApp(\u003Cspan class=\\\"hljs-type\\\"\u003EApp\u003C\u002Fspan\u003E());\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EApp\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EStatelessWidget\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EWidget\u003C\u002Fspan\u003E build(\u003Cspan class=\\\"hljs-type\\\"\u003EBuildContext\u003C\u002Fspan\u003E context) {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-type\\\"\u003EMaterialApp\u003C\u002Fspan\u003E(\\n      title: \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;Toast轻提示&quot;\u003C\u002Fspan\u003E,\\n      home: \u003Cspan class=\\\"hljs-type\\\"\u003EHome\u003C\u002Fspan\u003E(),\\n    );\\n  }\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EHome\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EStatefulWidget\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EHome\u003C\u002Fspan\u003E({\u003Cspan class=\\\"hljs-type\\\"\u003EKey\u003C\u002Fspan\u003E? key}) : \u003Cspan class=\\\"hljs-keyword\\\"\u003Esuper\u003C\u002Fspan\u003E(key: key);\\n\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  _HomeState createState() =&gt; _HomeState();\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003E_HomeState\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EState&lt;Home&gt;\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EWidget\u003C\u002Fspan\u003E build(\u003Cspan class=\\\"hljs-type\\\"\u003EBuildContext\u003C\u002Fspan\u003E context) {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-type\\\"\u003EScaffold\u003C\u002Fspan\u003E(\\n        appBar: \u003Cspan class=\\\"hljs-type\\\"\u003EAppBar\u003C\u002Fspan\u003E(\\n          title: \u003Cspan class=\\\"hljs-type\\\"\u003EText\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;Toast\u003C\u002Fspan\u003E轻提示&#x27;),\\n        ),\\n        body: \u003Cspan class=\\\"hljs-type\\\"\u003EWrap\u003C\u002Fspan\u003E(\\n          children: [\\n            \u003Cspan class=\\\"hljs-type\\\"\u003EOutlinedButton\u003C\u002Fspan\u003E(\\n              child: \u003Cspan class=\\\"hljs-type\\\"\u003EText\u003C\u002Fspan\u003E(&#x27;显示\u003Cspan class=\\\"hljs-type\\\"\u003ELoading\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-type\\\"\u003EToast\u003C\u002Fspan\u003E&#x27;),\\n              onPressed: () {\\n                \u003Cspan class=\\\"hljs-type\\\"\u003EToast\u003C\u002Fspan\u003E.loading(context: context, message: \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;这是一个Loading Toast&quot;\u003C\u002Fspan\u003E);\\n              },\\n            ),\\n            \u003Cspan class=\\\"hljs-type\\\"\u003EOutlinedButton\u003C\u002Fspan\u003E(\\n              child: \u003Cspan class=\\\"hljs-type\\\"\u003EText\u003C\u002Fspan\u003E(&#x27;显示成功\u003Cspan class=\\\"hljs-type\\\"\u003EToast\u003C\u002Fspan\u003E&#x27;),\\n              onPressed: () {\\n                \u003Cspan class=\\\"hljs-type\\\"\u003EToast\u003C\u002Fspan\u003E.success(context: context, message: \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;这是一个成功Toast&quot;\u003C\u002Fspan\u003E);\\n              },\\n            ),\\n            \u003Cspan class=\\\"hljs-type\\\"\u003EOutlinedButton\u003C\u002Fspan\u003E(\\n              child: \u003Cspan class=\\\"hljs-type\\\"\u003EText\u003C\u002Fspan\u003E(&#x27;显示失败\u003Cspan class=\\\"hljs-type\\\"\u003EToast\u003C\u002Fspan\u003E&#x27;),\\n              onPressed: () {\\n                \u003Cspan class=\\\"hljs-type\\\"\u003EToast\u003C\u002Fspan\u003E.error(context: context, message: \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;这是一个Loading Toast&quot;\u003C\u002Fspan\u003E);\\n              },\\n            ),\\n          ],\\n        ));\\n  }\\n}\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\"}"}</script>
 </div>
 	</body>
 </html>
