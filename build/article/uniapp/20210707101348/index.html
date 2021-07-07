@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" content="#333333" />
+		<link rel="stylesheet" href="/assets/styles/global.css" />
+		<title>App对接极光推送</title>
+
+		
+
+		<link rel="modulepreload" href="/./_app/start-bf43ee66.js">
+		<link rel="modulepreload" href="/./_app/chunks/vendor-d00531f1.js">
+		<link rel="modulepreload" href="/./_app/pages/__layout.svelte-2c475058.js">
+		<link rel="modulepreload" href="/./_app/pages/article/__layout.svelte-42f46e6c.js">
+		<link rel="modulepreload" href="/./_app/pages/article/[category]/[id].svelte-f684a407.js">
+		<link rel="modulepreload" href="/./_app/chunks/utils-a81d5505.js">
+		<link rel="stylesheet" href="/./_app/assets/start-a8cd1609.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/__layout.svelte-dfbf40bb.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/article/__layout.svelte-1448dd73.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/article/[category]/[id].svelte-7f79f039.css">
+
+		<script type="module">
+			import { start } from "/./_app/start-bf43ee66.js";
+			start({
+				target: document.querySelector("#svelte"),
+				paths: {"base":"","assets":"/."},
+				session: {},
+				host: location.host,
+				route: true,
+				spa: false,
+				trailing_slash: "never",
+				hydrate: {
+					status: 200,
+					error: null,
+					nodes: [
+						import("/./_app/pages/__layout.svelte-2c475058.js"),
+						import("/./_app/pages/article/__layout.svelte-42f46e6c.js"),
+						import("/./_app/pages/article/[category]/[id].svelte-f684a407.js")
+					],
+					page: {
+						host: location.host, // TODO this is redundant
+						path: "/article/uniapp/20210707101348",
+						query: new URLSearchParams(""),
+						params: {"category":"uniapp","id":"20210707101348"}
+					}
+				}
+			});
+		</script>
+	</head>
+	<body>
+		<div id="svelte">
+
+
+
+<section class="svelte-jbk32v"><header class="svelte-jbk32v"><a href="/"><img class="logo svelte-jbk32v" src="/assets/images/logo.png" alt="code book logo"></a>
+<a class="github svelte-jbk32v" href="https://github.com/PingTouG" target="_blank"><i class="iconfont icon-github svelte-jbk32v"></i></a></header>
+	<main><section><main class="svelte-1fbldbu">
+
+<section class="md"><h1 class="title">App对接极光推送</h1>
+  <div class="info svelte-1vg5uky"><div class="author svelte-1vg5uky">作者：PingTouG</div>
+    <div class="time">时间：2021-07-07 10:14:43</div></div>
+
+  <div class="md-content"><h2 id="准备工作">准备工作</h2>
+<h3 id="极光应用">极光应用</h3>
+<p>去<a href="https://www.jiguang.cn/">极光官网</a>注册账号，然后创建一个应用，服务选择<code>消息推送</code>，在产品设置时填写的<code>应用包名</code>需要和开发的App包名一致，然后点击下一步就可以了，SDK不需要下载。</p>
+<br />
+
+<p>打开应用设置，找到<code>高级设置→推送设置</code>，如果需要精准推送的话，可以在<code>Android</code>选项设置对应厂商的信息，<code>IOS</code>设置需要证书</p>
+<h4 id="生成ios推送证书">生成IOS推送证书</h4>
+<p>如果之前在生成<code>IOS</code>描述文件时没有选择<code>Push Notifications(推送服务)</code>，则需要开启推送服务</p>
+<h5 id="开启推送服务">开启推送服务</h5>
+<ul>
+<li>登录账号，选择<code>Certificates, Identifiers &amp; Profiles</code></li>
+<li>进入之后，在左侧菜单上点击<code>Identifiers</code>，点击进入对应的App</li>
+<li>在<code>Capabilities</code>栏中找到<code>Push Notifications</code>勾选上，此时右侧会出现<code>Config</code>，点击进入</li>
+<li>分别创建<code>开发推送证书</code>和<code>正式推送证书</code>，创建时选择<code>.certSigningRequest</code>文件，然后点击<code>Continue</code>即可，最后下载下来</li>
+<li>如果之前生成描述文件时没有开启<code>推送服务</code>，则开启之后需要点击编辑，然后点击保存，最后将新的描述文件重新下载下来，替换旧的描述文件</li>
+</ul>
+<p>证书生成之后在<code>IOS</code>设置处上传证书保存即可。</p>
+<h2 id="安装uniapp极光推送插件">安装Uniapp极光推送插件</h2>
+<ul>
+<li>在插件市场搜索极光推送，然后将作者是<code>极光</code>的两个插件：<code>极光JPush官方SDK</code>、<code>极光JCore官方SDK</code>购买即可(免费)</li>
+<li>然后在<code>HBuilder</code>中双击<code>manifest.json</code>文件，选择<code>App原生插件配置</code>，点击<code>选择云端插件</code>，然后将两个插件选中确定即可</li>
+</ul>
+<blockquote>
+<p>注意：一个账号下的应用包名只能安装一个插件，所以在市场购买插件时指定应用包名需要注意一下，否则会出现添加了插件但运行自定义基座时报找不到插件</p>
+</blockquote>
+<h2 id="配置极光推送">配置极光推送</h2>
+<p>在<code>JCore</code>插件配置所需信息</p>
+<ul>
+<li><code>JPUSH_APPKEY_ANDROID</code>：(Android)用于统计分发渠道，可填默认值<code>developer-default</code></li>
+<li><code>JPUSH_APPKEY_IOS</code>：(IOS)用于统计分发渠道，可填默认值<code>developer-default</code></li>
+<li><code>JPUSH_APPKEY_IOS</code>：(IOS)极光应用的<code>appkey</code></li>
+<li><code>JPUSH_APPKEY_ANDROID</code>：(Android)极光应用的<code>appkey</code></li>
+</ul>
+<h2 id="使用极光推送">使用极光推送</h2>
+<p>在<code>App.vue</code>中注册极光推送</p>
+<pre><code class="language-vue"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+    <span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> {
+        <span class="hljs-function"><span class="hljs-title">onLaunch</span>(<span class="hljs-params"></span>)</span> {
+            <span class="hljs-keyword">const</span> jv = uni.requireNativePlugin(<span class="hljs-string">&#x27;JG-JPush&#x27;</span>)
+            jv.initJPushService()
+            jv.addConnectEventListener(<span class="hljs-function"><span class="hljs-params">result</span>=&gt;</span>{
+                <span class="hljs-keyword">if</span>(result.connectEnable){
+                    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;连接极光推送成功&#x27;</span>)
+                }
+            })
+        },
+    }
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+</code></pre>
+<blockquote>
+<p>如果没有连接成功，可先尝试设置一下别名，然后再试试设置别名用<code>setAlias({alias:&#39;xx&#39;}})</code>，注意设置别名时别名是字符串</p>
+</blockquote>
+<h2 id="测试消息推送">测试消息推送</h2>
+<p>在极光应用运营平台中选择<code>消息推送→推送管理→创建推送</code>，选择目标平台，这里使用<code>IOS开发环境</code>，输入通知标题和内容，选择目标人群<code>广播所有人</code>，点击发送预览，若出现<code>错误:没有满足条件的推送目标或推送目标超过 255 天不活跃，被排除在推送目标之外</code>则说明没有注册成功，检查一下配置是否有误，或者使用<code>设备别名</code>并在代码中注册别名尝试一下</p>
+<h2 id="极光推送方法">极光推送方法</h2>
+<h3 id="initjpushservice">initJPushService</h3>
+<blockquote>
+<p>初始化服务，使用极光推送前需要使用此方法初始化服务，一般在应用启动时注册：<code>App.vue</code>中的<code>onLaunch</code></p>
+</blockquote>
+<pre><code class="language-js">const jv = uni<span class="hljs-selector-class">.requireNativePlugin</span>(<span class="hljs-string">&#x27;JG-JPush&#x27;</span>)
+jv<span class="hljs-selector-class">.initJPushService</span>()
+</code></pre>
+<h3 id="addconnecteventlistener">addConnectEventListener</h3>
+<blockquote>
+<p>监听连接状态，返回结果中的<code>connectEnable</code>为<code>true</code>则说明连接成功</p>
+</blockquote>
+<pre><code class="language-js"><span class="hljs-variable">const</span> <span class="hljs-variable">jv</span> = <span class="hljs-variable">uni.requireNativePlugin</span>(<span class="hljs-string">&#x27;JG-JPush&#x27;</span>)
+<span class="hljs-variable">jv.addConnectEventListener</span>(<span class="hljs-variable"><span class="hljs-class">result</span></span>=&gt;{
+    <span class="hljs-function"><span class="hljs-title">if</span>(<span class="hljs-variable"><span class="hljs-class">result</span>.connectEnable</span>){
+        <span class="hljs-variable">console.log</span>(<span class="hljs-string">&#x27;连接极光推送成功&#x27;</span>)</span>
+    }
+})
+</code></pre>
+<h3 id="setalias">setAlias</h3>
+<blockquote>
+<p>注册设备别名，接受一个对象</p>
+</blockquote>
+<ul>
+<li><code>alias</code>：别名,注意：别名只能是字符串</li>
+<li><code>sequence</code>：序列，可不填</li>
+</ul>
+<pre><code class="language-js">const jv = uni<span class="hljs-selector-class">.requireNativePlugin</span>(<span class="hljs-string">&#x27;JG-JPush&#x27;</span>)
+jv<span class="hljs-selector-class">.setAlias</span>({ <span class="hljs-string">&#x27;alias&#x27;</span>: <span class="hljs-string">&#x27;testAlias&#x27;</span> })
+</code></pre>
+<h3 id="queryalias">queryAlias</h3>
+<blockquote>
+<p>查询别名，可接受一个对象</p>
+</blockquote>
+<ul>
+<li><code>sequence</code>：序列，可不填</li>
+</ul>
+<pre><code class="language-js">const jv = uni<span class="hljs-selector-class">.requireNativePlugin</span>(<span class="hljs-string">&#x27;JG-JPush&#x27;</span>)
+jv<span class="hljs-selector-class">.queryAlias</span>()
+</code></pre>
+<h3 id="deletealias">deleteAlias</h3>
+<blockquote>
+<p>删除别名，可接受一个对象</p>
+</blockquote>
+<ul>
+<li><code>sequence</code>：序列，可不填</li>
+</ul>
+<pre><code class="language-js">const jv = uni<span class="hljs-selector-class">.requireNativePlugin</span>(<span class="hljs-string">&#x27;JG-JPush&#x27;</span>)
+jv<span class="hljs-selector-class">.deleteAlias</span>()
+</code></pre>
+<h3 id="addtags">addTags</h3>
+<blockquote>
+<p>添加设备标签，接受一个对象</p>
+</blockquote>
+<ul>
+<li><code>tags</code>：设备标签数组</li>
+<li><code>sequence</code>：序列，可不填</li>
+</ul>
+<pre><code class="language-js">const jv = uni.require<span class="hljs-constructor">NativePlugin(&#x27;JG-JPush&#x27;)</span>
+jv.add<span class="hljs-constructor">Tags({ &#x27;<span class="hljs-params">tags</span>&#x27;:<span class="hljs-params">tags</span> })</span>
+</code></pre>
+<h3 id="querytag">queryTag</h3>
+<blockquote>
+<p>验证设备标签，可接受一个对象</p>
+</blockquote>
+<ul>
+<li><code>sequence</code>：序列，可不填</li>
+</ul>
+<pre><code class="language-js">const jv = uni<span class="hljs-selector-class">.requireNativePlugin</span>(<span class="hljs-string">&#x27;JG-JPush&#x27;</span>)
+jv<span class="hljs-selector-class">.queryTag</span>()
+</code></pre>
+<h3 id="getalltags">getAllTags</h3>
+<blockquote>
+<p>查询所有标签</p>
+</blockquote>
+<pre><code class="language-js">const jv = uni<span class="hljs-selector-class">.requireNativePlugin</span>(<span class="hljs-string">&#x27;JG-JPush&#x27;</span>)
+jv<span class="hljs-selector-class">.getAllTags</span>()
+</code></pre>
+<h3 id="updatetags">updateTags</h3>
+<blockquote>
+<p>覆盖设备标签，接受参数同<code>addTags</code></p>
+</blockquote>
+<pre><code class="language-js">const jv = uni.require<span class="hljs-constructor">NativePlugin(&#x27;JG-JPush&#x27;)</span>
+jv.update<span class="hljs-constructor">Tags({ &#x27;<span class="hljs-params">tags</span>&#x27;:<span class="hljs-params">tags</span> })</span>
+</code></pre>
+<h3 id="deletetags">deleteTags</h3>
+<blockquote>
+<p>删除设备标签，接受参数同<code>addTags</code></p>
+</blockquote>
+<pre><code class="language-js">const jv = uni.require<span class="hljs-constructor">NativePlugin(&#x27;JG-JPush&#x27;)</span>
+jv.delete<span class="hljs-constructor">Tags({ &#x27;<span class="hljs-params">tags</span>&#x27;:<span class="hljs-params">tags</span> })</span>
+</code></pre>
+<h3 id="cleantags">cleanTags</h3>
+<blockquote>
+<p>清空设备标签，可接受一个对象</p>
+</blockquote>
+<ul>
+<li><code>sequence</code>：序列，可不填</li>
+</ul>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> jv = uni.requireNativePlugin(<span class="hljs-string">&#x27;JG-JPush&#x27;</span>)
+jv.cleanTags)
+</code></pre>
+<h3 id="setbadge">setBadge</h3>
+<blockquote>
+<p>设置角标，即应用图标左上角数量</p>
+</blockquote>
+<pre><code class="language-js">const jv = uni<span class="hljs-selector-class">.requireNativePlugin</span>(<span class="hljs-string">&#x27;JG-JPush&#x27;</span>)
+jv<span class="hljs-selector-class">.setBadge</span>(<span class="hljs-number">1</span>)
+</code></pre>
+<h3 id="setmobilenumber">setMobileNumber</h3>
+<blockquote>
+<p>设置电话号码</p>
+</blockquote>
+<pre><code class="language-js">const jv = uni.require<span class="hljs-constructor">NativePlugin(&#x27;JG-JPush&#x27;)</span>
+jv.set<span class="hljs-constructor">MobileNumber({<span class="hljs-params">mobileNumber</span>: 13011112222})</span>
+</code></pre>
+<h3 id="locationservicesenabled">locationServicesEnabled</h3>
+<blockquote>
+<p>获取位置是否可用</p>
+</blockquote>
+<pre><code class="language-js">const jv = uni<span class="hljs-selector-class">.requireNativePlugin</span>(<span class="hljs-string">&#x27;JG-JPush&#x27;</span>)
+jv<span class="hljs-selector-class">.locationServicesEnabled</span>()
+</code></pre>
+<h3 id="getlocationauthorizationstatus">getLocationAuthorizationStatus</h3>
+<blockquote>
+<p>获取位置权限</p>
+</blockquote>
+<pre><code class="language-js">const jv = uni<span class="hljs-selector-class">.requireNativePlugin</span>(<span class="hljs-string">&#x27;JG-JPush&#x27;</span>)
+jv<span class="hljs-selector-class">.getLocationAuthorizationStatus</span>()
+</code></pre>
+<h3 id="requestlocationauthorization">requestLocationAuthorization</h3>
+<blockquote>
+<p>向用于申请定位权限</p>
+</blockquote>
+<pre><code class="language-js">const jv = uni.requireNativePlug<span class="hljs-meta">in(</span><span class="hljs-string">&#x27;JG-JPush&#x27;</span>)
+jv.requestLocationAuthorizati<span class="hljs-meta">on(</span>)
+</code></pre>
+<h3 id="setlocationeanable">setLocationEanable</h3>
+<blockquote>
+<p>设置位置是否可用</p>
+</blockquote>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> jv = uni.requireNativePlugin(<span class="hljs-string">&#x27;JG-JPush&#x27;</span>)
+jv.setLocationEanable(<span class="hljs-literal">true</span>)
+</code></pre>
+<h3 id="setlocation">setLocation</h3>
+<blockquote>
+<p>设置位置</p>
+</blockquote>
+<pre><code class="language-js"><span class="hljs-attribute">const</span> jv = uni.requireNativePlugin(&#x27;JG-JPush&#x27;)
+<span class="hljs-attribute">jv</span>.setLocation({ latitude: <span class="hljs-number">23</span>.<span class="hljs-number">23</span>, longitude: <span class="hljs-number">23</span>.<span class="hljs-number">23</span>, })
+</code></pre>
+<h3 id="setloggerenable">setLoggerEnable</h3>
+<blockquote>
+<p>设置日志是否打开</p>
+</blockquote>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> jv = uni.requireNativePlugin(<span class="hljs-string">&#x27;JG-JPush&#x27;</span>)
+jv.setLoggerEnable(<span class="hljs-literal">true</span>)
+</code></pre>
+<h3 id="requestnotificationauthorization">requestNotificationAuthorization</h3>
+<blockquote>
+<p>向用户申请消息通知权限</p>
+</blockquote>
+<pre><code class="language-js">const jv = uni.requireNativePlugin(<span class="hljs-string">&#x27;JG-JPush&#x27;</span>)
+jv.requestNotificationAuthorization(<span class="hljs-function"><span class="hljs-params">(result)</span>=&gt;</span>{
+    <span class="hljs-keyword">if</span> (result.status &lt; <span class="hljs-number">2</span>) {
+        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;您还没有打开通知权限&#x27;</span>)
+    }
+})
+</code></pre>
+<h3 id="getregistrationid">getRegistrationID</h3>
+<blockquote>
+<p>获取注册ID，需要连接成功之后获取，否则程序会崩溃</p>
+</blockquote>
+<pre><code class="language-js">const jv = uni<span class="hljs-selector-class">.requireNativePlugin</span>(<span class="hljs-string">&#x27;JG-JPush&#x27;</span>)
+jv<span class="hljs-selector-class">.getRegistrationID</span>()
+</code></pre>
+<h3 id="setmaxgeofencenumber">setMaxGeofenceNumber</h3>
+<blockquote>
+<p>设置位置围栏的最大半径，位置围栏是只在某一范围内可推送</p>
+</blockquote>
+<h3 id="addgeofencelistener">addGeofenceListener</h3>
+<blockquote>
+<p>监听位置围栏触发</p>
+</blockquote>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> jv = uni.requireNativePlugin(<span class="hljs-string">&#x27;JG-JPush&#x27;</span>)
+jv.addGeofenceListener(<span class="hljs-function"><span class="hljs-params">result</span> =&gt;</span> {
+    <span class="hljs-built_in">console</span>.log(result)
+})
+</code></pre>
+<h3 id="deletegeofence">deleteGeofence</h3>
+<blockquote>
+<p>删除位置围栏</p>
+</blockquote>
+<h3 id="opensettingsfornotification">openSettingsForNotification</h3>
+<blockquote>
+<p>跳转当前应用消息通知设置界面</p>
+</blockquote>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> jv = uni.requireNativePlugin(<span class="hljs-string">&#x27;JG-JPush&#x27;</span>)
+jv.openSettingsForNotification(<span class="hljs-function"><span class="hljs-params">result</span> =&gt;</span> {
+    <span class="hljs-built_in">console</span>.log(result)
+})
+</code></pre>
+<h3 id="addlocalnotification">addLocalNotification</h3>
+<blockquote>
+<p>创建本地消息通知</p>
+</blockquote>
+<pre><code class="language-js">const jv = uni.requireNativePlug<span class="hljs-meta">in(</span><span class="hljs-string">&#x27;JG-JPush&#x27;</span>)
+jv.addLocalNotificati<span class="hljs-meta">on(</span>{
+    messageID:<span class="hljs-string">&#x27;123&#x27;</span>,
+    <span class="hljs-meta">title</span>:<span class="hljs-string">&#x27;title&#x27;</span>,
+    content:<span class="hljs-string">&#x27;content&#x27;</span>,
+    extras:{
+        name: <span class="hljs-string">&#x27;Cindy&#x27;</span>,
+        age: <span class="hljs-string">&#x27;16&#x27;</span>
+    }
+})
+</code></pre>
+<h3 id="removelocalnotification">removeLocalNotification</h3>
+<blockquote>
+<p>删除本地消息通知</p>
+</blockquote>
+<pre><code class="language-js">const jv = uni.requireNativePlug<span class="hljs-meta">in(</span><span class="hljs-string">&#x27;JG-JPush&#x27;</span>)
+jv.removeLocalNotificati<span class="hljs-meta">on(</span>{ messageID:<span class="hljs-string">&#x27;123&#x27;</span> })
+</code></pre>
+<h3 id="clearlocalnotifications">clearLocalNotifications</h3>
+<blockquote>
+<p>清空本地消息通知</p>
+</blockquote>
+<pre><code class="language-js">const jv = uni<span class="hljs-selector-class">.requireNativePlugin</span>(<span class="hljs-string">&#x27;JG-JPush&#x27;</span>)
+jv<span class="hljs-selector-class">.clearLocalNotifications</span>()
+</code></pre>
+<h3 id="addeventlistener">addEventListener</h3>
+<h3 id="removealleventlisteners">removeAllEventListeners</h3>
+<h3 id="setisallowedinmessagepop">setIsAllowedInMessagePop</h3>
+<h3 id="addlocalnotificationlistener">addLocalNotificationListener</h3>
+<h3 id="addinmessagelistener">addInMessageListener</h3>
+<h3 id="initvoipservice">initVoipService</h3>
+<h3 id="addcustommessagelistener">addCustomMessageListener</h3>
+<h3 id="addmobilenumberlistener">addMobileNumberListener</h3>
+<h3 id="addnotificationlistener">addNotificationListener</h3>
+<h3 id="pullinmessage">pullInMessage</h3>
+<h3 id="addvoippushincominglistener">addVoipPushIncomingListener</h3>
+</div>
+</section></main>
+</section></main>
+	
+<div class="back-top svelte-9c9s8u" style="bottom: 5rem;right: 0.625rem;display: none"><i class="iconfont icon-back-top"></i>
+</div>
+</section>
+
+
+
+	<script type="svelte-data" url="20210707101348.json">{"status":200,"statusText":"","headers":{"content-type":"text/plain;charset=UTF-8"},"body":"{\"title\":\"App对接极光推送\",\"slug\":\"uniapp\",\"time\":\"2021-07-07T10:14:43.000Z\",\"author\":\"PingTouG\",\"html\":\"\u003Ch2 id=\\\"准备工作\\\"\u003E准备工作\u003C\u002Fh2\u003E\\n\u003Ch3 id=\\\"极光应用\\\"\u003E极光应用\u003C\u002Fh3\u003E\\n\u003Cp\u003E去\u003Ca href=\\\"https:\u002F\u002Fwww.jiguang.cn\u002F\\\"\u003E极光官网\u003C\u002Fa\u003E注册账号，然后创建一个应用，服务选择\u003Ccode\u003E消息推送\u003C\u002Fcode\u003E，在产品设置时填写的\u003Ccode\u003E应用包名\u003C\u002Fcode\u003E需要和开发的App包名一致，然后点击下一步就可以了，SDK不需要下载。\u003C\u002Fp\u003E\\n\u003Cbr \u002F\u003E\\n\\n\u003Cp\u003E打开应用设置，找到\u003Ccode\u003E高级设置→推送设置\u003C\u002Fcode\u003E，如果需要精准推送的话，可以在\u003Ccode\u003EAndroid\u003C\u002Fcode\u003E选项设置对应厂商的信息，\u003Ccode\u003EIOS\u003C\u002Fcode\u003E设置需要证书\u003C\u002Fp\u003E\\n\u003Ch4 id=\\\"生成ios推送证书\\\"\u003E生成IOS推送证书\u003C\u002Fh4\u003E\\n\u003Cp\u003E如果之前在生成\u003Ccode\u003EIOS\u003C\u002Fcode\u003E描述文件时没有选择\u003Ccode\u003EPush Notifications(推送服务)\u003C\u002Fcode\u003E，则需要开启推送服务\u003C\u002Fp\u003E\\n\u003Ch5 id=\\\"开启推送服务\\\"\u003E开启推送服务\u003C\u002Fh5\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E登录账号，选择\u003Ccode\u003ECertificates, Identifiers &amp; Profiles\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E进入之后，在左侧菜单上点击\u003Ccode\u003EIdentifiers\u003C\u002Fcode\u003E，点击进入对应的App\u003C\u002Fli\u003E\\n\u003Cli\u003E在\u003Ccode\u003ECapabilities\u003C\u002Fcode\u003E栏中找到\u003Ccode\u003EPush Notifications\u003C\u002Fcode\u003E勾选上，此时右侧会出现\u003Ccode\u003EConfig\u003C\u002Fcode\u003E，点击进入\u003C\u002Fli\u003E\\n\u003Cli\u003E分别创建\u003Ccode\u003E开发推送证书\u003C\u002Fcode\u003E和\u003Ccode\u003E正式推送证书\u003C\u002Fcode\u003E，创建时选择\u003Ccode\u003E.certSigningRequest\u003C\u002Fcode\u003E文件，然后点击\u003Ccode\u003EContinue\u003C\u002Fcode\u003E即可，最后下载下来\u003C\u002Fli\u003E\\n\u003Cli\u003E如果之前生成描述文件时没有开启\u003Ccode\u003E推送服务\u003C\u002Fcode\u003E，则开启之后需要点击编辑，然后点击保存，最后将新的描述文件重新下载下来，替换旧的描述文件\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Cp\u003E证书生成之后在\u003Ccode\u003EIOS\u003C\u002Fcode\u003E设置处上传证书保存即可。\u003C\u002Fp\u003E\\n\u003Ch2 id=\\\"安装uniapp极光推送插件\\\"\u003E安装Uniapp极光推送插件\u003C\u002Fh2\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E在插件市场搜索极光推送，然后将作者是\u003Ccode\u003E极光\u003C\u002Fcode\u003E的两个插件：\u003Ccode\u003E极光JPush官方SDK\u003C\u002Fcode\u003E、\u003Ccode\u003E极光JCore官方SDK\u003C\u002Fcode\u003E购买即可(免费)\u003C\u002Fli\u003E\\n\u003Cli\u003E然后在\u003Ccode\u003EHBuilder\u003C\u002Fcode\u003E中双击\u003Ccode\u003Emanifest.json\u003C\u002Fcode\u003E文件，选择\u003Ccode\u003EApp原生插件配置\u003C\u002Fcode\u003E，点击\u003Ccode\u003E选择云端插件\u003C\u002Fcode\u003E，然后将两个插件选中确定即可\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E注意：一个账号下的应用包名只能安装一个插件，所以在市场购买插件时指定应用包名需要注意一下，否则会出现添加了插件但运行自定义基座时报找不到插件\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Ch2 id=\\\"配置极光推送\\\"\u003E配置极光推送\u003C\u002Fh2\u003E\\n\u003Cp\u003E在\u003Ccode\u003EJCore\u003C\u002Fcode\u003E插件配置所需信息\u003C\u002Fp\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003EJPUSH_APPKEY_ANDROID\u003C\u002Fcode\u003E：(Android)用于统计分发渠道，可填默认值\u003Ccode\u003Edeveloper-default\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EJPUSH_APPKEY_IOS\u003C\u002Fcode\u003E：(IOS)用于统计分发渠道，可填默认值\u003Ccode\u003Edeveloper-default\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EJPUSH_APPKEY_IOS\u003C\u002Fcode\u003E：(IOS)极光应用的\u003Ccode\u003Eappkey\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EJPUSH_APPKEY_ANDROID\u003C\u002Fcode\u003E：(Android)极光应用的\u003Ccode\u003Eappkey\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Ch2 id=\\\"使用极光推送\\\"\u003E使用极光推送\u003C\u002Fh2\u003E\\n\u003Cp\u003E在\u003Ccode\u003EApp.vue\u003C\u002Fcode\u003E中注册极光推送\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-vue\\\"\u003E\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Escript\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\u003Cspan class=\\\"javascript\\\"\u003E\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Eexport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Edefault\u003C\u002Fspan\u003E {\\n        \u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-title\\\"\u003EonLaunch\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-params\\\"\u003E\u003C\u002Fspan\u003E)\u003C\u002Fspan\u003E {\\n            \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E jv = uni.requireNativePlugin(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;JG-JPush&#x27;\u003C\u002Fspan\u003E)\\n            jv.initJPushService()\\n            jv.addConnectEventListener(\u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-params\\\"\u003Eresult\u003C\u002Fspan\u003E=&gt;\u003C\u002Fspan\u003E{\\n                \u003Cspan class=\\\"hljs-keyword\\\"\u003Eif\u003C\u002Fspan\u003E(result.connectEnable){\\n                    \u003Cspan class=\\\"hljs-built_in\\\"\u003Econsole\u003C\u002Fspan\u003E.log(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;连接极光推送成功&#x27;\u003C\u002Fspan\u003E)\\n                }\\n            })\\n        },\\n    }\\n\u003C\u002Fspan\u003E\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Escript\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E如果没有连接成功，可先尝试设置一下别名，然后再试试设置别名用\u003Ccode\u003EsetAlias({alias:&#39;xx&#39;}})\u003C\u002Fcode\u003E，注意设置别名时别名是字符串\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Ch2 id=\\\"测试消息推送\\\"\u003E测试消息推送\u003C\u002Fh2\u003E\\n\u003Cp\u003E在极光应用运营平台中选择\u003Ccode\u003E消息推送→推送管理→创建推送\u003C\u002Fcode\u003E，选择目标平台，这里使用\u003Ccode\u003EIOS开发环境\u003C\u002Fcode\u003E，输入通知标题和内容，选择目标人群\u003Ccode\u003E广播所有人\u003C\u002Fcode\u003E，点击发送预览，若出现\u003Ccode\u003E错误:没有满足条件的推送目标或推送目标超过 255 天不活跃，被排除在推送目标之外\u003C\u002Fcode\u003E则说明没有注册成功，检查一下配置是否有误，或者使用\u003Ccode\u003E设备别名\u003C\u002Fcode\u003E并在代码中注册别名尝试一下\u003C\u002Fp\u003E\\n\u003Ch2 id=\\\"极光推送方法\\\"\u003E极光推送方法\u003C\u002Fh2\u003E\\n\u003Ch3 id=\\\"initjpushservice\\\"\u003EinitJPushService\u003C\u002Fh3\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E初始化服务，使用极光推送前需要使用此方法初始化服务，一般在应用启动时注册：\u003Ccode\u003EApp.vue\u003C\u002Fcode\u003E中的\u003Ccode\u003EonLaunch\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-js\\\"\u003Econst jv = uni\u003Cspan class=\\\"hljs-selector-class\\\"\u003E.requireNativePlugin\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;JG-JPush&#x27;\u003C\u002Fspan\u003E)\\njv\u003Cspan class=\\\"hljs-selector-class\\\"\u003E.initJPushService\u003C\u002Fspan\u003E()\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch3 id=\\\"addconnecteventlistener\\\"\u003EaddConnectEventListener\u003C\u002Fh3\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E监听连接状态，返回结果中的\u003Ccode\u003EconnectEnable\u003C\u002Fcode\u003E为\u003Ccode\u003Etrue\u003C\u002Fcode\u003E则说明连接成功\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-js\\\"\u003E\u003Cspan class=\\\"hljs-variable\\\"\u003Econst\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-variable\\\"\u003Ejv\u003C\u002Fspan\u003E = \u003Cspan class=\\\"hljs-variable\\\"\u003Euni.requireNativePlugin\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;JG-JPush&#x27;\u003C\u002Fspan\u003E)\\n\u003Cspan class=\\\"hljs-variable\\\"\u003Ejv.addConnectEventListener\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-variable\\\"\u003E\u003Cspan class=\\\"hljs-class\\\"\u003Eresult\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E=&gt;{\\n    \u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-title\\\"\u003Eif\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-variable\\\"\u003E\u003Cspan class=\\\"hljs-class\\\"\u003Eresult\u003C\u002Fspan\u003E.connectEnable\u003C\u002Fspan\u003E){\\n        \u003Cspan class=\\\"hljs-variable\\\"\u003Econsole.log\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;连接极光推送成功&#x27;\u003C\u002Fspan\u003E)\u003C\u002Fspan\u003E\\n    }\\n})\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch3 id=\\\"setalias\\\"\u003EsetAlias\u003C\u002Fh3\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E注册设备别名，接受一个对象\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003Ealias\u003C\u002Fcode\u003E：别名,注意：别名只能是字符串\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Esequence\u003C\u002Fcode\u003E：序列，可不填\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-js\\\"\u003Econst jv = uni\u003Cspan class=\\\"hljs-selector-class\\\"\u003E.requireNativePlugin\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;JG-JPush&#x27;\u003C\u002Fspan\u003E)\\njv\u003Cspan class=\\\"hljs-selector-class\\\"\u003E.setAlias\u003C\u002Fspan\u003E({ \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;alias&#x27;\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;testAlias&#x27;\u003C\u002Fspan\u003E })\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch3 id=\\\"queryalias\\\"\u003EqueryAlias\u003C\u002Fh3\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E查询别名，可接受一个对象\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003Esequence\u003C\u002Fcode\u003E：序列，可不填\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-js\\\"\u003Econst jv = uni\u003Cspan class=\\\"hljs-selector-class\\\"\u003E.requireNativePlugin\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;JG-JPush&#x27;\u003C\u002Fspan\u003E)\\njv\u003Cspan class=\\\"hljs-selector-class\\\"\u003E.queryAlias\u003C\u002Fspan\u003E()\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch3 id=\\\"deletealias\\\"\u003EdeleteAlias\u003C\u002Fh3\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E删除别名，可接受一个对象\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003Esequence\u003C\u002Fcode\u003E：序列，可不填\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-js\\\"\u003Econst jv = uni\u003Cspan class=\\\"hljs-selector-class\\\"\u003E.requireNativePlugin\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;JG-JPush&#x27;\u003C\u002Fspan\u003E)\\njv\u003Cspan class=\\\"hljs-selector-class\\\"\u003E.deleteAlias\u003C\u002Fspan\u003E()\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch3 id=\\\"addtags\\\"\u003EaddTags\u003C\u002Fh3\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E添加设备标签，接受一个对象\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003Etags\u003C\u002Fcode\u003E：设备标签数组\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Esequence\u003C\u002Fcode\u003E：序列，可不填\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-js\\\"\u003Econst jv = uni.require\u003Cspan class=\\\"hljs-constructor\\\"\u003ENativePlugin(&#x27;JG-JPush&#x27;)\u003C\u002Fspan\u003E\\njv.add\u003Cspan class=\\\"hljs-constructor\\\"\u003ETags({ &#x27;\u003Cspan class=\\\"hljs-params\\\"\u003Etags\u003C\u002Fspan\u003E&#x27;:\u003Cspan class=\\\"hljs-params\\\"\u003Etags\u003C\u002Fspan\u003E })\u003C\u002Fspan\u003E\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch3 id=\\\"querytag\\\"\u003EqueryTag\u003C\u002Fh3\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E验证设备标签，可接受一个对象\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003Esequence\u003C\u002Fcode\u003E：序列，可不填\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-js\\\"\u003Econst jv = uni\u003Cspan class=\\\"hljs-selector-class\\\"\u003E.requireNativePlugin\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;JG-JPush&#x27;\u003C\u002Fspan\u003E)\\njv\u003Cspan class=\\\"hljs-selector-class\\\"\u003E.queryTag\u003C\u002Fspan\u003E()\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch3 id=\\\"getalltags\\\"\u003EgetAllTags\u003C\u002Fh3\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E查询所有标签\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-js\\\"\u003Econst jv = uni\u003Cspan class=\\\"hljs-selector-class\\\"\u003E.requireNativePlugin\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;JG-JPush&#x27;\u003C\u002Fspan\u003E)\\njv\u003Cspan class=\\\"hljs-selector-class\\\"\u003E.getAllTags\u003C\u002Fspan\u003E()\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch3 id=\\\"updatetags\\\"\u003EupdateTags\u003C\u002Fh3\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E覆盖设备标签，接受参数同\u003Ccode\u003EaddTags\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-js\\\"\u003Econst jv = uni.require\u003Cspan class=\\\"hljs-constructor\\\"\u003ENativePlugin(&#x27;JG-JPush&#x27;)\u003C\u002Fspan\u003E\\njv.update\u003Cspan class=\\\"hljs-constructor\\\"\u003ETags({ &#x27;\u003Cspan class=\\\"hljs-params\\\"\u003Etags\u003C\u002Fspan\u003E&#x27;:\u003Cspan class=\\\"hljs-params\\\"\u003Etags\u003C\u002Fspan\u003E })\u003C\u002Fspan\u003E\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch3 id=\\\"deletetags\\\"\u003EdeleteTags\u003C\u002Fh3\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E删除设备标签，接受参数同\u003Ccode\u003EaddTags\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-js\\\"\u003Econst jv = uni.require\u003Cspan class=\\\"hljs-constructor\\\"\u003ENativePlugin(&#x27;JG-JPush&#x27;)\u003C\u002Fspan\u003E\\njv.delete\u003Cspan class=\\\"hljs-constructor\\\"\u003ETags({ &#x27;\u003Cspan class=\\\"hljs-params\\\"\u003Etags\u003C\u002Fspan\u003E&#x27;:\u003Cspan class=\\\"hljs-params\\\"\u003Etags\u003C\u002Fspan\u003E })\u003C\u002Fspan\u003E\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch3 id=\\\"cleantags\\\"\u003EcleanTags\u003C\u002Fh3\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E清空设备标签，可接受一个对象\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003Esequence\u003C\u002Fcode\u003E：序列，可不填\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-js\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E jv = uni.requireNativePlugin(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;JG-JPush&#x27;\u003C\u002Fspan\u003E)\\njv.cleanTags)\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch3 id=\\\"setbadge\\\"\u003EsetBadge\u003C\u002Fh3\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E设置角标，即应用图标左上角数量\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-js\\\"\u003Econst jv = uni\u003Cspan class=\\\"hljs-selector-class\\\"\u003E.requireNativePlugin\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;JG-JPush&#x27;\u003C\u002Fspan\u003E)\\njv\u003Cspan class=\\\"hljs-selector-class\\\"\u003E.setBadge\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-number\\\"\u003E1\u003C\u002Fspan\u003E)\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch3 id=\\\"setmobilenumber\\\"\u003EsetMobileNumber\u003C\u002Fh3\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E设置电话号码\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-js\\\"\u003Econst jv = uni.require\u003Cspan class=\\\"hljs-constructor\\\"\u003ENativePlugin(&#x27;JG-JPush&#x27;)\u003C\u002Fspan\u003E\\njv.set\u003Cspan class=\\\"hljs-constructor\\\"\u003EMobileNumber({\u003Cspan class=\\\"hljs-params\\\"\u003EmobileNumber\u003C\u002Fspan\u003E: 13011112222})\u003C\u002Fspan\u003E\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch3 id=\\\"locationservicesenabled\\\"\u003ElocationServicesEnabled\u003C\u002Fh3\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E获取位置是否可用\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-js\\\"\u003Econst jv = uni\u003Cspan class=\\\"hljs-selector-class\\\"\u003E.requireNativePlugin\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;JG-JPush&#x27;\u003C\u002Fspan\u003E)\\njv\u003Cspan class=\\\"hljs-selector-class\\\"\u003E.locationServicesEnabled\u003C\u002Fspan\u003E()\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch3 id=\\\"getlocationauthorizationstatus\\\"\u003EgetLocationAuthorizationStatus\u003C\u002Fh3\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E获取位置权限\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-js\\\"\u003Econst jv = uni\u003Cspan class=\\\"hljs-selector-class\\\"\u003E.requireNativePlugin\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;JG-JPush&#x27;\u003C\u002Fspan\u003E)\\njv\u003Cspan class=\\\"hljs-selector-class\\\"\u003E.getLocationAuthorizationStatus\u003C\u002Fspan\u003E()\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch3 id=\\\"requestlocationauthorization\\\"\u003ErequestLocationAuthorization\u003C\u002Fh3\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E向用于申请定位权限\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-js\\\"\u003Econst jv = uni.requireNativePlug\u003Cspan class=\\\"hljs-meta\\\"\u003Ein(\u003C\u002Fspan\u003E\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;JG-JPush&#x27;\u003C\u002Fspan\u003E)\\njv.requestLocationAuthorizati\u003Cspan class=\\\"hljs-meta\\\"\u003Eon(\u003C\u002Fspan\u003E)\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch3 id=\\\"setlocationeanable\\\"\u003EsetLocationEanable\u003C\u002Fh3\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E设置位置是否可用\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-js\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E jv = uni.requireNativePlugin(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;JG-JPush&#x27;\u003C\u002Fspan\u003E)\\njv.setLocationEanable(\u003Cspan class=\\\"hljs-literal\\\"\u003Etrue\u003C\u002Fspan\u003E)\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch3 id=\\\"setlocation\\\"\u003EsetLocation\u003C\u002Fh3\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E设置位置\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-js\\\"\u003E\u003Cspan class=\\\"hljs-attribute\\\"\u003Econst\u003C\u002Fspan\u003E jv = uni.requireNativePlugin(&#x27;JG-JPush&#x27;)\\n\u003Cspan class=\\\"hljs-attribute\\\"\u003Ejv\u003C\u002Fspan\u003E.setLocation({ latitude: \u003Cspan class=\\\"hljs-number\\\"\u003E23\u003C\u002Fspan\u003E.\u003Cspan class=\\\"hljs-number\\\"\u003E23\u003C\u002Fspan\u003E, longitude: \u003Cspan class=\\\"hljs-number\\\"\u003E23\u003C\u002Fspan\u003E.\u003Cspan class=\\\"hljs-number\\\"\u003E23\u003C\u002Fspan\u003E, })\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch3 id=\\\"setloggerenable\\\"\u003EsetLoggerEnable\u003C\u002Fh3\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E设置日志是否打开\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-js\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E jv = uni.requireNativePlugin(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;JG-JPush&#x27;\u003C\u002Fspan\u003E)\\njv.setLoggerEnable(\u003Cspan class=\\\"hljs-literal\\\"\u003Etrue\u003C\u002Fspan\u003E)\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch3 id=\\\"requestnotificationauthorization\\\"\u003ErequestNotificationAuthorization\u003C\u002Fh3\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E向用户申请消息通知权限\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-js\\\"\u003Econst jv = uni.requireNativePlugin(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;JG-JPush&#x27;\u003C\u002Fspan\u003E)\\njv.requestNotificationAuthorization(\u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-params\\\"\u003E(result)\u003C\u002Fspan\u003E=&gt;\u003C\u002Fspan\u003E{\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Eif\u003C\u002Fspan\u003E (result.status &lt; \u003Cspan class=\\\"hljs-number\\\"\u003E2\u003C\u002Fspan\u003E) {\\n        \u003Cspan class=\\\"hljs-built_in\\\"\u003Econsole\u003C\u002Fspan\u003E.log(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;您还没有打开通知权限&#x27;\u003C\u002Fspan\u003E)\\n    }\\n})\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch3 id=\\\"getregistrationid\\\"\u003EgetRegistrationID\u003C\u002Fh3\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E获取注册ID，需要连接成功之后获取，否则程序会崩溃\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-js\\\"\u003Econst jv = uni\u003Cspan class=\\\"hljs-selector-class\\\"\u003E.requireNativePlugin\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;JG-JPush&#x27;\u003C\u002Fspan\u003E)\\njv\u003Cspan class=\\\"hljs-selector-class\\\"\u003E.getRegistrationID\u003C\u002Fspan\u003E()\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch3 id=\\\"setmaxgeofencenumber\\\"\u003EsetMaxGeofenceNumber\u003C\u002Fh3\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E设置位置围栏的最大半径，位置围栏是只在某一范围内可推送\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Ch3 id=\\\"addgeofencelistener\\\"\u003EaddGeofenceListener\u003C\u002Fh3\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E监听位置围栏触发\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-js\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E jv = uni.requireNativePlugin(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;JG-JPush&#x27;\u003C\u002Fspan\u003E)\\njv.addGeofenceListener(\u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-params\\\"\u003Eresult\u003C\u002Fspan\u003E =&gt;\u003C\u002Fspan\u003E {\\n    \u003Cspan class=\\\"hljs-built_in\\\"\u003Econsole\u003C\u002Fspan\u003E.log(result)\\n})\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch3 id=\\\"deletegeofence\\\"\u003EdeleteGeofence\u003C\u002Fh3\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E删除位置围栏\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Ch3 id=\\\"opensettingsfornotification\\\"\u003EopenSettingsForNotification\u003C\u002Fh3\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E跳转当前应用消息通知设置界面\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-js\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E jv = uni.requireNativePlugin(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;JG-JPush&#x27;\u003C\u002Fspan\u003E)\\njv.openSettingsForNotification(\u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-params\\\"\u003Eresult\u003C\u002Fspan\u003E =&gt;\u003C\u002Fspan\u003E {\\n    \u003Cspan class=\\\"hljs-built_in\\\"\u003Econsole\u003C\u002Fspan\u003E.log(result)\\n})\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch3 id=\\\"addlocalnotification\\\"\u003EaddLocalNotification\u003C\u002Fh3\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E创建本地消息通知\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-js\\\"\u003Econst jv = uni.requireNativePlug\u003Cspan class=\\\"hljs-meta\\\"\u003Ein(\u003C\u002Fspan\u003E\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;JG-JPush&#x27;\u003C\u002Fspan\u003E)\\njv.addLocalNotificati\u003Cspan class=\\\"hljs-meta\\\"\u003Eon(\u003C\u002Fspan\u003E{\\n    messageID:\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;123&#x27;\u003C\u002Fspan\u003E,\\n    \u003Cspan class=\\\"hljs-meta\\\"\u003Etitle\u003C\u002Fspan\u003E:\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;title&#x27;\u003C\u002Fspan\u003E,\\n    content:\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;content&#x27;\u003C\u002Fspan\u003E,\\n    extras:{\\n        name: \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;Cindy&#x27;\u003C\u002Fspan\u003E,\\n        age: \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;16&#x27;\u003C\u002Fspan\u003E\\n    }\\n})\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch3 id=\\\"removelocalnotification\\\"\u003EremoveLocalNotification\u003C\u002Fh3\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E删除本地消息通知\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-js\\\"\u003Econst jv = uni.requireNativePlug\u003Cspan class=\\\"hljs-meta\\\"\u003Ein(\u003C\u002Fspan\u003E\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;JG-JPush&#x27;\u003C\u002Fspan\u003E)\\njv.removeLocalNotificati\u003Cspan class=\\\"hljs-meta\\\"\u003Eon(\u003C\u002Fspan\u003E{ messageID:\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;123&#x27;\u003C\u002Fspan\u003E })\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch3 id=\\\"clearlocalnotifications\\\"\u003EclearLocalNotifications\u003C\u002Fh3\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E清空本地消息通知\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-js\\\"\u003Econst jv = uni\u003Cspan class=\\\"hljs-selector-class\\\"\u003E.requireNativePlugin\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;JG-JPush&#x27;\u003C\u002Fspan\u003E)\\njv\u003Cspan class=\\\"hljs-selector-class\\\"\u003E.clearLocalNotifications\u003C\u002Fspan\u003E()\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch3 id=\\\"addeventlistener\\\"\u003EaddEventListener\u003C\u002Fh3\u003E\\n\u003Ch3 id=\\\"removealleventlisteners\\\"\u003EremoveAllEventListeners\u003C\u002Fh3\u003E\\n\u003Ch3 id=\\\"setisallowedinmessagepop\\\"\u003EsetIsAllowedInMessagePop\u003C\u002Fh3\u003E\\n\u003Ch3 id=\\\"addlocalnotificationlistener\\\"\u003EaddLocalNotificationListener\u003C\u002Fh3\u003E\\n\u003Ch3 id=\\\"addinmessagelistener\\\"\u003EaddInMessageListener\u003C\u002Fh3\u003E\\n\u003Ch3 id=\\\"initvoipservice\\\"\u003EinitVoipService\u003C\u002Fh3\u003E\\n\u003Ch3 id=\\\"addcustommessagelistener\\\"\u003EaddCustomMessageListener\u003C\u002Fh3\u003E\\n\u003Ch3 id=\\\"addmobilenumberlistener\\\"\u003EaddMobileNumberListener\u003C\u002Fh3\u003E\\n\u003Ch3 id=\\\"addnotificationlistener\\\"\u003EaddNotificationListener\u003C\u002Fh3\u003E\\n\u003Ch3 id=\\\"pullinmessage\\\"\u003EpullInMessage\u003C\u002Fh3\u003E\\n\u003Ch3 id=\\\"addvoippushincominglistener\\\"\u003EaddVoipPushIncomingListener\u003C\u002Fh3\u003E\\n\"}"}</script>
+</div>
+	</body>
+</html>
