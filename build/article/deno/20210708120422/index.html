@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" content="#333333" />
+		<link rel="stylesheet" href="/assets/styles/global.css" />
+		<title>deno常用命令</title>
+
+		
+
+		<link rel="modulepreload" href="/./_app/start-bf43ee66.js">
+		<link rel="modulepreload" href="/./_app/chunks/vendor-d00531f1.js">
+		<link rel="modulepreload" href="/./_app/pages/__layout.svelte-2c475058.js">
+		<link rel="modulepreload" href="/./_app/pages/article/__layout.svelte-42f46e6c.js">
+		<link rel="modulepreload" href="/./_app/pages/article/[category]/[id].svelte-f684a407.js">
+		<link rel="modulepreload" href="/./_app/chunks/utils-a81d5505.js">
+		<link rel="stylesheet" href="/./_app/assets/start-a8cd1609.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/__layout.svelte-dfbf40bb.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/article/__layout.svelte-1448dd73.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/article/[category]/[id].svelte-7f79f039.css">
+
+		<script type="module">
+			import { start } from "/./_app/start-bf43ee66.js";
+			start({
+				target: document.querySelector("#svelte"),
+				paths: {"base":"","assets":"/."},
+				session: {},
+				host: location.host,
+				route: true,
+				spa: false,
+				trailing_slash: "never",
+				hydrate: {
+					status: 200,
+					error: null,
+					nodes: [
+						import("/./_app/pages/__layout.svelte-2c475058.js"),
+						import("/./_app/pages/article/__layout.svelte-42f46e6c.js"),
+						import("/./_app/pages/article/[category]/[id].svelte-f684a407.js")
+					],
+					page: {
+						host: location.host, // TODO this is redundant
+						path: "/article/deno/20210708120422",
+						query: new URLSearchParams(""),
+						params: {"category":"deno","id":"20210708120422"}
+					}
+				}
+			});
+		</script>
+	</head>
+	<body>
+		<div id="svelte">
+
+
+
+<section class="svelte-jbk32v"><header class="svelte-jbk32v"><a href="/"><img class="logo svelte-jbk32v" src="/assets/images/logo.png" alt="code book logo"></a>
+<a class="github svelte-jbk32v" href="https://github.com/PingTouG" target="_blank"><i class="iconfont icon-github svelte-jbk32v"></i></a></header>
+	<main><section><main class="svelte-1fbldbu">
+
+<section class="md"><h1 class="title">deno常用命令</h1>
+  <div class="info svelte-1vg5uky"><div class="author svelte-1vg5uky">作者：PingTouG</div>
+    <div class="time">时间：2021-07-08 12:05:06</div></div>
+
+  <div class="md-content"><h2 id="常用命令">常用命令</h2>
+<h3 id="使用方式">使用方式</h3>
+<pre><code class="language-cmd">deno <span class="hljs-selector-attr">[OPTIONS]</span><span class="hljs-selector-attr">[subcommand]</span>
+</code></pre>
+<h3 id="查看帮助">查看帮助</h3>
+<blockquote>
+<p><code>--help</code> / <code>-h</code></p>
+</blockquote>
+<pre><code class="language-cmd"><span class="hljs-attribute">deno -h</span>
+</code></pre>
+<h3 id="查看版本">查看版本</h3>
+<blockquote>
+<p><code>--version</code> / <code>-V</code></p>
+</blockquote>
+<pre><code class="language-cmd"><span class="hljs-attribute">deno -V</span>
+</code></pre>
+<h3 id="编译运行文件">编译运行文件</h3>
+<blockquote>
+<p><code>deno run</code></p>
+</blockquote>
+<blockquote>
+<p>编译<code>ts</code>成<code>js</code>代码和<code>sourceMap</code>文件，存在<code>DENO_DIR/gen/</code>目录下。并且<code>js</code>和<code>sourceMap</code>文件都是以<code>hash</code>值命名的，只要代码不做变更，都会一直执行编译后的文件，如果代码变更了，会重新执行编译，并且生成新的<code>hash</code>命名的<code>js</code>和<code>sourceMap</code>文件</p>
+</blockquote>
+<h4 id="权限参数">权限参数</h4>
+<blockquote>
+<p>参数后面可以通过<code>=参数值</code>的形式来指定权限的范围，如：<code>--allow-read=/docs</code>表示只能读取<code>/docs</code>下的文件</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>--allow-net</td>
+<td>允许直接使用网络权限</td>
+</tr>
+<tr>
+<td>--allow-read</td>
+<td>允许直接使用文件读权限</td>
+</tr>
+<tr>
+<td>--allow-write</td>
+<td>允许直接使用文件写权限</td>
+</tr>
+<tr>
+<td>--allow-run</td>
+<td>允许直接执行子程序/子进程</td>
+</tr>
+<tr>
+<td>--allow-env</td>
+<td>允许直接使用操作环境权限</td>
+</tr>
+<tr>
+<td>--allow-hrtime</td>
+<td>允许测量高分辨率时间</td>
+</tr>
+<tr>
+<td>--allow-all</td>
+<td>允许所有权限</td>
+</tr>
+</tbody></table>
+<h4 id="其他参数">其他参数</h4>
+<ul>
+<li><code>--reload</code>：重新加载编译</li>
+<li><code>-D</code>：输出执行底层日志</li>
+<li><code>--no-prompt</code>：执行代码时不输出提示</li>
+<li><code>--v8-flags</code>：设置 V8 命令行参数</li>
+</ul>
+<pre><code class="language-cmd"><span class="hljs-attribute">deno</span> run --<span class="hljs-literal">allow</span>-<span class="hljs-literal">all</span> test.ts
+</code></pre>
+<h3 id="直接执行脚本代码的字符串">直接执行脚本代码的字符串</h3>
+<blockquote>
+<p><code>eval</code></p>
+</blockquote>
+<pre><code class="language-cmd">deno <span class="hljs-built_in">eval</span> `console.<span class="hljs-built_in">log</span>(<span class="hljs-string">&#x27;hello deno&#x27;</span>)`
+</code></pre>
+<h3 id="获取远程在线的依赖模块">获取远程在线的依赖模块</h3>
+<blockquote>
+<p><code>fetch</code></p>
+</blockquote>
+<blockquote>
+<p>下载和编译远程依赖模块，并保存在本地， 并递归获取和编译模块的所有依赖，编译后不运行代码，执行此命令之后，除非使用<code>--reload</code>否则使用<code>fetch</code>的模块不会重新下载和编译</p>
+</blockquote>
+<pre><code class="language-cmd">deno fetch https:<span class="hljs-regexp">//</span>deno.land/welcome.ts
+</code></pre>
+<h3 id="格式化代码">格式化代码</h3>
+<blockquote>
+<p><code>fmt</code></p>
+</blockquote>
+<pre><code class="language-cmd">deno fmt <span class="hljs-keyword">test</span>.ts
+</code></pre>
+<h3 id="查看项目信息">查看项目信息</h3>
+<blockquote>
+<p><code>info</code></p>
+</blockquote>
+<p><code>项目信息字段</code></p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>local</td>
+<td>显示文件在本地的绝对路径</td>
+</tr>
+<tr>
+<td>type</td>
+<td>显示文件类型，主要支持 <code>JavaScript</code>, <code>TypeScript</code> 和 <code>JSON</code> 三种格式</td>
+</tr>
+<tr>
+<td>compiled</td>
+<td>只支持<code>TypeScript</code>类型的文件，显示<code>TypeScript</code>编译后<code>JavaScript</code>代码文件在本地的绝对路径</td>
+</tr>
+<tr>
+<td>map</td>
+<td>只支持<code>TypeScript</code>类型的文件，显示<code>TypeScript</code>编译后<code>sourceMap</code>文件在本地的绝对路径</td>
+</tr>
+<tr>
+<td>deps</td>
+<td>显示文件里代码的依赖模块，并显示依赖树</td>
+</tr>
+</tbody></table>
+</div>
+</section></main>
+</section></main>
+	
+<div class="back-top svelte-9c9s8u" style="bottom: 5rem;right: 0.625rem;display: none"><i class="iconfont icon-back-top"></i>
+</div>
+</section>
+
+
+
+	<script type="svelte-data" url="20210708120422.json">{"status":200,"statusText":"","headers":{"content-type":"text/plain;charset=UTF-8"},"body":"{\"title\":\"deno常用命令\",\"slug\":\"deno\",\"time\":\"2021-07-08T12:05:06.000Z\",\"author\":\"PingTouG\",\"html\":\"\u003Ch2 id=\\\"常用命令\\\"\u003E常用命令\u003C\u002Fh2\u003E\\n\u003Ch3 id=\\\"使用方式\\\"\u003E使用方式\u003C\u002Fh3\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-cmd\\\"\u003Edeno \u003Cspan class=\\\"hljs-selector-attr\\\"\u003E[OPTIONS]\u003C\u002Fspan\u003E\u003Cspan class=\\\"hljs-selector-attr\\\"\u003E[subcommand]\u003C\u002Fspan\u003E\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch3 id=\\\"查看帮助\\\"\u003E查看帮助\u003C\u002Fh3\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E\u003Ccode\u003E--help\u003C\u002Fcode\u003E \u002F \u003Ccode\u003E-h\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-cmd\\\"\u003E\u003Cspan class=\\\"hljs-attribute\\\"\u003Edeno -h\u003C\u002Fspan\u003E\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch3 id=\\\"查看版本\\\"\u003E查看版本\u003C\u002Fh3\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E\u003Ccode\u003E--version\u003C\u002Fcode\u003E \u002F \u003Ccode\u003E-V\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-cmd\\\"\u003E\u003Cspan class=\\\"hljs-attribute\\\"\u003Edeno -V\u003C\u002Fspan\u003E\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch3 id=\\\"编译运行文件\\\"\u003E编译运行文件\u003C\u002Fh3\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E\u003Ccode\u003Edeno run\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E编译\u003Ccode\u003Ets\u003C\u002Fcode\u003E成\u003Ccode\u003Ejs\u003C\u002Fcode\u003E代码和\u003Ccode\u003EsourceMap\u003C\u002Fcode\u003E文件，存在\u003Ccode\u003EDENO_DIR\u002Fgen\u002F\u003C\u002Fcode\u003E目录下。并且\u003Ccode\u003Ejs\u003C\u002Fcode\u003E和\u003Ccode\u003EsourceMap\u003C\u002Fcode\u003E文件都是以\u003Ccode\u003Ehash\u003C\u002Fcode\u003E值命名的，只要代码不做变更，都会一直执行编译后的文件，如果代码变更了，会重新执行编译，并且生成新的\u003Ccode\u003Ehash\u003C\u002Fcode\u003E命名的\u003Ccode\u003Ejs\u003C\u002Fcode\u003E和\u003Ccode\u003EsourceMap\u003C\u002Fcode\u003E文件\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Ch4 id=\\\"权限参数\\\"\u003E权限参数\u003C\u002Fh4\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E参数后面可以通过\u003Ccode\u003E=参数值\u003C\u002Fcode\u003E的形式来指定权限的范围，如：\u003Ccode\u003E--allow-read=\u002Fdocs\u003C\u002Fcode\u003E表示只能读取\u003Ccode\u003E\u002Fdocs\u003C\u002Fcode\u003E下的文件\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Ctable\u003E\\n\u003Cthead\u003E\\n\u003Ctr\u003E\\n\u003Cth\u003E参数\u003C\u002Fth\u003E\\n\u003Cth\u003E说明\u003C\u002Fth\u003E\\n\u003C\u002Ftr\u003E\\n\u003C\u002Fthead\u003E\\n\u003Ctbody\u003E\u003Ctr\u003E\\n\u003Ctd\u003E--allow-net\u003C\u002Ftd\u003E\\n\u003Ctd\u003E允许直接使用网络权限\u003C\u002Ftd\u003E\\n\u003C\u002Ftr\u003E\\n\u003Ctr\u003E\\n\u003Ctd\u003E--allow-read\u003C\u002Ftd\u003E\\n\u003Ctd\u003E允许直接使用文件读权限\u003C\u002Ftd\u003E\\n\u003C\u002Ftr\u003E\\n\u003Ctr\u003E\\n\u003Ctd\u003E--allow-write\u003C\u002Ftd\u003E\\n\u003Ctd\u003E允许直接使用文件写权限\u003C\u002Ftd\u003E\\n\u003C\u002Ftr\u003E\\n\u003Ctr\u003E\\n\u003Ctd\u003E--allow-run\u003C\u002Ftd\u003E\\n\u003Ctd\u003E允许直接执行子程序\u002F子进程\u003C\u002Ftd\u003E\\n\u003C\u002Ftr\u003E\\n\u003Ctr\u003E\\n\u003Ctd\u003E--allow-env\u003C\u002Ftd\u003E\\n\u003Ctd\u003E允许直接使用操作环境权限\u003C\u002Ftd\u003E\\n\u003C\u002Ftr\u003E\\n\u003Ctr\u003E\\n\u003Ctd\u003E--allow-hrtime\u003C\u002Ftd\u003E\\n\u003Ctd\u003E允许测量高分辨率时间\u003C\u002Ftd\u003E\\n\u003C\u002Ftr\u003E\\n\u003Ctr\u003E\\n\u003Ctd\u003E--allow-all\u003C\u002Ftd\u003E\\n\u003Ctd\u003E允许所有权限\u003C\u002Ftd\u003E\\n\u003C\u002Ftr\u003E\\n\u003C\u002Ftbody\u003E\u003C\u002Ftable\u003E\\n\u003Ch4 id=\\\"其他参数\\\"\u003E其他参数\u003C\u002Fh4\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003E--reload\u003C\u002Fcode\u003E：重新加载编译\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003E-D\u003C\u002Fcode\u003E：输出执行底层日志\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003E--no-prompt\u003C\u002Fcode\u003E：执行代码时不输出提示\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003E--v8-flags\u003C\u002Fcode\u003E：设置 V8 命令行参数\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-cmd\\\"\u003E\u003Cspan class=\\\"hljs-attribute\\\"\u003Edeno\u003C\u002Fspan\u003E run --\u003Cspan class=\\\"hljs-literal\\\"\u003Eallow\u003C\u002Fspan\u003E-\u003Cspan class=\\\"hljs-literal\\\"\u003Eall\u003C\u002Fspan\u003E test.ts\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch3 id=\\\"直接执行脚本代码的字符串\\\"\u003E直接执行脚本代码的字符串\u003C\u002Fh3\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E\u003Ccode\u003Eeval\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-cmd\\\"\u003Edeno \u003Cspan class=\\\"hljs-built_in\\\"\u003Eeval\u003C\u002Fspan\u003E `console.\u003Cspan class=\\\"hljs-built_in\\\"\u003Elog\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;hello deno&#x27;\u003C\u002Fspan\u003E)`\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch3 id=\\\"获取远程在线的依赖模块\\\"\u003E获取远程在线的依赖模块\u003C\u002Fh3\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E\u003Ccode\u003Efetch\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E下载和编译远程依赖模块，并保存在本地， 并递归获取和编译模块的所有依赖，编译后不运行代码，执行此命令之后，除非使用\u003Ccode\u003E--reload\u003C\u002Fcode\u003E否则使用\u003Ccode\u003Efetch\u003C\u002Fcode\u003E的模块不会重新下载和编译\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-cmd\\\"\u003Edeno fetch https:\u003Cspan class=\\\"hljs-regexp\\\"\u003E\u002F\u002F\u003C\u002Fspan\u003Edeno.land\u002Fwelcome.ts\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch3 id=\\\"格式化代码\\\"\u003E格式化代码\u003C\u002Fh3\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E\u003Ccode\u003Efmt\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-cmd\\\"\u003Edeno fmt \u003Cspan class=\\\"hljs-keyword\\\"\u003Etest\u003C\u002Fspan\u003E.ts\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch3 id=\\\"查看项目信息\\\"\u003E查看项目信息\u003C\u002Fh3\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E\u003Ccode\u003Einfo\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cp\u003E\u003Ccode\u003E项目信息字段\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003Ctable\u003E\\n\u003Cthead\u003E\\n\u003Ctr\u003E\\n\u003Cth\u003E字段\u003C\u002Fth\u003E\\n\u003Cth\u003E说明\u003C\u002Fth\u003E\\n\u003C\u002Ftr\u003E\\n\u003C\u002Fthead\u003E\\n\u003Ctbody\u003E\u003Ctr\u003E\\n\u003Ctd\u003Elocal\u003C\u002Ftd\u003E\\n\u003Ctd\u003E显示文件在本地的绝对路径\u003C\u002Ftd\u003E\\n\u003C\u002Ftr\u003E\\n\u003Ctr\u003E\\n\u003Ctd\u003Etype\u003C\u002Ftd\u003E\\n\u003Ctd\u003E显示文件类型，主要支持 \u003Ccode\u003EJavaScript\u003C\u002Fcode\u003E, \u003Ccode\u003ETypeScript\u003C\u002Fcode\u003E 和 \u003Ccode\u003EJSON\u003C\u002Fcode\u003E 三种格式\u003C\u002Ftd\u003E\\n\u003C\u002Ftr\u003E\\n\u003Ctr\u003E\\n\u003Ctd\u003Ecompiled\u003C\u002Ftd\u003E\\n\u003Ctd\u003E只支持\u003Ccode\u003ETypeScript\u003C\u002Fcode\u003E类型的文件，显示\u003Ccode\u003ETypeScript\u003C\u002Fcode\u003E编译后\u003Ccode\u003EJavaScript\u003C\u002Fcode\u003E代码文件在本地的绝对路径\u003C\u002Ftd\u003E\\n\u003C\u002Ftr\u003E\\n\u003Ctr\u003E\\n\u003Ctd\u003Emap\u003C\u002Ftd\u003E\\n\u003Ctd\u003E只支持\u003Ccode\u003ETypeScript\u003C\u002Fcode\u003E类型的文件，显示\u003Ccode\u003ETypeScript\u003C\u002Fcode\u003E编译后\u003Ccode\u003EsourceMap\u003C\u002Fcode\u003E文件在本地的绝对路径\u003C\u002Ftd\u003E\\n\u003C\u002Ftr\u003E\\n\u003Ctr\u003E\\n\u003Ctd\u003Edeps\u003C\u002Ftd\u003E\\n\u003Ctd\u003E显示文件里代码的依赖模块，并显示依赖树\u003C\u002Ftd\u003E\\n\u003C\u002Ftr\u003E\\n\u003C\u002Ftbody\u003E\u003C\u002Ftable\u003E\\n\"}"}</script>
+</div>
+	</body>
+</html>

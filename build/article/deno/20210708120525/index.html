@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" content="#333333" />
+		<link rel="stylesheet" href="/assets/styles/global.css" />
+		<title>deno之文件操作</title>
+
+		
+
+		<link rel="modulepreload" href="/./_app/start-bf43ee66.js">
+		<link rel="modulepreload" href="/./_app/chunks/vendor-d00531f1.js">
+		<link rel="modulepreload" href="/./_app/pages/__layout.svelte-2c475058.js">
+		<link rel="modulepreload" href="/./_app/pages/article/__layout.svelte-42f46e6c.js">
+		<link rel="modulepreload" href="/./_app/pages/article/[category]/[id].svelte-f684a407.js">
+		<link rel="modulepreload" href="/./_app/chunks/utils-a81d5505.js">
+		<link rel="stylesheet" href="/./_app/assets/start-a8cd1609.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/__layout.svelte-dfbf40bb.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/article/__layout.svelte-1448dd73.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/article/[category]/[id].svelte-7f79f039.css">
+
+		<script type="module">
+			import { start } from "/./_app/start-bf43ee66.js";
+			start({
+				target: document.querySelector("#svelte"),
+				paths: {"base":"","assets":"/."},
+				session: {},
+				host: location.host,
+				route: true,
+				spa: false,
+				trailing_slash: "never",
+				hydrate: {
+					status: 200,
+					error: null,
+					nodes: [
+						import("/./_app/pages/__layout.svelte-2c475058.js"),
+						import("/./_app/pages/article/__layout.svelte-42f46e6c.js"),
+						import("/./_app/pages/article/[category]/[id].svelte-f684a407.js")
+					],
+					page: {
+						host: location.host, // TODO this is redundant
+						path: "/article/deno/20210708120525",
+						query: new URLSearchParams(""),
+						params: {"category":"deno","id":"20210708120525"}
+					}
+				}
+			});
+		</script>
+	</head>
+	<body>
+		<div id="svelte">
+
+
+
+<section class="svelte-jbk32v"><header class="svelte-jbk32v"><a href="/"><img class="logo svelte-jbk32v" src="/assets/images/logo.png" alt="code book logo"></a>
+<a class="github svelte-jbk32v" href="https://github.com/PingTouG" target="_blank"><i class="iconfont icon-github svelte-jbk32v"></i></a></header>
+	<main><section><main class="svelte-1fbldbu">
+
+<section class="md"><h1 class="title">deno之文件操作</h1>
+  <div class="info svelte-1vg5uky"><div class="author svelte-1vg5uky">作者：PingTouG</div>
+    <div class="time">时间：2021-07-08 12:05:51</div></div>
+
+  <div class="md-content"><h2 id="文件操作">文件操作</h2>
+<h2 id="readfile">readFile</h2>
+<p><code>function Deno.readFile(path: string): Promise&lt;Uint8Array&gt;</code></p>
+<blockquote>
+<p><code>--allow-read</code></p>
+</blockquote>
+<blockquote>
+<p>异步读取文件,返回的数据类型是<code>Uint8Array</code>,需要通过<code>TextDecoder</code>解码.</p>
+</blockquote>
+<pre><code class="language-typescript">const decoder = <span class="hljs-keyword">new</span> <span class="hljs-constructor">TextDecoder(&#x27;<span class="hljs-params">utf</span>-8&#x27;)</span>
+const data = await <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Deno</span>.</span></span>read<span class="hljs-constructor">File(&#x27;<span class="hljs-params">hello</span>.<span class="hljs-params">txt</span>&#x27;)</span>
+console.log(decoder.decode(data))
+</code></pre>
+<h2 id="readfilesync">readFileSync</h2>
+<blockquote>
+<p>同步读取文件,用法同<code>readFile</code></p>
+</blockquote>
+<pre><code class="language-ts"><span class="hljs-keyword">const</span> { readFile, readFileSync } = Deno
+
+<span class="hljs-comment">/**
+ * <span class="hljs-doctag">@method <span class="hljs-variable">getDecoder</span></span>
+ * <span class="hljs-doctag">@description </span>获取解码器
+ * <span class="hljs-doctag">@param </span>encoding 文件编码
+ */</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getDecoder</span>(<span class="hljs-params">encoding: <span class="hljs-built_in">string</span></span>): <span class="hljs-title">TextDecoder</span> </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> TextDecoder(encoding)
+}
+
+<span class="hljs-comment">/**
+ * <span class="hljs-doctag">@method <span class="hljs-variable">read</span></span>
+ * <span class="hljs-doctag">@description </span>异步读取文件
+ * <span class="hljs-doctag">@param </span>path 文件路径
+ * <span class="hljs-doctag">@param </span>encoding 文件编码
+ */</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">read</span>(<span class="hljs-params">
+  path: <span class="hljs-built_in">string</span>,
+  encoding: <span class="hljs-built_in">string</span> = <span class="hljs-string">&#x27;utf-8&#x27;</span>
+</span>): <span class="hljs-title">Promise</span>&lt;<span class="hljs-title">string</span>&gt; </span>{
+  <span class="hljs-keyword">const</span> decoder = getDecoder(encoding)
+  <span class="hljs-keyword">const</span> data = <span class="hljs-keyword">await</span> readFile(path)
+  <span class="hljs-keyword">return</span> decoder.decode(data)
+}
+
+<span class="hljs-comment">/**
+ * <span class="hljs-doctag">@method <span class="hljs-variable">readSync</span></span>
+ * <span class="hljs-doctag">@description </span>同步读取文件
+ * <span class="hljs-doctag">@param </span>path 文件路径
+ * <span class="hljs-doctag">@param </span>encoding 文件编码
+ */</span>
+<span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">readSync</span>(<span class="hljs-params">path: <span class="hljs-built_in">string</span>, encoding: <span class="hljs-built_in">string</span> = <span class="hljs-string">&#x27;utf-8&#x27;</span></span>): <span class="hljs-title">string</span> </span>{
+  <span class="hljs-keyword">const</span> decoder = getDecoder(encoding)
+  <span class="hljs-keyword">const</span> data = readFileSync(path)
+  <span class="hljs-keyword">return</span> decoder.decode(data)
+}
+</code></pre>
+<h2 id="writefile">writeFile</h2>
+<p><code>function Deno.writeFile(path: string, data: Uint8Array, options?: WriteFileOptions): Promise&lt;void&gt;</code></p>
+<blockquote>
+<p><code>--allow-write</code></p>
+</blockquote>
+<blockquote>
+<p>异步写入文件,写入的数据类型是<code>Uint8Array</code>,需要通过<code>TextEncoder</code>编码数据.</p>
+</blockquote>
+<pre><code class="language-typescript">const encoder = <span class="hljs-keyword">new</span> <span class="hljs-constructor">TextEncoder()</span>
+const data = encoder.encode(&#x27;Hello world\n&#x27;)
+await <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Deno</span>.</span></span>write<span class="hljs-constructor">File(&#x27;<span class="hljs-params">hello1</span>.<span class="hljs-params">txt</span>&#x27;, <span class="hljs-params">data</span>)</span>
+</code></pre>
+<h2 id="writefilesync">writeFileSync</h2>
+<blockquote>
+<p>同步写入文件,用法同<code>writeFile</code></p>
+</blockquote>
+<h2 id="writetextfile">writeTextFile</h2>
+<p><code>function Deno.writeTextFile(path: string, data: string): Promise&lt;void&gt;</code></p>
+<blockquote>
+<p><code>--allow-write</code></p>
+</blockquote>
+<blockquote>
+<p>异步写入文本文件,写入的数据类型是<code>string</code></p>
+</blockquote>
+<h2 id="writetextfilesync">writeTextFileSync</h2>
+<blockquote>
+<p>同步写入文本文件,用法同<code>writeTextFile</code></p>
+</blockquote>
+<pre><code class="language-ts"><span class="hljs-keyword">const</span> { writeFile, writeFileSync, writeTextFile, writeTextFileSync } = Deno
+
+<span class="hljs-comment">/**
+ * <span class="hljs-doctag">@method <span class="hljs-variable">encode</span></span>
+ * <span class="hljs-doctag">@description </span>编码数据
+ * <span class="hljs-doctag">@param </span>data 要编码的数据
+ */</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">encode</span>(<span class="hljs-params">data: <span class="hljs-built_in">string</span></span>): <span class="hljs-title">Uint8Array</span> </span>{
+  <span class="hljs-keyword">const</span> decoder = <span class="hljs-keyword">new</span> TextEncoder()
+  <span class="hljs-keyword">return</span> decoder.encode(data)
+}
+
+<span class="hljs-comment">/**
+ * <span class="hljs-doctag">@method <span class="hljs-variable">write</span></span>
+ * <span class="hljs-doctag">@description </span>异步写文件
+ * <span class="hljs-doctag">@param </span>path 文件路径
+ * <span class="hljs-doctag">@param </span>data 写入数据
+ * <span class="hljs-doctag">@param </span>options 写入参数
+ */</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">write</span>(<span class="hljs-params">
+  path: <span class="hljs-built_in">string</span>,
+  data: <span class="hljs-built_in">any</span>,
+  options: Deno.WriteFileOptions = {}
+</span>): <span class="hljs-title">Promise</span>&lt;<span class="hljs-title">void</span>&gt; </span>{
+  <span class="hljs-keyword">const</span> enData = encode(data)
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">await</span> writeFile(path, enData, options)
+}
+
+<span class="hljs-comment">/**
+ * <span class="hljs-doctag">@method <span class="hljs-variable">write</span></span>
+ * <span class="hljs-doctag">@description </span>异步写文件
+ * <span class="hljs-doctag">@param </span>path 文件路径
+ * <span class="hljs-doctag">@param </span>data 写入数据
+ * <span class="hljs-doctag">@param </span>options 写入参数
+ */</span>
+<span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">writeSync</span>(<span class="hljs-params">
+  path: <span class="hljs-built_in">string</span>,
+  data: <span class="hljs-built_in">any</span>,
+  options: Deno.WriteFileOptions = {}
+</span>) </span>{
+  <span class="hljs-keyword">const</span> enData = encode(data)
+  writeFileSync(path, enData, options)
+}
+
+<span class="hljs-comment">/**
+ * <span class="hljs-doctag">@method <span class="hljs-variable">writeText</span></span>
+ * <span class="hljs-doctag">@description </span>异步写入string数据
+ * <span class="hljs-doctag">@param </span>path 文件路径
+ * <span class="hljs-doctag">@param </span>text 写入数据
+ */</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">writeText</span>(<span class="hljs-params">path: <span class="hljs-built_in">string</span>, text: <span class="hljs-built_in">string</span></span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">await</span> writeTextFile(path, text)
+}
+
+<span class="hljs-comment">/**
+ * <span class="hljs-doctag">@method <span class="hljs-variable">writeTextSync</span></span>
+ * <span class="hljs-doctag">@description </span>同步写入string数据
+ * <span class="hljs-doctag">@param </span>path 文件路径
+ * <span class="hljs-doctag">@param </span>text 写入数据
+ */</span>
+<span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">writeTextSync</span>(<span class="hljs-params">path: <span class="hljs-built_in">string</span>, text: <span class="hljs-built_in">string</span></span>) </span>{
+  <span class="hljs-keyword">return</span> writeTextFileSync(path, text)
+}
+</code></pre>
+</div>
+</section></main>
+</section></main>
+	
+<div class="back-top svelte-9c9s8u" style="bottom: 5rem;right: 0.625rem;display: none"><i class="iconfont icon-back-top"></i>
+</div>
+</section>
+
+
+
+	<script type="svelte-data" url="20210708120525.json">{"status":200,"statusText":"","headers":{"content-type":"text/plain;charset=UTF-8"},"body":"{\"title\":\"deno之文件操作\",\"slug\":\"uniapp pdf\",\"time\":\"2021-07-08T12:05:51.000Z\",\"author\":\"PingTouG\",\"html\":\"\u003Ch2 id=\\\"文件操作\\\"\u003E文件操作\u003C\u002Fh2\u003E\\n\u003Ch2 id=\\\"readfile\\\"\u003EreadFile\u003C\u002Fh2\u003E\\n\u003Cp\u003E\u003Ccode\u003Efunction Deno.readFile(path: string): Promise&lt;Uint8Array&gt;\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E\u003Ccode\u003E--allow-read\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E异步读取文件,返回的数据类型是\u003Ccode\u003EUint8Array\u003C\u002Fcode\u003E,需要通过\u003Ccode\u003ETextDecoder\u003C\u002Fcode\u003E解码.\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-typescript\\\"\u003Econst decoder = \u003Cspan class=\\\"hljs-keyword\\\"\u003Enew\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-constructor\\\"\u003ETextDecoder(&#x27;\u003Cspan class=\\\"hljs-params\\\"\u003Eutf\u003C\u002Fspan\u003E-8&#x27;)\u003C\u002Fspan\u003E\\nconst data = await \u003Cspan class=\\\"hljs-module-access\\\"\u003E\u003Cspan class=\\\"hljs-module\\\"\u003E\u003Cspan class=\\\"hljs-identifier\\\"\u003EDeno\u003C\u002Fspan\u003E.\u003C\u002Fspan\u003E\u003C\u002Fspan\u003Eread\u003Cspan class=\\\"hljs-constructor\\\"\u003EFile(&#x27;\u003Cspan class=\\\"hljs-params\\\"\u003Ehello\u003C\u002Fspan\u003E.\u003Cspan class=\\\"hljs-params\\\"\u003Etxt\u003C\u002Fspan\u003E&#x27;)\u003C\u002Fspan\u003E\\nconsole.log(decoder.decode(data))\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch2 id=\\\"readfilesync\\\"\u003EreadFileSync\u003C\u002Fh2\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E同步读取文件,用法同\u003Ccode\u003EreadFile\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-ts\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E { readFile, readFileSync } = Deno\\n\\n\u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F**\\n * \u003Cspan class=\\\"hljs-doctag\\\"\u003E@method \u003Cspan class=\\\"hljs-variable\\\"\u003EgetDecoder\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E\\n * \u003Cspan class=\\\"hljs-doctag\\\"\u003E@description \u003C\u002Fspan\u003E获取解码器\\n * \u003Cspan class=\\\"hljs-doctag\\\"\u003E@param \u003C\u002Fspan\u003Eencoding 文件编码\\n *\u002F\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Efunction\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EgetDecoder\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-params\\\"\u003Eencoding: \u003Cspan class=\\\"hljs-built_in\\\"\u003Estring\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E): \u003Cspan class=\\\"hljs-title\\\"\u003ETextDecoder\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Enew\u003C\u002Fspan\u003E TextDecoder(encoding)\\n}\\n\\n\u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F**\\n * \u003Cspan class=\\\"hljs-doctag\\\"\u003E@method \u003Cspan class=\\\"hljs-variable\\\"\u003Eread\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E\\n * \u003Cspan class=\\\"hljs-doctag\\\"\u003E@description \u003C\u002Fspan\u003E异步读取文件\\n * \u003Cspan class=\\\"hljs-doctag\\\"\u003E@param \u003C\u002Fspan\u003Epath 文件路径\\n * \u003Cspan class=\\\"hljs-doctag\\\"\u003E@param \u003C\u002Fspan\u003Eencoding 文件编码\\n *\u002F\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eexport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Easync\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Efunction\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003Eread\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-params\\\"\u003E\\n  path: \u003Cspan class=\\\"hljs-built_in\\\"\u003Estring\u003C\u002Fspan\u003E,\\n  encoding: \u003Cspan class=\\\"hljs-built_in\\\"\u003Estring\u003C\u002Fspan\u003E = \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;utf-8&#x27;\u003C\u002Fspan\u003E\\n\u003C\u002Fspan\u003E): \u003Cspan class=\\\"hljs-title\\\"\u003EPromise\u003C\u002Fspan\u003E&lt;\u003Cspan class=\\\"hljs-title\\\"\u003Estring\u003C\u002Fspan\u003E&gt; \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E decoder = getDecoder(encoding)\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E data = \u003Cspan class=\\\"hljs-keyword\\\"\u003Eawait\u003C\u002Fspan\u003E readFile(path)\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E decoder.decode(data)\\n}\\n\\n\u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F**\\n * \u003Cspan class=\\\"hljs-doctag\\\"\u003E@method \u003Cspan class=\\\"hljs-variable\\\"\u003EreadSync\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E\\n * \u003Cspan class=\\\"hljs-doctag\\\"\u003E@description \u003C\u002Fspan\u003E同步读取文件\\n * \u003Cspan class=\\\"hljs-doctag\\\"\u003E@param \u003C\u002Fspan\u003Epath 文件路径\\n * \u003Cspan class=\\\"hljs-doctag\\\"\u003E@param \u003C\u002Fspan\u003Eencoding 文件编码\\n *\u002F\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eexport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Efunction\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EreadSync\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-params\\\"\u003Epath: \u003Cspan class=\\\"hljs-built_in\\\"\u003Estring\u003C\u002Fspan\u003E, encoding: \u003Cspan class=\\\"hljs-built_in\\\"\u003Estring\u003C\u002Fspan\u003E = \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;utf-8&#x27;\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E): \u003Cspan class=\\\"hljs-title\\\"\u003Estring\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E decoder = getDecoder(encoding)\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E data = readFileSync(path)\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E decoder.decode(data)\\n}\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch2 id=\\\"writefile\\\"\u003EwriteFile\u003C\u002Fh2\u003E\\n\u003Cp\u003E\u003Ccode\u003Efunction Deno.writeFile(path: string, data: Uint8Array, options?: WriteFileOptions): Promise&lt;void&gt;\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E\u003Ccode\u003E--allow-write\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E异步写入文件,写入的数据类型是\u003Ccode\u003EUint8Array\u003C\u002Fcode\u003E,需要通过\u003Ccode\u003ETextEncoder\u003C\u002Fcode\u003E编码数据.\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-typescript\\\"\u003Econst encoder = \u003Cspan class=\\\"hljs-keyword\\\"\u003Enew\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-constructor\\\"\u003ETextEncoder()\u003C\u002Fspan\u003E\\nconst data = encoder.encode(&#x27;Hello world\\\\n&#x27;)\\nawait \u003Cspan class=\\\"hljs-module-access\\\"\u003E\u003Cspan class=\\\"hljs-module\\\"\u003E\u003Cspan class=\\\"hljs-identifier\\\"\u003EDeno\u003C\u002Fspan\u003E.\u003C\u002Fspan\u003E\u003C\u002Fspan\u003Ewrite\u003Cspan class=\\\"hljs-constructor\\\"\u003EFile(&#x27;\u003Cspan class=\\\"hljs-params\\\"\u003Ehello1\u003C\u002Fspan\u003E.\u003Cspan class=\\\"hljs-params\\\"\u003Etxt\u003C\u002Fspan\u003E&#x27;, \u003Cspan class=\\\"hljs-params\\\"\u003Edata\u003C\u002Fspan\u003E)\u003C\u002Fspan\u003E\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch2 id=\\\"writefilesync\\\"\u003EwriteFileSync\u003C\u002Fh2\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E同步写入文件,用法同\u003Ccode\u003EwriteFile\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Ch2 id=\\\"writetextfile\\\"\u003EwriteTextFile\u003C\u002Fh2\u003E\\n\u003Cp\u003E\u003Ccode\u003Efunction Deno.writeTextFile(path: string, data: string): Promise&lt;void&gt;\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E\u003Ccode\u003E--allow-write\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E异步写入文本文件,写入的数据类型是\u003Ccode\u003Estring\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Ch2 id=\\\"writetextfilesync\\\"\u003EwriteTextFileSync\u003C\u002Fh2\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E同步写入文本文件,用法同\u003Ccode\u003EwriteTextFile\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-ts\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E { writeFile, writeFileSync, writeTextFile, writeTextFileSync } = Deno\\n\\n\u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F**\\n * \u003Cspan class=\\\"hljs-doctag\\\"\u003E@method \u003Cspan class=\\\"hljs-variable\\\"\u003Eencode\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E\\n * \u003Cspan class=\\\"hljs-doctag\\\"\u003E@description \u003C\u002Fspan\u003E编码数据\\n * \u003Cspan class=\\\"hljs-doctag\\\"\u003E@param \u003C\u002Fspan\u003Edata 要编码的数据\\n *\u002F\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Efunction\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003Eencode\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-params\\\"\u003Edata: \u003Cspan class=\\\"hljs-built_in\\\"\u003Estring\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E): \u003Cspan class=\\\"hljs-title\\\"\u003EUint8Array\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E decoder = \u003Cspan class=\\\"hljs-keyword\\\"\u003Enew\u003C\u002Fspan\u003E TextEncoder()\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E decoder.encode(data)\\n}\\n\\n\u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F**\\n * \u003Cspan class=\\\"hljs-doctag\\\"\u003E@method \u003Cspan class=\\\"hljs-variable\\\"\u003Ewrite\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E\\n * \u003Cspan class=\\\"hljs-doctag\\\"\u003E@description \u003C\u002Fspan\u003E异步写文件\\n * \u003Cspan class=\\\"hljs-doctag\\\"\u003E@param \u003C\u002Fspan\u003Epath 文件路径\\n * \u003Cspan class=\\\"hljs-doctag\\\"\u003E@param \u003C\u002Fspan\u003Edata 写入数据\\n * \u003Cspan class=\\\"hljs-doctag\\\"\u003E@param \u003C\u002Fspan\u003Eoptions 写入参数\\n *\u002F\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eexport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Easync\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Efunction\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003Ewrite\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-params\\\"\u003E\\n  path: \u003Cspan class=\\\"hljs-built_in\\\"\u003Estring\u003C\u002Fspan\u003E,\\n  data: \u003Cspan class=\\\"hljs-built_in\\\"\u003Eany\u003C\u002Fspan\u003E,\\n  options: Deno.WriteFileOptions = {}\\n\u003C\u002Fspan\u003E): \u003Cspan class=\\\"hljs-title\\\"\u003EPromise\u003C\u002Fspan\u003E&lt;\u003Cspan class=\\\"hljs-title\\\"\u003Evoid\u003C\u002Fspan\u003E&gt; \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E enData = encode(data)\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eawait\u003C\u002Fspan\u003E writeFile(path, enData, options)\\n}\\n\\n\u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F**\\n * \u003Cspan class=\\\"hljs-doctag\\\"\u003E@method \u003Cspan class=\\\"hljs-variable\\\"\u003Ewrite\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E\\n * \u003Cspan class=\\\"hljs-doctag\\\"\u003E@description \u003C\u002Fspan\u003E异步写文件\\n * \u003Cspan class=\\\"hljs-doctag\\\"\u003E@param \u003C\u002Fspan\u003Epath 文件路径\\n * \u003Cspan class=\\\"hljs-doctag\\\"\u003E@param \u003C\u002Fspan\u003Edata 写入数据\\n * \u003Cspan class=\\\"hljs-doctag\\\"\u003E@param \u003C\u002Fspan\u003Eoptions 写入参数\\n *\u002F\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eexport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Efunction\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EwriteSync\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-params\\\"\u003E\\n  path: \u003Cspan class=\\\"hljs-built_in\\\"\u003Estring\u003C\u002Fspan\u003E,\\n  data: \u003Cspan class=\\\"hljs-built_in\\\"\u003Eany\u003C\u002Fspan\u003E,\\n  options: Deno.WriteFileOptions = {}\\n\u003C\u002Fspan\u003E) \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E enData = encode(data)\\n  writeFileSync(path, enData, options)\\n}\\n\\n\u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F**\\n * \u003Cspan class=\\\"hljs-doctag\\\"\u003E@method \u003Cspan class=\\\"hljs-variable\\\"\u003EwriteText\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E\\n * \u003Cspan class=\\\"hljs-doctag\\\"\u003E@description \u003C\u002Fspan\u003E异步写入string数据\\n * \u003Cspan class=\\\"hljs-doctag\\\"\u003E@param \u003C\u002Fspan\u003Epath 文件路径\\n * \u003Cspan class=\\\"hljs-doctag\\\"\u003E@param \u003C\u002Fspan\u003Etext 写入数据\\n *\u002F\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eexport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Easync\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Efunction\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EwriteText\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-params\\\"\u003Epath: \u003Cspan class=\\\"hljs-built_in\\\"\u003Estring\u003C\u002Fspan\u003E, text: \u003Cspan class=\\\"hljs-built_in\\\"\u003Estring\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E) \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eawait\u003C\u002Fspan\u003E writeTextFile(path, text)\\n}\\n\\n\u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F**\\n * \u003Cspan class=\\\"hljs-doctag\\\"\u003E@method \u003Cspan class=\\\"hljs-variable\\\"\u003EwriteTextSync\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E\\n * \u003Cspan class=\\\"hljs-doctag\\\"\u003E@description \u003C\u002Fspan\u003E同步写入string数据\\n * \u003Cspan class=\\\"hljs-doctag\\\"\u003E@param \u003C\u002Fspan\u003Epath 文件路径\\n * \u003Cspan class=\\\"hljs-doctag\\\"\u003E@param \u003C\u002Fspan\u003Etext 写入数据\\n *\u002F\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eexport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Efunction\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EwriteTextSync\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-params\\\"\u003Epath: \u003Cspan class=\\\"hljs-built_in\\\"\u003Estring\u003C\u002Fspan\u003E, text: \u003Cspan class=\\\"hljs-built_in\\\"\u003Estring\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E) \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E writeTextFileSync(path, text)\\n}\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\"}"}</script>
+</div>
+	</body>
+</html>
