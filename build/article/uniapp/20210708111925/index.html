@@ -64,99 +64,127 @@
 
   <div class="md-content"><p>常用方法封装是针对<code>Uniapp</code>插件市场中的极光官方的两个插件：<code>极光JPush官方SDK</code>、<code>极光JCore官方SDK</code>，关于安装请参考<a href="https://codebook.vercel.app/article/uniapp/20210707101348">Uniapp对接极光推送</a></p>
 <p><code>jpush.js</code></p>
-<pre><code class="language-js"><span class="hljs-regexp">//</span> 工具类，导出环境判断
-import { isDev,isIos } from <span class="hljs-string">&#x27;./tools&#x27;</span>
-<span class="hljs-regexp">//</span> vuex
-import store from <span class="hljs-string">&#x27;@/store&#x27;</span>
-<span class="hljs-regexp">//</span> 本地缓存
-import storage, { MESSAGE_TOTAL,USER_INFO } from <span class="hljs-string">&#x27;./storage&#x27;</span>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { isDev,isIos, isAndroid } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./tools&#x27;</span>
+<span class="hljs-keyword">import</span> store <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@/store&#x27;</span>
+<span class="hljs-keyword">import</span> storage, { MESSAGE_TOTAL,USER_INFO,CLOSE_NOTIFICATION_TIPS } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./storage&#x27;</span>
+<span class="hljs-keyword">import</span> { goMessages } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@/utils/pageHelper&#x27;</span>
 
-<span class="hljs-regexp">//</span> <span class="hljs-comment">#ifdef APP-PLUS</span>
-const jv = uni.requireNativePlugin(<span class="hljs-string">&#x27;JG-JPush&#x27;</span>)
-<span class="hljs-regexp">//</span> <span class="hljs-comment">#endif</span>
-
-<span class="hljs-regexp">//</span> 不在App内提醒
-const unAppToast = () =&gt; {
-    <span class="hljs-regexp">//</span> <span class="hljs-comment">#ifndef APP-PLUS</span>
+<span class="hljs-comment">// 不在App内提醒</span>
+<span class="hljs-keyword">const</span> unAppToast = <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-comment">// #ifndef APP-PLUS</span>
     isDev &amp;&amp; uni.showToast({
-        title:<span class="hljs-string">&#x27;极光推送仅限APP内使用&#x27;</span>,
-        icon:<span class="hljs-string">&#x27;none&#x27;</span>
+        <span class="hljs-attr">title</span>:<span class="hljs-string">&#x27;极光推送仅限APP内使用&#x27;</span>,
+        <span class="hljs-attr">icon</span>:<span class="hljs-string">&#x27;none&#x27;</span>
     })
-    <span class="hljs-regexp">//</span> <span class="hljs-comment">#endif</span>
+    <span class="hljs-comment">// #endif</span>
 }
-<span class="hljs-regexp">//</span> 初始化极光推送
-export const jpushInit = () =&gt; {
-    <span class="hljs-regexp">//</span> <span class="hljs-comment">#ifdef APP-PLUS</span>
-    <span class="hljs-regexp">//</span> 初始化
+<span class="hljs-comment">// 初始化极光推送</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> jpushInit = <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-comment">// #ifdef APP-PLUS</span>
+    <span class="hljs-keyword">const</span> jv = uni.requireNativePlugin(<span class="hljs-string">&#x27;JG-JPush&#x27;</span>)
     jv.initJPushService()
-    <span class="hljs-regexp">//</span> 监听连接状态
-    jv.addConnectEventListener(result=&gt;{
+    jv.addConnectEventListener(<span class="hljs-function"><span class="hljs-params">result</span>=&gt;</span>{
         <span class="hljs-keyword">if</span>(result.connectEnable){
-            isDev &amp;&amp; console.log(<span class="hljs-string">&#x27;连接极光推送成功&#x27;</span>)
-            const userinfo = storage.get(USER_INFO)
+            isDev &amp;&amp; <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;连接极光推送成功&#x27;</span>)
+            <span class="hljs-keyword">const</span> userinfo = storage.get(USER_INFO)
             <span class="hljs-keyword">if</span>(userinfo){
-                let total = <span class="hljs-number">0</span>
-                <span class="hljs-regexp">//</span> 在IOS下获取当前应用角标
+                <span class="hljs-keyword">let</span> total = <span class="hljs-number">0</span>
                 <span class="hljs-keyword">if</span>(isIos){
-                    const app = plus.ios.import(<span class="hljs-string">&quot;UIApplication&quot;</span>).sharedApplication()
+                    <span class="hljs-keyword">const</span> app = plus.ios.import(<span class="hljs-string">&quot;UIApplication&quot;</span>).sharedApplication()
                     total = app.applicationIconBadgeNumber()
                 }
                 
                 <span class="hljs-keyword">if</span>(total === <span class="hljs-number">0</span>){
-                    let total = storage.get(`<span class="hljs-variable">${MESSAGE_TOTAL}</span>_<span class="hljs-variable">${userinfo.id}</span>`)
+                    <span class="hljs-keyword">let</span> total = storage.get(<span class="hljs-string">`<span class="hljs-subst">${MESSAGE_TOTAL}</span>_<span class="hljs-subst">${userinfo.id}</span>`</span>)
                     total = total ? total : <span class="hljs-number">0</span>
-                }
+                }+
                 store.commit(<span class="hljs-string">&#x27;updateMessageTotal&#x27;</span>,total)
-                storage.set(`<span class="hljs-variable">${MESSAGE_TOTAL}</span>_<span class="hljs-variable">${userinfo.id}</span>`,total)
+                storage.set(<span class="hljs-string">`<span class="hljs-subst">${MESSAGE_TOTAL}</span>_<span class="hljs-subst">${userinfo.id}</span>`</span>,total)
             }
         }
     })
+    <span class="hljs-keyword">const</span> closeNotificationTips = storage.get(CLOSE_NOTIFICATION_TIPS)
+    <span class="hljs-keyword">if</span>(!closeNotificationTips){
+        getNotificationAuthorization()
+    }
     onNotification()
-    <span class="hljs-regexp">//</span> <span class="hljs-comment">#endif</span>
+    <span class="hljs-comment">// #endif</span>
     unAppToast()
 }
-<span class="hljs-regexp">//</span> 监听消息推送
-const onNotification = () =&gt; {
-    <span class="hljs-regexp">//</span> <span class="hljs-comment">#ifdef APP-PLUS</span>
-    jv.addNotificationListener(({badge,notificationEventType}) =&gt; {
-        <span class="hljs-regexp">//</span> 收到新消息
+<span class="hljs-comment">// 监听消息推送</span>
+<span class="hljs-keyword">const</span> onNotification = <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">const</span> jv = uni.requireNativePlugin(<span class="hljs-string">&#x27;JG-JPush&#x27;</span>)
+    jv.addNotificationListener(<span class="hljs-function">(<span class="hljs-params">data</span>) =&gt;</span> {
+        <span class="hljs-keyword">const</span> {badge,notificationEventType} = data
+        <span class="hljs-comment">// 收到新消息</span>
         <span class="hljs-keyword">if</span>(notificationEventType === <span class="hljs-string">&#x27;notificationArrived&#x27;</span>){
             setBadge(badge)
         }
-        <span class="hljs-regexp">//</span> 点击打开消息
+        <span class="hljs-comment">// 点击打开消息</span>
         <span class="hljs-keyword">if</span>(notificationEventType === <span class="hljs-string">&#x27;notificationOpened&#x27;</span>){
-            <span class="hljs-regexp">//</span> 此处是commit mutation，因为APP启动后会先加载首页，需要在首页加载完成之后才能跳转消息列表页，所以在这设置状态，在onLaunch中通过此状态判断是否需要跳转
-            store.commit(<span class="hljs-string">&#x27;updateIsGoMessage&#x27;</span>,true)
+            <span class="hljs-keyword">if</span>(store.state.isLaunch){
+                goMessages()
+            } <span class="hljs-keyword">else</span> {
+                store.commit(<span class="hljs-string">&#x27;updateIsGoMessage&#x27;</span>,<span class="hljs-literal">true</span>)
+            }
         }
     })
-    <span class="hljs-regexp">//</span> <span class="hljs-comment">#endif</span>
-    unAppToast()
 }
-<span class="hljs-regexp">//</span> 设置应用消息量角标
-export const setBadge = (badge,isSyncData = true) =&gt; {
-    <span class="hljs-regexp">//</span> <span class="hljs-comment">#ifdef APP-PLUS</span>
+<span class="hljs-comment">// 查询是否有通知权限</span>
+<span class="hljs-keyword">const</span> getNotificationAuthorization = <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">const</span> jv = uni.requireNativePlugin(<span class="hljs-string">&#x27;JG-JPush&#x27;</span>)
+    <span class="hljs-keyword">if</span>(isAndroid){
+        jv.isNotificationEnabled(<span class="hljs-function">(<span class="hljs-params">{code}</span>) =&gt;</span> {
+            <span class="hljs-keyword">if</span>(code === <span class="hljs-number">0</span>){
+                goNotificationSettings()
+            }
+        })
+    }
+}
+<span class="hljs-comment">// 跳转消息通知设置界面</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> goNotificationSettings = <span class="hljs-function">() =&gt;</span> {
+    uni.showModal({
+        <span class="hljs-attr">content</span>: <span class="hljs-string">&#x27;检测到您未打开消息通知，开启后第一时间可收到消息推送&#x27;</span>,
+        <span class="hljs-attr">cancelText</span>:<span class="hljs-string">&#x27;稍后开启&#x27;</span>,
+        <span class="hljs-attr">confirmText</span>:<span class="hljs-string">&#x27;去开启&#x27;</span>,
+        <span class="hljs-attr">success</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">res</span>) </span>{
+            storage.set(CLOSE_NOTIFICATION_TIPS,<span class="hljs-literal">true</span>)
+            <span class="hljs-keyword">if</span> (res.confirm) {
+                <span class="hljs-keyword">const</span> jv = uni.requireNativePlugin(<span class="hljs-string">&#x27;JG-JPush&#x27;</span>)
+                jv.openSettingsForNotification()
+            }
+        }
+    })
+}
+<span class="hljs-comment">// 设置应用消息量角标</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> setBadge = <span class="hljs-function">(<span class="hljs-params">badge,isSyncData = <span class="hljs-literal">true</span></span>) =&gt;</span> {
+    <span class="hljs-comment">// #ifdef APP-PLUS</span>
     plus.runtime.setBadgeNumber(badge)
+    <span class="hljs-keyword">const</span> jv = uni.requireNativePlugin(<span class="hljs-string">&#x27;JG-JPush&#x27;</span>)
     jv.setBadge(badge)
     <span class="hljs-keyword">if</span>(isSyncData){
-        const userinfo = storage.get(USER_INFO)
-        storage.set(`<span class="hljs-variable">${MESSAGE_TOTAL}</span>_<span class="hljs-variable">${userinfo?.id}</span>`,badge)
+        <span class="hljs-keyword">const</span> userinfo = storage.get(USER_INFO)
+        storage.set(<span class="hljs-string">`<span class="hljs-subst">${MESSAGE_TOTAL}</span>_<span class="hljs-subst">${userinfo?.id}</span>`</span>,badge)
         store.commit(<span class="hljs-string">&#x27;updateMessageTotal&#x27;</span>,badge)
     }
-    <span class="hljs-regexp">//</span> <span class="hljs-comment">#endif</span>
+    <span class="hljs-comment">// #endif</span>
     unAppToast()
 }
-<span class="hljs-regexp">//</span> 设置别名
-export const setAlias = (alias) =&gt; {
-    <span class="hljs-regexp">//</span> <span class="hljs-comment">#ifdef APP-PLUS</span>
+<span class="hljs-comment">// 设置别名</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> setAlias = <span class="hljs-function">(<span class="hljs-params">alias</span>) =&gt;</span> {
+    <span class="hljs-comment">// #ifdef APP-PLUS</span>
+    <span class="hljs-keyword">const</span> jv = uni.requireNativePlugin(<span class="hljs-string">&#x27;JG-JPush&#x27;</span>)
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;alias&#x27;</span>,alias)
     jv.setAlias({ alias })
-    <span class="hljs-regexp">//</span> <span class="hljs-comment">#endif</span>
+    <span class="hljs-comment">// #endif</span>
     unAppToast()
 }
-<span class="hljs-regexp">//</span> 删除别名
-export const removeAlias = () =&gt; {
-    <span class="hljs-regexp">//</span> <span class="hljs-comment">#ifdef APP-PLUS</span>
-    jv.deleteAlias()
-    <span class="hljs-regexp">//</span> <span class="hljs-comment">#endif</span>
+<span class="hljs-comment">// 删除别名</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> removeAlias = <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-comment">// #ifdef APP-PLUS</span>
+    <span class="hljs-keyword">const</span> jv = uni.requireNativePlugin(<span class="hljs-string">&#x27;JG-JPush&#x27;</span>)
+    jv.deleteAlias({})
+    <span class="hljs-comment">// #endif</span>
     unAppToast()
 }
 </code></pre>
@@ -170,7 +198,7 @@ export const removeAlias = () =&gt; {
 
 
 
-	<script type="svelte-data" url="20210708111925.json">{"status":200,"statusText":"","headers":{"content-type":"text/plain;charset=UTF-8"},"body":"{\"title\":\"Uniapp极光推送常用方法封装\",\"slug\":\"uniapp jpush\",\"time\":\"2021-07-07T10:14:43.000Z\",\"author\":\"PingTouG\",\"html\":\"\u003Cp\u003E常用方法封装是针对\u003Ccode\u003EUniapp\u003C\u002Fcode\u003E插件市场中的极光官方的两个插件：\u003Ccode\u003E极光JPush官方SDK\u003C\u002Fcode\u003E、\u003Ccode\u003E极光JCore官方SDK\u003C\u002Fcode\u003E，关于安装请参考\u003Ca href=\\\"https:\u002F\u002Fcodebook.vercel.app\u002Farticle\u002Funiapp\u002F20210707101348\\\"\u003EUniapp对接极光推送\u003C\u002Fa\u003E\u003C\u002Fp\u003E\\n\u003Cp\u003E\u003Ccode\u003Ejpush.js\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-js\\\"\u003E\u003Cspan class=\\\"hljs-regexp\\\"\u003E\u002F\u002F\u003C\u002Fspan\u003E 工具类，导出环境判断\\nimport { isDev,isIos } from \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;.\u002Ftools&#x27;\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-regexp\\\"\u003E\u002F\u002F\u003C\u002Fspan\u003E vuex\\nimport store from \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;@\u002Fstore&#x27;\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-regexp\\\"\u003E\u002F\u002F\u003C\u002Fspan\u003E 本地缓存\\nimport storage, { MESSAGE_TOTAL,USER_INFO } from \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;.\u002Fstorage&#x27;\u003C\u002Fspan\u003E\\n\\n\u003Cspan class=\\\"hljs-regexp\\\"\u003E\u002F\u002F\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-comment\\\"\u003E#ifdef APP-PLUS\u003C\u002Fspan\u003E\\nconst jv = uni.requireNativePlugin(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;JG-JPush&#x27;\u003C\u002Fspan\u003E)\\n\u003Cspan class=\\\"hljs-regexp\\\"\u003E\u002F\u002F\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-comment\\\"\u003E#endif\u003C\u002Fspan\u003E\\n\\n\u003Cspan class=\\\"hljs-regexp\\\"\u003E\u002F\u002F\u003C\u002Fspan\u003E 不在App内提醒\\nconst unAppToast = () =&gt; {\\n    \u003Cspan class=\\\"hljs-regexp\\\"\u003E\u002F\u002F\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-comment\\\"\u003E#ifndef APP-PLUS\u003C\u002Fspan\u003E\\n    isDev &amp;&amp; uni.showToast({\\n        title:\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;极光推送仅限APP内使用&#x27;\u003C\u002Fspan\u003E,\\n        icon:\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;none&#x27;\u003C\u002Fspan\u003E\\n    })\\n    \u003Cspan class=\\\"hljs-regexp\\\"\u003E\u002F\u002F\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-comment\\\"\u003E#endif\u003C\u002Fspan\u003E\\n}\\n\u003Cspan class=\\\"hljs-regexp\\\"\u003E\u002F\u002F\u003C\u002Fspan\u003E 初始化极光推送\\nexport const jpushInit = () =&gt; {\\n    \u003Cspan class=\\\"hljs-regexp\\\"\u003E\u002F\u002F\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-comment\\\"\u003E#ifdef APP-PLUS\u003C\u002Fspan\u003E\\n    \u003Cspan class=\\\"hljs-regexp\\\"\u003E\u002F\u002F\u003C\u002Fspan\u003E 初始化\\n    jv.initJPushService()\\n    \u003Cspan class=\\\"hljs-regexp\\\"\u003E\u002F\u002F\u003C\u002Fspan\u003E 监听连接状态\\n    jv.addConnectEventListener(result=&gt;{\\n        \u003Cspan class=\\\"hljs-keyword\\\"\u003Eif\u003C\u002Fspan\u003E(result.connectEnable){\\n            isDev &amp;&amp; console.log(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;连接极光推送成功&#x27;\u003C\u002Fspan\u003E)\\n            const userinfo = storage.get(USER_INFO)\\n            \u003Cspan class=\\\"hljs-keyword\\\"\u003Eif\u003C\u002Fspan\u003E(userinfo){\\n                let total = \u003Cspan class=\\\"hljs-number\\\"\u003E0\u003C\u002Fspan\u003E\\n                \u003Cspan class=\\\"hljs-regexp\\\"\u003E\u002F\u002F\u003C\u002Fspan\u003E 在IOS下获取当前应用角标\\n                \u003Cspan class=\\\"hljs-keyword\\\"\u003Eif\u003C\u002Fspan\u003E(isIos){\\n                    const app = plus.ios.import(\u003Cspan class=\\\"hljs-string\\\"\u003E&quot;UIApplication&quot;\u003C\u002Fspan\u003E).sharedApplication()\\n                    total = app.applicationIconBadgeNumber()\\n                }\\n                \\n                \u003Cspan class=\\\"hljs-keyword\\\"\u003Eif\u003C\u002Fspan\u003E(total === \u003Cspan class=\\\"hljs-number\\\"\u003E0\u003C\u002Fspan\u003E){\\n                    let total = storage.get(`\u003Cspan class=\\\"hljs-variable\\\"\u003E${MESSAGE_TOTAL}\u003C\u002Fspan\u003E_\u003Cspan class=\\\"hljs-variable\\\"\u003E${userinfo.id}\u003C\u002Fspan\u003E`)\\n                    total = total ? total : \u003Cspan class=\\\"hljs-number\\\"\u003E0\u003C\u002Fspan\u003E\\n                }\\n                store.commit(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;updateMessageTotal&#x27;\u003C\u002Fspan\u003E,total)\\n                storage.set(`\u003Cspan class=\\\"hljs-variable\\\"\u003E${MESSAGE_TOTAL}\u003C\u002Fspan\u003E_\u003Cspan class=\\\"hljs-variable\\\"\u003E${userinfo.id}\u003C\u002Fspan\u003E`,total)\\n            }\\n        }\\n    })\\n    onNotification()\\n    \u003Cspan class=\\\"hljs-regexp\\\"\u003E\u002F\u002F\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-comment\\\"\u003E#endif\u003C\u002Fspan\u003E\\n    unAppToast()\\n}\\n\u003Cspan class=\\\"hljs-regexp\\\"\u003E\u002F\u002F\u003C\u002Fspan\u003E 监听消息推送\\nconst onNotification = () =&gt; {\\n    \u003Cspan class=\\\"hljs-regexp\\\"\u003E\u002F\u002F\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-comment\\\"\u003E#ifdef APP-PLUS\u003C\u002Fspan\u003E\\n    jv.addNotificationListener(({badge,notificationEventType}) =&gt; {\\n        \u003Cspan class=\\\"hljs-regexp\\\"\u003E\u002F\u002F\u003C\u002Fspan\u003E 收到新消息\\n        \u003Cspan class=\\\"hljs-keyword\\\"\u003Eif\u003C\u002Fspan\u003E(notificationEventType === \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;notificationArrived&#x27;\u003C\u002Fspan\u003E){\\n            setBadge(badge)\\n        }\\n        \u003Cspan class=\\\"hljs-regexp\\\"\u003E\u002F\u002F\u003C\u002Fspan\u003E 点击打开消息\\n        \u003Cspan class=\\\"hljs-keyword\\\"\u003Eif\u003C\u002Fspan\u003E(notificationEventType === \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;notificationOpened&#x27;\u003C\u002Fspan\u003E){\\n            \u003Cspan class=\\\"hljs-regexp\\\"\u003E\u002F\u002F\u003C\u002Fspan\u003E 此处是commit mutation，因为APP启动后会先加载首页，需要在首页加载完成之后才能跳转消息列表页，所以在这设置状态，在onLaunch中通过此状态判断是否需要跳转\\n            store.commit(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;updateIsGoMessage&#x27;\u003C\u002Fspan\u003E,true)\\n        }\\n    })\\n    \u003Cspan class=\\\"hljs-regexp\\\"\u003E\u002F\u002F\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-comment\\\"\u003E#endif\u003C\u002Fspan\u003E\\n    unAppToast()\\n}\\n\u003Cspan class=\\\"hljs-regexp\\\"\u003E\u002F\u002F\u003C\u002Fspan\u003E 设置应用消息量角标\\nexport const setBadge = (badge,isSyncData = true) =&gt; {\\n    \u003Cspan class=\\\"hljs-regexp\\\"\u003E\u002F\u002F\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-comment\\\"\u003E#ifdef APP-PLUS\u003C\u002Fspan\u003E\\n    plus.runtime.setBadgeNumber(badge)\\n    jv.setBadge(badge)\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Eif\u003C\u002Fspan\u003E(isSyncData){\\n        const userinfo = storage.get(USER_INFO)\\n        storage.set(`\u003Cspan class=\\\"hljs-variable\\\"\u003E${MESSAGE_TOTAL}\u003C\u002Fspan\u003E_\u003Cspan class=\\\"hljs-variable\\\"\u003E${userinfo?.id}\u003C\u002Fspan\u003E`,badge)\\n        store.commit(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;updateMessageTotal&#x27;\u003C\u002Fspan\u003E,badge)\\n    }\\n    \u003Cspan class=\\\"hljs-regexp\\\"\u003E\u002F\u002F\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-comment\\\"\u003E#endif\u003C\u002Fspan\u003E\\n    unAppToast()\\n}\\n\u003Cspan class=\\\"hljs-regexp\\\"\u003E\u002F\u002F\u003C\u002Fspan\u003E 设置别名\\nexport const setAlias = (alias) =&gt; {\\n    \u003Cspan class=\\\"hljs-regexp\\\"\u003E\u002F\u002F\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-comment\\\"\u003E#ifdef APP-PLUS\u003C\u002Fspan\u003E\\n    jv.setAlias({ alias })\\n    \u003Cspan class=\\\"hljs-regexp\\\"\u003E\u002F\u002F\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-comment\\\"\u003E#endif\u003C\u002Fspan\u003E\\n    unAppToast()\\n}\\n\u003Cspan class=\\\"hljs-regexp\\\"\u003E\u002F\u002F\u003C\u002Fspan\u003E 删除别名\\nexport const removeAlias = () =&gt; {\\n    \u003Cspan class=\\\"hljs-regexp\\\"\u003E\u002F\u002F\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-comment\\\"\u003E#ifdef APP-PLUS\u003C\u002Fspan\u003E\\n    jv.deleteAlias()\\n    \u003Cspan class=\\\"hljs-regexp\\\"\u003E\u002F\u002F\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-comment\\\"\u003E#endif\u003C\u002Fspan\u003E\\n    unAppToast()\\n}\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\"}"}</script>
+	<script type="svelte-data" url="20210708111925.json">{"status":200,"statusText":"","headers":{"content-type":"text/plain;charset=UTF-8"},"body":"{\"title\":\"Uniapp极光推送常用方法封装\",\"slug\":\"uniapp jpush\",\"time\":\"2021-07-07T10:14:43.000Z\",\"author\":\"PingTouG\",\"html\":\"\u003Cp\u003E常用方法封装是针对\u003Ccode\u003EUniapp\u003C\u002Fcode\u003E插件市场中的极光官方的两个插件：\u003Ccode\u003E极光JPush官方SDK\u003C\u002Fcode\u003E、\u003Ccode\u003E极光JCore官方SDK\u003C\u002Fcode\u003E，关于安装请参考\u003Ca href=\\\"https:\u002F\u002Fcodebook.vercel.app\u002Farticle\u002Funiapp\u002F20210707101348\\\"\u003EUniapp对接极光推送\u003C\u002Fa\u003E\u003C\u002Fp\u003E\\n\u003Cp\u003E\u003Ccode\u003Ejpush.js\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-js\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E { isDev,isIos, isAndroid } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;.\u002Ftools&#x27;\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E store \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;@\u002Fstore&#x27;\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E storage, { MESSAGE_TOTAL,USER_INFO,CLOSE_NOTIFICATION_TIPS } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;.\u002Fstorage&#x27;\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E { goMessages } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;@\u002Futils\u002FpageHelper&#x27;\u003C\u002Fspan\u003E\\n\\n\u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 不在App内提醒\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E unAppToast = \u003Cspan class=\\\"hljs-function\\\"\u003E() =&gt;\u003C\u002Fspan\u003E {\\n    \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F #ifndef APP-PLUS\u003C\u002Fspan\u003E\\n    isDev &amp;&amp; uni.showToast({\\n        \u003Cspan class=\\\"hljs-attr\\\"\u003Etitle\u003C\u002Fspan\u003E:\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;极光推送仅限APP内使用&#x27;\u003C\u002Fspan\u003E,\\n        \u003Cspan class=\\\"hljs-attr\\\"\u003Eicon\u003C\u002Fspan\u003E:\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;none&#x27;\u003C\u002Fspan\u003E\\n    })\\n    \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F #endif\u003C\u002Fspan\u003E\\n}\\n\u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 初始化极光推送\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eexport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E jpushInit = \u003Cspan class=\\\"hljs-function\\\"\u003E() =&gt;\u003C\u002Fspan\u003E {\\n    \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F #ifdef APP-PLUS\u003C\u002Fspan\u003E\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E jv = uni.requireNativePlugin(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;JG-JPush&#x27;\u003C\u002Fspan\u003E)\\n    jv.initJPushService()\\n    jv.addConnectEventListener(\u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-params\\\"\u003Eresult\u003C\u002Fspan\u003E=&gt;\u003C\u002Fspan\u003E{\\n        \u003Cspan class=\\\"hljs-keyword\\\"\u003Eif\u003C\u002Fspan\u003E(result.connectEnable){\\n            isDev &amp;&amp; \u003Cspan class=\\\"hljs-built_in\\\"\u003Econsole\u003C\u002Fspan\u003E.log(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;连接极光推送成功&#x27;\u003C\u002Fspan\u003E)\\n            \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E userinfo = storage.get(USER_INFO)\\n            \u003Cspan class=\\\"hljs-keyword\\\"\u003Eif\u003C\u002Fspan\u003E(userinfo){\\n                \u003Cspan class=\\\"hljs-keyword\\\"\u003Elet\u003C\u002Fspan\u003E total = \u003Cspan class=\\\"hljs-number\\\"\u003E0\u003C\u002Fspan\u003E\\n                \u003Cspan class=\\\"hljs-keyword\\\"\u003Eif\u003C\u002Fspan\u003E(isIos){\\n                    \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E app = plus.ios.import(\u003Cspan class=\\\"hljs-string\\\"\u003E&quot;UIApplication&quot;\u003C\u002Fspan\u003E).sharedApplication()\\n                    total = app.applicationIconBadgeNumber()\\n                }\\n                \\n                \u003Cspan class=\\\"hljs-keyword\\\"\u003Eif\u003C\u002Fspan\u003E(total === \u003Cspan class=\\\"hljs-number\\\"\u003E0\u003C\u002Fspan\u003E){\\n                    \u003Cspan class=\\\"hljs-keyword\\\"\u003Elet\u003C\u002Fspan\u003E total = storage.get(\u003Cspan class=\\\"hljs-string\\\"\u003E`\u003Cspan class=\\\"hljs-subst\\\"\u003E${MESSAGE_TOTAL}\u003C\u002Fspan\u003E_\u003Cspan class=\\\"hljs-subst\\\"\u003E${userinfo.id}\u003C\u002Fspan\u003E`\u003C\u002Fspan\u003E)\\n                    total = total ? total : \u003Cspan class=\\\"hljs-number\\\"\u003E0\u003C\u002Fspan\u003E\\n                }+\\n                store.commit(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;updateMessageTotal&#x27;\u003C\u002Fspan\u003E,total)\\n                storage.set(\u003Cspan class=\\\"hljs-string\\\"\u003E`\u003Cspan class=\\\"hljs-subst\\\"\u003E${MESSAGE_TOTAL}\u003C\u002Fspan\u003E_\u003Cspan class=\\\"hljs-subst\\\"\u003E${userinfo.id}\u003C\u002Fspan\u003E`\u003C\u002Fspan\u003E,total)\\n            }\\n        }\\n    })\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E closeNotificationTips = storage.get(CLOSE_NOTIFICATION_TIPS)\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Eif\u003C\u002Fspan\u003E(!closeNotificationTips){\\n        getNotificationAuthorization()\\n    }\\n    onNotification()\\n    \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F #endif\u003C\u002Fspan\u003E\\n    unAppToast()\\n}\\n\u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 监听消息推送\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E onNotification = \u003Cspan class=\\\"hljs-function\\\"\u003E() =&gt;\u003C\u002Fspan\u003E {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E jv = uni.requireNativePlugin(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;JG-JPush&#x27;\u003C\u002Fspan\u003E)\\n    jv.addNotificationListener(\u003Cspan class=\\\"hljs-function\\\"\u003E(\u003Cspan class=\\\"hljs-params\\\"\u003Edata\u003C\u002Fspan\u003E) =&gt;\u003C\u002Fspan\u003E {\\n        \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E {badge,notificationEventType} = data\\n        \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 收到新消息\u003C\u002Fspan\u003E\\n        \u003Cspan class=\\\"hljs-keyword\\\"\u003Eif\u003C\u002Fspan\u003E(notificationEventType === \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;notificationArrived&#x27;\u003C\u002Fspan\u003E){\\n            setBadge(badge)\\n        }\\n        \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 点击打开消息\u003C\u002Fspan\u003E\\n        \u003Cspan class=\\\"hljs-keyword\\\"\u003Eif\u003C\u002Fspan\u003E(notificationEventType === \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;notificationOpened&#x27;\u003C\u002Fspan\u003E){\\n            \u003Cspan class=\\\"hljs-keyword\\\"\u003Eif\u003C\u002Fspan\u003E(store.state.isLaunch){\\n                goMessages()\\n            } \u003Cspan class=\\\"hljs-keyword\\\"\u003Eelse\u003C\u002Fspan\u003E {\\n                store.commit(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;updateIsGoMessage&#x27;\u003C\u002Fspan\u003E,\u003Cspan class=\\\"hljs-literal\\\"\u003Etrue\u003C\u002Fspan\u003E)\\n            }\\n        }\\n    })\\n}\\n\u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 查询是否有通知权限\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E getNotificationAuthorization = \u003Cspan class=\\\"hljs-function\\\"\u003E() =&gt;\u003C\u002Fspan\u003E {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E jv = uni.requireNativePlugin(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;JG-JPush&#x27;\u003C\u002Fspan\u003E)\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Eif\u003C\u002Fspan\u003E(isAndroid){\\n        jv.isNotificationEnabled(\u003Cspan class=\\\"hljs-function\\\"\u003E(\u003Cspan class=\\\"hljs-params\\\"\u003E{code}\u003C\u002Fspan\u003E) =&gt;\u003C\u002Fspan\u003E {\\n            \u003Cspan class=\\\"hljs-keyword\\\"\u003Eif\u003C\u002Fspan\u003E(code === \u003Cspan class=\\\"hljs-number\\\"\u003E0\u003C\u002Fspan\u003E){\\n                goNotificationSettings()\\n            }\\n        })\\n    }\\n}\\n\u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 跳转消息通知设置界面\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eexport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E goNotificationSettings = \u003Cspan class=\\\"hljs-function\\\"\u003E() =&gt;\u003C\u002Fspan\u003E {\\n    uni.showModal({\\n        \u003Cspan class=\\\"hljs-attr\\\"\u003Econtent\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;检测到您未打开消息通知，开启后第一时间可收到消息推送&#x27;\u003C\u002Fspan\u003E,\\n        \u003Cspan class=\\\"hljs-attr\\\"\u003EcancelText\u003C\u002Fspan\u003E:\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;稍后开启&#x27;\u003C\u002Fspan\u003E,\\n        \u003Cspan class=\\\"hljs-attr\\\"\u003EconfirmText\u003C\u002Fspan\u003E:\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;去开启&#x27;\u003C\u002Fspan\u003E,\\n        \u003Cspan class=\\\"hljs-attr\\\"\u003Esuccess\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Efunction\u003C\u002Fspan\u003E (\u003Cspan class=\\\"hljs-params\\\"\u003Eres\u003C\u002Fspan\u003E) \u003C\u002Fspan\u003E{\\n            storage.set(CLOSE_NOTIFICATION_TIPS,\u003Cspan class=\\\"hljs-literal\\\"\u003Etrue\u003C\u002Fspan\u003E)\\n            \u003Cspan class=\\\"hljs-keyword\\\"\u003Eif\u003C\u002Fspan\u003E (res.confirm) {\\n                \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E jv = uni.requireNativePlugin(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;JG-JPush&#x27;\u003C\u002Fspan\u003E)\\n                jv.openSettingsForNotification()\\n            }\\n        }\\n    })\\n}\\n\u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 设置应用消息量角标\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eexport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E setBadge = \u003Cspan class=\\\"hljs-function\\\"\u003E(\u003Cspan class=\\\"hljs-params\\\"\u003Ebadge,isSyncData = \u003Cspan class=\\\"hljs-literal\\\"\u003Etrue\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E) =&gt;\u003C\u002Fspan\u003E {\\n    \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F #ifdef APP-PLUS\u003C\u002Fspan\u003E\\n    plus.runtime.setBadgeNumber(badge)\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E jv = uni.requireNativePlugin(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;JG-JPush&#x27;\u003C\u002Fspan\u003E)\\n    jv.setBadge(badge)\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Eif\u003C\u002Fspan\u003E(isSyncData){\\n        \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E userinfo = storage.get(USER_INFO)\\n        storage.set(\u003Cspan class=\\\"hljs-string\\\"\u003E`\u003Cspan class=\\\"hljs-subst\\\"\u003E${MESSAGE_TOTAL}\u003C\u002Fspan\u003E_\u003Cspan class=\\\"hljs-subst\\\"\u003E${userinfo?.id}\u003C\u002Fspan\u003E`\u003C\u002Fspan\u003E,badge)\\n        store.commit(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;updateMessageTotal&#x27;\u003C\u002Fspan\u003E,badge)\\n    }\\n    \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F #endif\u003C\u002Fspan\u003E\\n    unAppToast()\\n}\\n\u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 设置别名\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eexport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E setAlias = \u003Cspan class=\\\"hljs-function\\\"\u003E(\u003Cspan class=\\\"hljs-params\\\"\u003Ealias\u003C\u002Fspan\u003E) =&gt;\u003C\u002Fspan\u003E {\\n    \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F #ifdef APP-PLUS\u003C\u002Fspan\u003E\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E jv = uni.requireNativePlugin(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;JG-JPush&#x27;\u003C\u002Fspan\u003E)\\n    \u003Cspan class=\\\"hljs-built_in\\\"\u003Econsole\u003C\u002Fspan\u003E.log(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;alias&#x27;\u003C\u002Fspan\u003E,alias)\\n    jv.setAlias({ alias })\\n    \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F #endif\u003C\u002Fspan\u003E\\n    unAppToast()\\n}\\n\u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 删除别名\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eexport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E removeAlias = \u003Cspan class=\\\"hljs-function\\\"\u003E() =&gt;\u003C\u002Fspan\u003E {\\n    \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F #ifdef APP-PLUS\u003C\u002Fspan\u003E\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E jv = uni.requireNativePlugin(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;JG-JPush&#x27;\u003C\u002Fspan\u003E)\\n    jv.deleteAlias({})\\n    \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F #endif\u003C\u002Fspan\u003E\\n    unAppToast()\\n}\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\"}"}</script>
 </div>
 	</body>
 </html>
