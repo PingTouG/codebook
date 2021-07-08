@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" content="#333333" />
+		<link rel="stylesheet" href="/assets/styles/global.css" />
+		<title>Uniapp预览pdf文件</title>
+
+		
+
+		<link rel="modulepreload" href="/./_app/start-bf43ee66.js">
+		<link rel="modulepreload" href="/./_app/chunks/vendor-d00531f1.js">
+		<link rel="modulepreload" href="/./_app/pages/__layout.svelte-2c475058.js">
+		<link rel="modulepreload" href="/./_app/pages/article/__layout.svelte-42f46e6c.js">
+		<link rel="modulepreload" href="/./_app/pages/article/[category]/[id].svelte-f684a407.js">
+		<link rel="modulepreload" href="/./_app/chunks/utils-a81d5505.js">
+		<link rel="stylesheet" href="/./_app/assets/start-a8cd1609.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/__layout.svelte-dfbf40bb.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/article/__layout.svelte-1448dd73.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/article/[category]/[id].svelte-7f79f039.css">
+
+		<script type="module">
+			import { start } from "/./_app/start-bf43ee66.js";
+			start({
+				target: document.querySelector("#svelte"),
+				paths: {"base":"","assets":"/."},
+				session: {},
+				host: location.host,
+				route: true,
+				spa: false,
+				trailing_slash: "never",
+				hydrate: {
+					status: 200,
+					error: null,
+					nodes: [
+						import("/./_app/pages/__layout.svelte-2c475058.js"),
+						import("/./_app/pages/article/__layout.svelte-42f46e6c.js"),
+						import("/./_app/pages/article/[category]/[id].svelte-f684a407.js")
+					],
+					page: {
+						host: location.host, // TODO this is redundant
+						path: "/article/uniapp/20210708113335",
+						query: new URLSearchParams(""),
+						params: {"category":"uniapp","id":"20210708113335"}
+					}
+				}
+			});
+		</script>
+	</head>
+	<body>
+		<div id="svelte">
+
+
+
+<section class="svelte-jbk32v"><header class="svelte-jbk32v"><a href="/"><img class="logo svelte-jbk32v" src="/assets/images/logo.png" alt="code book logo"></a>
+<a class="github svelte-jbk32v" href="https://github.com/PingTouG" target="_blank"><i class="iconfont icon-github svelte-jbk32v"></i></a></header>
+	<main><section><main class="svelte-1fbldbu">
+
+<section class="md"><h1 class="title">Uniapp预览pdf文件</h1>
+  <div class="info svelte-1vg5uky"><div class="author svelte-1vg5uky">作者：PingTouG</div>
+    <div class="time">时间：2021-07-08 11:34:01</div></div>
+
+  <div class="md-content"><p>在IOS下其实很简单，为了兼容<code>Android</code>的话需要使用<code>pdf.js</code></p>
+<h2 id="下载pdfjs">下载pdf.js</h2>
+<p>我将文件放到了<code>github</code>上，需要的请自行下载<a href="https://github.com/PingTouG/uniapp-pdf.js">uniapp-pdf.js</a>，下载成功之后将<code>hybrid</code>目录复制到项目目录的<code>static</code>下即可</p>
+<h2 id="开发预览页">开发预览页</h2>
+<p>为了更好的效果，此页面使用<code>nvue</code>开发</p>
+<p><code>file-preview.vue</code></p>
+<pre><code class="language-vue"><span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">template</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">view</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">view</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;header&quot;</span> <span class="hljs-attr">:style</span>=<span class="hljs-string">&quot;{width: `${windowWidth}px`}&quot;</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">view</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;navbar&quot;</span> <span class="hljs-attr">:style</span>=<span class="hljs-string">&quot;{width: `${windowWidth}px`,marginTop: `${statusBarHeight}px`}&quot;</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">image</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;navbar__back&quot;</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;../../static/images/arrow-left.png&quot;</span> <span class="hljs-attr">mode</span>=<span class="hljs-string">&quot;aspectFill&quot;</span> @<span class="hljs-attr">click</span>=<span class="hljs-string">&quot;onBack&quot;</span>/&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">view</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;navbar__title&quot;</span>&gt;</span>
+                    <span class="hljs-tag">&lt;<span class="hljs-name">text</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;navbar__title-text&quot;</span>&gt;</span></span><span class="hljs-template-variable">{{<span class="hljs-name">title</span>}}</span><span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">text</span>&gt;</span>
+                <span class="hljs-tag">&lt;/<span class="hljs-name">view</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">image</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;navbar__right&quot;</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;../../static/images/download.png&quot;</span> <span class="hljs-attr">mode</span>=<span class="hljs-string">&quot;aspectFill&quot;</span> @<span class="hljs-attr">click</span>=<span class="hljs-string">&quot;downloadFile(url)&quot;</span> /&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">view</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">view</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">web-view</span> <span class="hljs-attr">:webview-styles</span>=<span class="hljs-string">&quot;webviewStyles&quot;</span> <span class="hljs-attr">:style</span>=<span class="hljs-string">&quot;{marginTop: `${statusBarHeight + 44}px`,height: `${windowHeight}px`}&quot;</span> <span class="hljs-attr">:src</span>=<span class="hljs-string">&quot;fullUrl&quot;</span> /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">view</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+    <span class="hljs-keyword">import</span> { downloadFile, isAndroid } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@/utils/tools&#x27;</span>
+    
+    <span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> {
+        <span class="hljs-function"><span class="hljs-title">data</span>(<span class="hljs-params"></span>)</span>{
+            <span class="hljs-keyword">return</span> {
+                <span class="hljs-attr">url</span>:<span class="hljs-string">&#x27;&#x27;</span>,
+                <span class="hljs-attr">fullUrl</span>:<span class="hljs-string">&#x27;&#x27;</span>,
+                <span class="hljs-attr">title</span>:<span class="hljs-string">&#x27;&#x27;</span>,
+                <span class="hljs-attr">statusBarHeight</span>:<span class="hljs-number">0</span>,
+                <span class="hljs-attr">windowHeight</span>:<span class="hljs-number">0</span>,
+                <span class="hljs-attr">windowWidth</span>:<span class="hljs-number">0</span>,
+            }
+        },
+        <span class="hljs-attr">computed</span>:{
+            <span class="hljs-function"><span class="hljs-title">webviewStyles</span>(<span class="hljs-params"></span>)</span>{
+                <span class="hljs-keyword">return</span>  { <span class="hljs-attr">progress</span>: { <span class="hljs-attr">color</span>: <span class="hljs-string">&#x27;#3C75FF&#x27;</span> } }
+            },
+            <span class="hljs-function"><span class="hljs-title">viewerUrl</span>(<span class="hljs-params"></span>)</span>{
+                <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;../../static/hybrid/html/web/viewer.html&#x27;</span>
+            }
+        },
+        <span class="hljs-function"><span class="hljs-title">onLoad</span>(<span class="hljs-params">{url,title}</span>)</span> {
+            <span class="hljs-keyword">let</span> fileUrl = url
+            <span class="hljs-keyword">if</span>(isAndroid){
+                fileUrl = <span class="hljs-string">`<span class="hljs-subst">${<span class="hljs-built_in">this</span>.viewerUrl}</span>?file=<span class="hljs-subst">${<span class="hljs-built_in">encodeURIComponent</span>(url)}</span>`</span>
+            }
+            <span class="hljs-built_in">this</span>.fullUrl = fileUrl
+            <span class="hljs-built_in">this</span>.url = url
+            <span class="hljs-built_in">this</span>.title = title ?? <span class="hljs-string">&#x27;文件预览&#x27;</span>
+            <span class="hljs-keyword">const</span> {windowHeight, statusBarHeight, windowWidth} = uni.getSystemInfoSync()
+            <span class="hljs-built_in">this</span>.windowHeight = windowHeight - statusBarHeight
+            <span class="hljs-built_in">this</span>.statusBarHeight = statusBarHeight
+            <span class="hljs-built_in">this</span>.windowWidth = windowWidth
+        },
+        <span class="hljs-attr">methods</span>:{
+            <span class="hljs-function"><span class="hljs-title">onBack</span>(<span class="hljs-params"></span>)</span>{
+                uni.navigateBack()
+            },
+            downloadFile
+        }
+    }
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">style</span> <span class="hljs-attr">scoped</span>&gt;</span><span class="css">
+<span class="hljs-selector-class">.header</span>{
+    <span class="hljs-attribute">background-color</span>: <span class="hljs-number">#FFFFFF</span>;
+    <span class="hljs-attribute">position</span>: fixed;
+}
+<span class="hljs-selector-class">.navbar</span>{
+    <span class="hljs-attribute">height</span>: <span class="hljs-number">82</span>rpx;
+    <span class="hljs-attribute">padding</span>: <span class="hljs-number">0</span> <span class="hljs-number">24</span>rpx;
+    <span class="hljs-attribute">flex-direction</span>: row;
+    <span class="hljs-attribute">align-items</span>: center;
+    <span class="hljs-attribute">justify-content</span>: space-between;
+}
+<span class="hljs-selector-class">.navbar__back</span>{
+    <span class="hljs-attribute">height</span>: <span class="hljs-number">44</span>rpx;
+    <span class="hljs-attribute">width</span>: <span class="hljs-number">44</span>rpx;
+}
+<span class="hljs-selector-class">.navbar__right</span>{
+    <span class="hljs-attribute">height</span>: <span class="hljs-number">56</span>rpx;
+    <span class="hljs-attribute">width</span>: <span class="hljs-number">56</span>rpx;
+}
+<span class="hljs-selector-class">.navbar__title</span>{
+    <span class="hljs-attribute">margin</span>: <span class="hljs-number">0</span> <span class="hljs-number">24</span>rpx;
+    <span class="hljs-attribute">width</span>: <span class="hljs-number">80%</span>;
+}
+<span class="hljs-selector-class">.navbar__title-text</span>{
+    <span class="hljs-attribute">width</span>: <span class="hljs-number">100%</span>;
+    <span class="hljs-comment">/* #ifdef APP-PLUS-NVUE */</span>
+    lines:<span class="hljs-number">1</span>;
+    <span class="hljs-comment">/* #endif */</span>
+    <span class="hljs-comment">/* #ifdef H5 */</span>
+    <span class="hljs-attribute">white-space</span>: nowrap;
+    <span class="hljs-comment">/* #endif */</span>
+    <span class="hljs-attribute">overflow</span>: hidden;
+    <span class="hljs-attribute">text-overflow</span>: ellipsis;
+    <span class="hljs-attribute">text-align</span>: center;
+}
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span></span>
+</code></pre>
+<p>其中<code>viewerUrl</code>是对应存放的<code>hybrid</code>目录的地址，在复制代码之后请自行调整正确的路径</p>
+<h2 id="配置预览页">配置预览页</h2>
+<p>将预览页配置到<code>pages.json</code>，因为需要提供下载功能所以此处使用了自定义标题栏</p>
+<pre><code class="language-json">{
+    <span class="hljs-attr">&quot;path&quot;</span> : <span class="hljs-string">&quot;pages/file-preview/index&quot;</span>,
+    <span class="hljs-attr">&quot;style&quot;</span> :                                                                                    
+    {
+        <span class="hljs-attr">&quot;navigationBarTitleText&quot;</span>: <span class="hljs-string">&quot;文件预览&quot;</span>,
+        <span class="hljs-attr">&quot;navigationStyle&quot;</span>:<span class="hljs-string">&quot;custom&quot;</span>
+    }
+    
+}
+</code></pre>
+<h2 id="跳转预览页">跳转预览页</h2>
+<pre><code class="language-js">uni.navigate<span class="hljs-constructor">To({ <span class="hljs-params">url</span>: `<span class="hljs-operator">/</span><span class="hljs-params">pages</span><span class="hljs-operator">/</span><span class="hljs-params">file</span>-<span class="hljs-params">preview</span><span class="hljs-operator">/</span><span class="hljs-params">index</span>?<span class="hljs-params">url</span>=${<span class="hljs-params">url</span>}&amp;<span class="hljs-params">title</span>=${<span class="hljs-params">title</span>}` })</span>
+</code></pre>
+<ul>
+<li><code>url</code>：pdf文件的地址</li>
+<li><code>title</code>：标题</li>
+</ul>
+</div>
+</section></main>
+</section></main>
+	
+<div class="back-top svelte-9c9s8u" style="bottom: 5rem;right: 0.625rem;display: none"><i class="iconfont icon-back-top"></i>
+</div>
+</section>
+
+
+
+	<script type="svelte-data" url="20210708113335.json">{"status":200,"statusText":"","headers":{"content-type":"text/plain;charset=UTF-8"},"body":"{\"title\":\"Uniapp预览pdf文件\",\"slug\":\"uniapp pdf\",\"time\":\"2021-07-08T11:34:01.000Z\",\"author\":\"PingTouG\",\"html\":\"\u003Cp\u003E在IOS下其实很简单，为了兼容\u003Ccode\u003EAndroid\u003C\u002Fcode\u003E的话需要使用\u003Ccode\u003Epdf.js\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003Ch2 id=\\\"下载pdfjs\\\"\u003E下载pdf.js\u003C\u002Fh2\u003E\\n\u003Cp\u003E我将文件放到了\u003Ccode\u003Egithub\u003C\u002Fcode\u003E上，需要的请自行下载\u003Ca href=\\\"https:\u002F\u002Fgithub.com\u002FPingTouG\u002Funiapp-pdf.js\\\"\u003Euniapp-pdf.js\u003C\u002Fa\u003E，下载成功之后将\u003Ccode\u003Ehybrid\u003C\u002Fcode\u003E目录复制到项目目录的\u003Ccode\u003Estatic\u003C\u002Fcode\u003E下即可\u003C\u002Fp\u003E\\n\u003Ch2 id=\\\"开发预览页\\\"\u003E开发预览页\u003C\u002Fh2\u003E\\n\u003Cp\u003E为了更好的效果，此页面使用\u003Ccode\u003Envue\u003C\u002Fcode\u003E开发\u003C\u002Fp\u003E\\n\u003Cp\u003E\u003Ccode\u003Efile-preview.vue\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-vue\\\"\u003E\u003Cspan class=\\\"xml\\\"\u003E\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Etemplate\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n    \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Eview\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n        \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Eview\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003Eclass\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E&quot;header&quot;\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003E:style\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E&quot;{width: `${windowWidth}px`}&quot;\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n            \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Eview\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003Eclass\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E&quot;navbar&quot;\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003E:style\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E&quot;{width: `${windowWidth}px`,marginTop: `${statusBarHeight}px`}&quot;\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n                \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Eimage\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003Eclass\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E&quot;navbar__back&quot;\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003Esrc\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E&quot;..\u002F..\u002Fstatic\u002Fimages\u002Farrow-left.png&quot;\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003Emode\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E&quot;aspectFill&quot;\u003C\u002Fspan\u003E @\u003Cspan class=\\\"hljs-attr\\\"\u003Eclick\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E&quot;onBack&quot;\u003C\u002Fspan\u003E\u002F&gt;\u003C\u002Fspan\u003E\\n                \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Eview\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003Eclass\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E&quot;navbar__title&quot;\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n                    \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Etext\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003Eclass\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E&quot;navbar__title-text&quot;\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E\u003Cspan class=\\\"hljs-template-variable\\\"\u003E{{\u003Cspan class=\\\"hljs-name\\\"\u003Etitle\u003C\u002Fspan\u003E}}\u003C\u002Fspan\u003E\u003Cspan class=\\\"xml\\\"\u003E\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Etext\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n                \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Eview\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n                \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Eimage\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003Eclass\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E&quot;navbar__right&quot;\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003Esrc\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E&quot;..\u002F..\u002Fstatic\u002Fimages\u002Fdownload.png&quot;\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003Emode\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E&quot;aspectFill&quot;\u003C\u002Fspan\u003E @\u003Cspan class=\\\"hljs-attr\\\"\u003Eclick\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E&quot;downloadFile(url)&quot;\u003C\u002Fspan\u003E \u002F&gt;\u003C\u002Fspan\u003E\\n            \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Eview\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n        \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Eview\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n        \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Eweb-view\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003E:webview-styles\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E&quot;webviewStyles&quot;\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003E:style\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E&quot;{marginTop: `${statusBarHeight + 44}px`,height: `${windowHeight}px`}&quot;\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003E:src\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E&quot;fullUrl&quot;\u003C\u002Fspan\u003E \u002F&gt;\u003C\u002Fspan\u003E\\n    \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Eview\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Etemplate\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n\\n\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Escript\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\u003Cspan class=\\\"javascript\\\"\u003E\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E { downloadFile, isAndroid } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;@\u002Futils\u002Ftools&#x27;\u003C\u002Fspan\u003E\\n    \\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Eexport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Edefault\u003C\u002Fspan\u003E {\\n        \u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-title\\\"\u003Edata\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-params\\\"\u003E\u003C\u002Fspan\u003E)\u003C\u002Fspan\u003E{\\n            \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E {\\n                \u003Cspan class=\\\"hljs-attr\\\"\u003Eurl\u003C\u002Fspan\u003E:\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;&#x27;\u003C\u002Fspan\u003E,\\n                \u003Cspan class=\\\"hljs-attr\\\"\u003EfullUrl\u003C\u002Fspan\u003E:\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;&#x27;\u003C\u002Fspan\u003E,\\n                \u003Cspan class=\\\"hljs-attr\\\"\u003Etitle\u003C\u002Fspan\u003E:\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;&#x27;\u003C\u002Fspan\u003E,\\n                \u003Cspan class=\\\"hljs-attr\\\"\u003EstatusBarHeight\u003C\u002Fspan\u003E:\u003Cspan class=\\\"hljs-number\\\"\u003E0\u003C\u002Fspan\u003E,\\n                \u003Cspan class=\\\"hljs-attr\\\"\u003EwindowHeight\u003C\u002Fspan\u003E:\u003Cspan class=\\\"hljs-number\\\"\u003E0\u003C\u002Fspan\u003E,\\n                \u003Cspan class=\\\"hljs-attr\\\"\u003EwindowWidth\u003C\u002Fspan\u003E:\u003Cspan class=\\\"hljs-number\\\"\u003E0\u003C\u002Fspan\u003E,\\n            }\\n        },\\n        \u003Cspan class=\\\"hljs-attr\\\"\u003Ecomputed\u003C\u002Fspan\u003E:{\\n            \u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-title\\\"\u003EwebviewStyles\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-params\\\"\u003E\u003C\u002Fspan\u003E)\u003C\u002Fspan\u003E{\\n                \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E  { \u003Cspan class=\\\"hljs-attr\\\"\u003Eprogress\u003C\u002Fspan\u003E: { \u003Cspan class=\\\"hljs-attr\\\"\u003Ecolor\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;#3C75FF&#x27;\u003C\u002Fspan\u003E } }\\n            },\\n            \u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-title\\\"\u003EviewerUrl\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-params\\\"\u003E\u003C\u002Fspan\u003E)\u003C\u002Fspan\u003E{\\n                \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;..\u002F..\u002Fstatic\u002Fhybrid\u002Fhtml\u002Fweb\u002Fviewer.html&#x27;\u003C\u002Fspan\u003E\\n            }\\n        },\\n        \u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-title\\\"\u003EonLoad\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-params\\\"\u003E{url,title}\u003C\u002Fspan\u003E)\u003C\u002Fspan\u003E {\\n            \u003Cspan class=\\\"hljs-keyword\\\"\u003Elet\u003C\u002Fspan\u003E fileUrl = url\\n            \u003Cspan class=\\\"hljs-keyword\\\"\u003Eif\u003C\u002Fspan\u003E(isAndroid){\\n                fileUrl = \u003Cspan class=\\\"hljs-string\\\"\u003E`\u003Cspan class=\\\"hljs-subst\\\"\u003E${\u003Cspan class=\\\"hljs-built_in\\\"\u003Ethis\u003C\u002Fspan\u003E.viewerUrl}\u003C\u002Fspan\u003E?file=\u003Cspan class=\\\"hljs-subst\\\"\u003E${\u003Cspan class=\\\"hljs-built_in\\\"\u003EencodeURIComponent\u003C\u002Fspan\u003E(url)}\u003C\u002Fspan\u003E`\u003C\u002Fspan\u003E\\n            }\\n            \u003Cspan class=\\\"hljs-built_in\\\"\u003Ethis\u003C\u002Fspan\u003E.fullUrl = fileUrl\\n            \u003Cspan class=\\\"hljs-built_in\\\"\u003Ethis\u003C\u002Fspan\u003E.url = url\\n            \u003Cspan class=\\\"hljs-built_in\\\"\u003Ethis\u003C\u002Fspan\u003E.title = title ?? \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;文件预览&#x27;\u003C\u002Fspan\u003E\\n            \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E {windowHeight, statusBarHeight, windowWidth} = uni.getSystemInfoSync()\\n            \u003Cspan class=\\\"hljs-built_in\\\"\u003Ethis\u003C\u002Fspan\u003E.windowHeight = windowHeight - statusBarHeight\\n            \u003Cspan class=\\\"hljs-built_in\\\"\u003Ethis\u003C\u002Fspan\u003E.statusBarHeight = statusBarHeight\\n            \u003Cspan class=\\\"hljs-built_in\\\"\u003Ethis\u003C\u002Fspan\u003E.windowWidth = windowWidth\\n        },\\n        \u003Cspan class=\\\"hljs-attr\\\"\u003Emethods\u003C\u002Fspan\u003E:{\\n            \u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-title\\\"\u003EonBack\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-params\\\"\u003E\u003C\u002Fspan\u003E)\u003C\u002Fspan\u003E{\\n                uni.navigateBack()\\n            },\\n            downloadFile\\n        }\\n    }\\n\u003C\u002Fspan\u003E\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Escript\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n\\n\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Estyle\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003Escoped\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\u003Cspan class=\\\"css\\\"\u003E\\n\u003Cspan class=\\\"hljs-selector-class\\\"\u003E.header\u003C\u002Fspan\u003E{\\n    \u003Cspan class=\\\"hljs-attribute\\\"\u003Ebackground-color\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-number\\\"\u003E#FFFFFF\u003C\u002Fspan\u003E;\\n    \u003Cspan class=\\\"hljs-attribute\\\"\u003Eposition\u003C\u002Fspan\u003E: fixed;\\n}\\n\u003Cspan class=\\\"hljs-selector-class\\\"\u003E.navbar\u003C\u002Fspan\u003E{\\n    \u003Cspan class=\\\"hljs-attribute\\\"\u003Eheight\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-number\\\"\u003E82\u003C\u002Fspan\u003Erpx;\\n    \u003Cspan class=\\\"hljs-attribute\\\"\u003Epadding\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-number\\\"\u003E0\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-number\\\"\u003E24\u003C\u002Fspan\u003Erpx;\\n    \u003Cspan class=\\\"hljs-attribute\\\"\u003Eflex-direction\u003C\u002Fspan\u003E: row;\\n    \u003Cspan class=\\\"hljs-attribute\\\"\u003Ealign-items\u003C\u002Fspan\u003E: center;\\n    \u003Cspan class=\\\"hljs-attribute\\\"\u003Ejustify-content\u003C\u002Fspan\u003E: space-between;\\n}\\n\u003Cspan class=\\\"hljs-selector-class\\\"\u003E.navbar__back\u003C\u002Fspan\u003E{\\n    \u003Cspan class=\\\"hljs-attribute\\\"\u003Eheight\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-number\\\"\u003E44\u003C\u002Fspan\u003Erpx;\\n    \u003Cspan class=\\\"hljs-attribute\\\"\u003Ewidth\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-number\\\"\u003E44\u003C\u002Fspan\u003Erpx;\\n}\\n\u003Cspan class=\\\"hljs-selector-class\\\"\u003E.navbar__right\u003C\u002Fspan\u003E{\\n    \u003Cspan class=\\\"hljs-attribute\\\"\u003Eheight\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-number\\\"\u003E56\u003C\u002Fspan\u003Erpx;\\n    \u003Cspan class=\\\"hljs-attribute\\\"\u003Ewidth\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-number\\\"\u003E56\u003C\u002Fspan\u003Erpx;\\n}\\n\u003Cspan class=\\\"hljs-selector-class\\\"\u003E.navbar__title\u003C\u002Fspan\u003E{\\n    \u003Cspan class=\\\"hljs-attribute\\\"\u003Emargin\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-number\\\"\u003E0\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-number\\\"\u003E24\u003C\u002Fspan\u003Erpx;\\n    \u003Cspan class=\\\"hljs-attribute\\\"\u003Ewidth\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-number\\\"\u003E80%\u003C\u002Fspan\u003E;\\n}\\n\u003Cspan class=\\\"hljs-selector-class\\\"\u003E.navbar__title-text\u003C\u002Fspan\u003E{\\n    \u003Cspan class=\\\"hljs-attribute\\\"\u003Ewidth\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-number\\\"\u003E100%\u003C\u002Fspan\u003E;\\n    \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F* #ifdef APP-PLUS-NVUE *\u002F\u003C\u002Fspan\u003E\\n    lines:\u003Cspan class=\\\"hljs-number\\\"\u003E1\u003C\u002Fspan\u003E;\\n    \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F* #endif *\u002F\u003C\u002Fspan\u003E\\n    \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F* #ifdef H5 *\u002F\u003C\u002Fspan\u003E\\n    \u003Cspan class=\\\"hljs-attribute\\\"\u003Ewhite-space\u003C\u002Fspan\u003E: nowrap;\\n    \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F* #endif *\u002F\u003C\u002Fspan\u003E\\n    \u003Cspan class=\\\"hljs-attribute\\\"\u003Eoverflow\u003C\u002Fspan\u003E: hidden;\\n    \u003Cspan class=\\\"hljs-attribute\\\"\u003Etext-overflow\u003C\u002Fspan\u003E: ellipsis;\\n    \u003Cspan class=\\\"hljs-attribute\\\"\u003Etext-align\u003C\u002Fspan\u003E: center;\\n}\\n\u003C\u002Fspan\u003E\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Estyle\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cp\u003E其中\u003Ccode\u003EviewerUrl\u003C\u002Fcode\u003E是对应存放的\u003Ccode\u003Ehybrid\u003C\u002Fcode\u003E目录的地址，在复制代码之后请自行调整正确的路径\u003C\u002Fp\u003E\\n\u003Ch2 id=\\\"配置预览页\\\"\u003E配置预览页\u003C\u002Fh2\u003E\\n\u003Cp\u003E将预览页配置到\u003Ccode\u003Epages.json\u003C\u002Fcode\u003E，因为需要提供下载功能所以此处使用了自定义标题栏\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-json\\\"\u003E{\\n    \u003Cspan class=\\\"hljs-attr\\\"\u003E&quot;path&quot;\u003C\u002Fspan\u003E : \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;pages\u002Ffile-preview\u002Findex&quot;\u003C\u002Fspan\u003E,\\n    \u003Cspan class=\\\"hljs-attr\\\"\u003E&quot;style&quot;\u003C\u002Fspan\u003E :                                                                                    \\n    {\\n        \u003Cspan class=\\\"hljs-attr\\\"\u003E&quot;navigationBarTitleText&quot;\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;文件预览&quot;\u003C\u002Fspan\u003E,\\n        \u003Cspan class=\\\"hljs-attr\\\"\u003E&quot;navigationStyle&quot;\u003C\u002Fspan\u003E:\u003Cspan class=\\\"hljs-string\\\"\u003E&quot;custom&quot;\u003C\u002Fspan\u003E\\n    }\\n    \\n}\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch2 id=\\\"跳转预览页\\\"\u003E跳转预览页\u003C\u002Fh2\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-js\\\"\u003Euni.navigate\u003Cspan class=\\\"hljs-constructor\\\"\u003ETo({ \u003Cspan class=\\\"hljs-params\\\"\u003Eurl\u003C\u002Fspan\u003E: `\u003Cspan class=\\\"hljs-operator\\\"\u003E\u002F\u003C\u002Fspan\u003E\u003Cspan class=\\\"hljs-params\\\"\u003Epages\u003C\u002Fspan\u003E\u003Cspan class=\\\"hljs-operator\\\"\u003E\u002F\u003C\u002Fspan\u003E\u003Cspan class=\\\"hljs-params\\\"\u003Efile\u003C\u002Fspan\u003E-\u003Cspan class=\\\"hljs-params\\\"\u003Epreview\u003C\u002Fspan\u003E\u003Cspan class=\\\"hljs-operator\\\"\u003E\u002F\u003C\u002Fspan\u003E\u003Cspan class=\\\"hljs-params\\\"\u003Eindex\u003C\u002Fspan\u003E?\u003Cspan class=\\\"hljs-params\\\"\u003Eurl\u003C\u002Fspan\u003E=${\u003Cspan class=\\\"hljs-params\\\"\u003Eurl\u003C\u002Fspan\u003E}&amp;\u003Cspan class=\\\"hljs-params\\\"\u003Etitle\u003C\u002Fspan\u003E=${\u003Cspan class=\\\"hljs-params\\\"\u003Etitle\u003C\u002Fspan\u003E}` })\u003C\u002Fspan\u003E\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003Eurl\u003C\u002Fcode\u003E：pdf文件的地址\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Etitle\u003C\u002Fcode\u003E：标题\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\"}"}</script>
+</div>
+	</body>
+</html>
