@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" content="#333333" />
+		<link rel="stylesheet" href="/assets/styles/global.css" />
+		<title>Wigets学习之日期时间</title>
+
+		
+
+		<link rel="modulepreload" href="/./_app/start-bf43ee66.js">
+		<link rel="modulepreload" href="/./_app/chunks/vendor-d00531f1.js">
+		<link rel="modulepreload" href="/./_app/pages/__layout.svelte-2c475058.js">
+		<link rel="modulepreload" href="/./_app/pages/article/__layout.svelte-42f46e6c.js">
+		<link rel="modulepreload" href="/./_app/pages/article/[category]/[id].svelte-f684a407.js">
+		<link rel="modulepreload" href="/./_app/chunks/utils-a81d5505.js">
+		<link rel="stylesheet" href="/./_app/assets/start-a8cd1609.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/__layout.svelte-dfbf40bb.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/article/__layout.svelte-1448dd73.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/article/[category]/[id].svelte-7f79f039.css">
+
+		<script type="module">
+			import { start } from "/./_app/start-bf43ee66.js";
+			start({
+				target: document.querySelector("#svelte"),
+				paths: {"base":"","assets":"/."},
+				session: {},
+				host: location.host,
+				route: true,
+				spa: false,
+				trailing_slash: "never",
+				hydrate: {
+					status: 200,
+					error: null,
+					nodes: [
+						import("/./_app/pages/__layout.svelte-2c475058.js"),
+						import("/./_app/pages/article/__layout.svelte-42f46e6c.js"),
+						import("/./_app/pages/article/[category]/[id].svelte-f684a407.js")
+					],
+					page: {
+						host: location.host, // TODO this is redundant
+						path: "/article/flutter/20210712164826",
+						query: new URLSearchParams(""),
+						params: {"category":"flutter","id":"20210712164826"}
+					}
+				}
+			});
+		</script>
+	</head>
+	<body>
+		<div id="svelte">
+
+
+
+<section class="svelte-jbk32v"><header class="svelte-jbk32v"><a href="/"><img class="logo svelte-jbk32v" src="/assets/images/logo.png" alt="code book logo"></a>
+<a class="github svelte-jbk32v" href="https://github.com/PingTouG" target="_blank"><i class="iconfont icon-github svelte-jbk32v"></i></a></header>
+	<main><section><main class="svelte-1fbldbu">
+
+<section class="md"><h1 class="title">Wigets学习之日期时间</h1>
+  <div class="info svelte-1vg5uky"><div class="author svelte-1vg5uky">作者：PingTouG</div>
+    <div class="time">时间：2021-07-12 16:48:47</div></div>
+
+  <div class="md-content"><h2 id="calendardatepicker">CalendarDatePicker</h2>
+<blockquote>
+<p>日期选择器</p>
+</blockquote>
+<ul>
+<li><code>initialDate</code>：初始化日期(必填)</li>
+<li><code>firstDate</code>：可选的最早日期(必填)</li>
+<li><code>lastDate</code>：可选的最晚日期(必填)</li>
+<li><code>onDateChanged</code>：日期改变事件(必填)</li>
+<li><code>currentDate</code>：当前选择日期</li>
+<li><code>onDisplayedMonthChanged</code>：年月改变事件</li>
+<li><code>initialCalendarMode</code>：日期格式，默认为<code>DatePickerMode.day(天选择)</code>，可选值<code>DatePickerMode.year(年选择)</code></li>
+<li><code>selectableDayPredicate</code>：可选择的日期，接收一个当前显示的日期参数，返回<code>true</code>则表示当前日期可选，返回<code>false</code>则当前日期不可选</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-keyword">import</span> <span class="hljs-symbol">&#x27;package</span>:flutter/material.dart&#x27;;
+
+void main() {
+  runApp(<span class="hljs-type">App</span>());
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">App</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatelessWidget</span> </span>{
+  <span class="hljs-meta">@override</span>
+  <span class="hljs-type">Widget</span> build(<span class="hljs-type">BuildContext</span> context) {
+    <span class="hljs-keyword">return</span> <span class="hljs-type">MaterialApp</span>(
+      title: &#x27;日期选择&#x27;,
+      home: <span class="hljs-type">Home</span>(),
+    );
+  }
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Home</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatefulWidget</span> </span>{
+  <span class="hljs-type">Home</span>({<span class="hljs-type">Key</span>? key}) : <span class="hljs-keyword">super</span>(key: key);
+
+  <span class="hljs-meta">@override</span>
+  _HomeState createState() =&gt; _HomeState();
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">_HomeState</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">State&lt;Home&gt;</span> </span>{
+  <span class="hljs-meta">@override</span>
+  <span class="hljs-type">Widget</span> build(<span class="hljs-type">BuildContext</span> context) {
+    <span class="hljs-keyword">return</span> <span class="hljs-type">Scaffold</span>(
+      appBar: <span class="hljs-type">AppBar</span>(
+        title: <span class="hljs-type">Text</span>(&#x27;日期选择&#x27;),
+      ),
+      body: <span class="hljs-type">Column</span>(
+        children: [
+          <span class="hljs-type">CalendarDatePicker</span>(
+            initialDate: <span class="hljs-type">DateTime</span>.now(),
+            firstDate: <span class="hljs-type">DateTime</span>(<span class="hljs-number">1970</span>),
+            lastDate: <span class="hljs-type">DateTime</span>.now(),
+            selectableDayPredicate: (date) {
+              <span class="hljs-keyword">return</span> date != <span class="hljs-type">DateTime</span>(<span class="hljs-number">2021</span>, <span class="hljs-number">7</span>, <span class="hljs-number">1</span>);
+            },
+            onDisplayedMonthChanged: (value) {
+              print(<span class="hljs-symbol">&#x27;onDisplayedMonthChanged</span> $value&#x27;);
+            },
+            onDateChanged: (value) {
+              print(value);
+            },
+          )
+        ],
+      ),
+    );
+  }
+}
+</code></pre>
+<h2 id="yearpicker">YearPicker</h2>
+<blockquote>
+<p>年份选择器</p>
+</blockquote>
+<ul>
+<li><code>firstDate</code>：可选的最早年份(必填)</li>
+<li><code>lastDate</code>：可选的最晚年份(必填)</li>
+<li><code>selectedDate</code>：已选的年份(必填)</li>
+<li><code>onChanged</code>：年份改变事件(必填)</li>
+<li><code>currentDate</code>：当前选择日期</li>
+<li><code>initialDate</code>：初始化日期</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-keyword">import</span> <span class="hljs-symbol">&#x27;package</span>:flutter/material.dart&#x27;;
+
+void main() {
+  runApp(<span class="hljs-type">App</span>());
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">App</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatelessWidget</span> </span>{
+  <span class="hljs-meta">@override</span>
+  <span class="hljs-type">Widget</span> build(<span class="hljs-type">BuildContext</span> context) {
+    <span class="hljs-keyword">return</span> <span class="hljs-type">MaterialApp</span>(
+      title: &#x27;年份选择&#x27;,
+      home: <span class="hljs-type">Home</span>(),
+    );
+  }
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Home</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatefulWidget</span> </span>{
+  <span class="hljs-type">Home</span>({<span class="hljs-type">Key</span>? key}) : <span class="hljs-keyword">super</span>(key: key);
+
+  <span class="hljs-meta">@override</span>
+  _HomeState createState() =&gt; _HomeState();
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">_HomeState</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">State&lt;Home&gt;</span> </span>{
+  <span class="hljs-meta">@override</span>
+  <span class="hljs-type">Widget</span> build(<span class="hljs-type">BuildContext</span> context) {
+    <span class="hljs-keyword">return</span> <span class="hljs-type">Scaffold</span>(
+      appBar: <span class="hljs-type">AppBar</span>(
+        title: <span class="hljs-type">Text</span>(&#x27;年份选择&#x27;),
+      ),
+      body: <span class="hljs-type">Column</span>(
+        children: [
+          <span class="hljs-type">Expanded</span>(
+              child: <span class="hljs-type">YearPicker</span>(
+                  firstDate: <span class="hljs-type">DateTime</span>(<span class="hljs-number">1970</span>),
+                  lastDate: <span class="hljs-type">DateTime</span>.now(),
+                  selectedDate: <span class="hljs-type">DateTime</span>(<span class="hljs-number">2020</span>),
+                  onChanged: (value) {
+                    print(value);
+                  })),
+        ],
+      ),
+    );
+  }
+}
+</code></pre>
+<h2 id="showdatepicker">showDatePicker</h2>
+<blockquote>
+<p>显示日期选择器</p>
+</blockquote>
+<ul>
+<li><code>context</code>：上下文(必填)</li>
+<li><code>initialDate</code>：初始化日期(必填)</li>
+<li><code>firstDate</code>：可选的最早日期(必填)</li>
+<li><code>lastDate</code>：可选的最晚日期(必填)</li>
+<li><code>currentDate</code>：当前选择日期</li>
+<li><code>initialEntryMode</code>：日期面板模式，默认为<code>DatePickerEntryMode.calendar(日期面板)</code>，可选<code>DatePickerEntryMode.input(输入框)</code></li>
+<li><code>selectableDayPredicate</code>：可选择的日期，接收一个当前显示的日期参数，返回<code>true</code>则表示当前日期可选，返回<code>false</code>则当前日期不可选</li>
+<li><code>helpText</code>：顶部标题的文本</li>
+<li><code>cancelText</code>：取消按钮的文本</li>
+<li><code>confirmText</code>：确定按钮的文本</li>
+<li><code>locale</code>：国际化配置</li>
+<li><code>useRootNavigator</code>：是否使用路由，默认为<code>true</code></li>
+<li><code>routeSettings</code>：路由配置</li>
+<li><code>initialDatePickerMode</code>：日期格式，默认为<code>DatePickerMode.day(天选择)</code>，可选值<code>DatePickerMode.year(年选择)</code></li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-keyword">import</span> <span class="hljs-symbol">&#x27;package</span>:flutter/material.dart&#x27;;
+
+void main() {
+  runApp(<span class="hljs-type">App</span>());
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">App</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatelessWidget</span> </span>{
+  <span class="hljs-meta">@override</span>
+  <span class="hljs-type">Widget</span> build(<span class="hljs-type">BuildContext</span> context) {
+    <span class="hljs-keyword">return</span> <span class="hljs-type">MaterialApp</span>(
+      title: &#x27;日期选择&#x27;,
+      home: <span class="hljs-type">Home</span>(),
+    );
+  }
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Home</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatefulWidget</span> </span>{
+  <span class="hljs-type">Home</span>({<span class="hljs-type">Key</span>? key}) : <span class="hljs-keyword">super</span>(key: key);
+
+  <span class="hljs-meta">@override</span>
+  _HomeState createState() =&gt; _HomeState();
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">_HomeState</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">State&lt;Home&gt;</span> </span>{
+  <span class="hljs-meta">@override</span>
+  <span class="hljs-type">Widget</span> build(<span class="hljs-type">BuildContext</span> context) {
+    <span class="hljs-keyword">return</span> <span class="hljs-type">Scaffold</span>(
+      appBar: <span class="hljs-type">AppBar</span>(
+        title: <span class="hljs-type">Text</span>(&#x27;日期选择&#x27;),
+      ),
+      body: <span class="hljs-type">Column</span>(
+        children: [
+          <span class="hljs-type">Row</span>(
+            children: [
+              <span class="hljs-type">Text</span>(&#x27;日期选择：&#x27;),
+              <span class="hljs-type">Expanded</span>(
+                  child: <span class="hljs-type">TextField</span>(
+                readOnly: <span class="hljs-literal">true</span>,
+                decoration: <span class="hljs-type">InputDecoration</span>(hintText: &#x27;请选择日期&#x27;),
+                onTap: () {
+                  showDatePicker(
+                      context: context,
+                      initialDate: <span class="hljs-type">DateTime</span>.now(),
+                      firstDate: <span class="hljs-type">DateTime</span>(<span class="hljs-number">1970</span>),
+                      lastDate: <span class="hljs-type">DateTime</span>.now(),
+                      selectableDayPredicate: (date) {
+                        <span class="hljs-keyword">return</span> date != <span class="hljs-type">DateTime</span>(<span class="hljs-number">2021</span>, <span class="hljs-number">7</span>, <span class="hljs-number">1</span>);
+                      },
+                      helpText: &#x27;请选择一个日期&#x27;,
+                      cancelText: &#x27;取消&#x27;,
+                      confirmText: &#x27;确定&#x27;,
+                      useRootNavigator: <span class="hljs-literal">true</span>,
+                      initialDatePickerMode: <span class="hljs-type">DatePickerMode</span>.day);
+                },
+              ))
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+</code></pre>
+<h2 id="showdaterangepicker">showDateRangePicker</h2>
+<blockquote>
+<p>日期范围选择器</p>
+</blockquote>
+<ul>
+<li><code>context</code>：上下文(必填)</li>
+<li><code>initialDateRange</code>：初始化日期范围</li>
+<li><code>firstDate</code>：可选的最早日期(必填)</li>
+<li><code>lastDate</code>：可选的最晚日期(必填)</li>
+<li><code>currentDate</code>：当前选择日期</li>
+<li><code>initialEntryMode</code>：日期面板模式，默认为<code>DatePickerEntryMode.calendar(日期面板)</code>，可选<code>DatePickerEntryMode.input(输入框)</code></li>
+<li><code>selectableDayPredicate</code>：可选择的日期，接收一个当前显示的日期参数，返回<code>true</code>则表示当前日期可选，返回<code>false</code>则当前日期不可选</li>
+<li><code>helpText</code>：顶部标题的文本</li>
+<li><code>cancelText</code>：<code>DatePickerEntryMode.input</code>模式下取消按钮的文本</li>
+<li><code>confirmText</code>：<code>DatePickerEntryMode.input</code>模式下确定按钮的文本</li>
+<li><code>saveText</code>：<code>DatePickerEntryMode.calendar</code>模式下确定按钮的文本</li>
+<li><code>fieldStartHintText</code>：<code>DatePickerEntryMode.input</code>模式下开始日期的提示文本</li>
+<li><code>fieldEndHintText</code>：<code>DatePickerEntryMode.input</code>模式下结束日期的提示文本</li>
+<li><code>fieldStartLabelText</code>：<code>DatePickerEntryMode.input</code>模式下开始日期<code>label</code>的文本</li>
+<li><code>fieldEndLabelText</code>：<code>DatePickerEntryMode.input</code>模式下结束日期<code>label</code>的文本</li>
+<li><code>locale</code>：国际化配置</li>
+<li><code>useRootNavigator</code>：是否使用路由，默认为<code>true</code></li>
+<li><code>routeSettings</code>：路由配置</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-keyword">import</span> <span class="hljs-symbol">&#x27;package</span>:flutter/material.dart&#x27;;
+
+void main() {
+  runApp(<span class="hljs-type">App</span>());
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">App</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatelessWidget</span> </span>{
+  <span class="hljs-meta">@override</span>
+  <span class="hljs-type">Widget</span> build(<span class="hljs-type">BuildContext</span> context) {
+    <span class="hljs-keyword">return</span> <span class="hljs-type">MaterialApp</span>(
+      title: &#x27;日期范围选择&#x27;,
+      home: <span class="hljs-type">Home</span>(),
+    );
+  }
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Home</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatefulWidget</span> </span>{
+  <span class="hljs-type">Home</span>({<span class="hljs-type">Key</span>? key}) : <span class="hljs-keyword">super</span>(key: key);
+
+  <span class="hljs-meta">@override</span>
+  _HomeState createState() =&gt; _HomeState();
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">_HomeState</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">State&lt;Home&gt;</span> </span>{
+  <span class="hljs-meta">@override</span>
+  <span class="hljs-type">Widget</span> build(<span class="hljs-type">BuildContext</span> context) {
+    <span class="hljs-keyword">return</span> <span class="hljs-type">Scaffold</span>(
+      appBar: <span class="hljs-type">AppBar</span>(
+        title: <span class="hljs-type">Text</span>(&#x27;日期范围选择&#x27;),
+      ),
+      body: <span class="hljs-type">Column</span>(
+        children: [
+          <span class="hljs-type">Row</span>(
+            children: [
+              <span class="hljs-type">Text</span>(&#x27;日期范围选择：&#x27;),
+              <span class="hljs-type">Expanded</span>(
+                  child: <span class="hljs-type">TextField</span>(
+                readOnly: <span class="hljs-literal">true</span>,
+                decoration: <span class="hljs-type">InputDecoration</span>(hintText: &#x27;请选择日期范围&#x27;),
+                onTap: () {
+                  showDateRangePicker(
+                      context: context,
+                      firstDate: <span class="hljs-type">DateTime</span>(<span class="hljs-number">1970</span>),
+                      lastDate: <span class="hljs-type">DateTime</span>.now(),
+                      helpText: &#x27;请选择日期范围&#x27;,
+                      cancelText: &#x27;取消&#x27;,
+                      confirmText: &#x27;确定&#x27;,
+                      saveText: &#x27;确定&#x27;,
+                      fieldStartHintText: &#x27;请输入开始日期&#x27;,
+                      fieldEndHintText: &#x27;请输入结束日期&#x27;,
+                      fieldStartLabelText: &#x27;开始日期&#x27;,
+                      fieldEndLabelText: &#x27;结束日期&#x27;);
+                },
+              ))
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+</code></pre>
+<h2 id="cupertinodatepicker">CupertinoDatePicker</h2>
+<blockquote>
+<p>IOS风格的日期时间选择器</p>
+</blockquote>
+<ul>
+<li><code>onDateTimeChanged</code>：时间改变事件(必填)</li>
+<li><code>mode</code>：显示模式，默认为<code>CupertinoDatePickerMode.dateAndTime(日期时间)</code>，可选：<code>CupertinoDatePickerMode.time(时间)</code>、<code>CupertinoDatePickerMode.date(日期)</code></li>
+<li><code>initialDateTime</code>：初始化日期时间</li>
+<li><code>minimumDate</code>：最小日期</li>
+<li><code>minimumYear</code>：最小年份，默认为<code>1</code></li>
+<li><code>maximumYear</code>：最大年份</li>
+<li><code>minuteInterval</code>：分钟的粒度，必须是60的正整数因子，即一分钟可以分割为<code>60/minuteInterval</code>份，默认为<code>1</code></li>
+<li><code>use24hFormat</code>：是否使用24小时制，默认为<code>false</code></li>
+<li><code>backgroundColor</code>：背景色</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-keyword">import</span> <span class="hljs-symbol">&#x27;package</span>:flutter/cupertino.dart&#x27;;
+<span class="hljs-keyword">import</span> <span class="hljs-symbol">&#x27;package</span>:flutter/material.dart&#x27;;
+
+void main() {
+  runApp(<span class="hljs-type">App</span>());
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">App</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatelessWidget</span> </span>{
+  <span class="hljs-meta">@override</span>
+  <span class="hljs-type">Widget</span> build(<span class="hljs-type">BuildContext</span> context) {
+    <span class="hljs-keyword">return</span> <span class="hljs-type">MaterialApp</span>(
+      title: &#x27;日期时间选择&#x27;,
+      home: <span class="hljs-type">Home</span>(),
+    );
+  }
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Home</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatefulWidget</span> </span>{
+  <span class="hljs-type">Home</span>({<span class="hljs-type">Key</span>? key}) : <span class="hljs-keyword">super</span>(key: key);
+
+  <span class="hljs-meta">@override</span>
+  _HomeState createState() =&gt; _HomeState();
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">_HomeState</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">State&lt;Home&gt;</span> </span>{
+  <span class="hljs-meta">@override</span>
+  <span class="hljs-type">Widget</span> build(<span class="hljs-type">BuildContext</span> context) {
+    <span class="hljs-keyword">return</span> <span class="hljs-type">Scaffold</span>(
+      appBar: <span class="hljs-type">AppBar</span>(
+        title: <span class="hljs-type">Text</span>(&#x27;日期时间选择&#x27;),
+      ),
+      body: <span class="hljs-type">Column</span>(
+        children: [
+          <span class="hljs-type">Expanded</span>(
+              child: <span class="hljs-type">CupertinoDatePicker</span>(
+            onDateTimeChanged: (value) {
+              print(value);
+            },
+            initialDateTime: <span class="hljs-type">DateTime</span>.now(),
+            minimumDate: <span class="hljs-type">DateTime</span>(<span class="hljs-number">2021</span>, <span class="hljs-number">6</span>),
+            use24hFormat: <span class="hljs-literal">true</span>,
+            backgroundColor: <span class="hljs-type">Colors</span>.black38,
+          )),
+        ],
+      ),
+    );
+  }
+}
+</code></pre>
+<h2 id="showtimepicker">showTimePicker</h2>
+<blockquote>
+<p>时间选择器</p>
+</blockquote>
+<ul>
+<li><code>context</code>：上下文(必填)</li>
+<li><code>initialTime</code>：初始化时间</li>
+<li><code>useRootNavigator</code>：是否使用路由，默认为<code>true</code></li>
+<li><code>initialEntryMode</code>：时间面板模式，默认为<code>TimePickerEntryMode.dial(时钟面板)</code>，可选<code>DatePickerEntryMode.input(输入框)</code></li>
+<li><code>helpText</code>：顶部标题的文本</li>
+<li><code>cancelText</code>：取消按钮的文本</li>
+<li><code>confirmText</code>：确定按钮的文本</li>
+<li><code>routeSettings</code>：路由配置</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-keyword">import</span> <span class="hljs-symbol">&#x27;package</span>:flutter/material.dart&#x27;;
+
+void main() {
+  runApp(<span class="hljs-type">App</span>());
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">App</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatelessWidget</span> </span>{
+  <span class="hljs-meta">@override</span>
+  <span class="hljs-type">Widget</span> build(<span class="hljs-type">BuildContext</span> context) {
+    <span class="hljs-keyword">return</span> <span class="hljs-type">MaterialApp</span>(
+      title: &#x27;日期时间选择&#x27;,
+      home: <span class="hljs-type">Home</span>(),
+    );
+  }
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Home</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatefulWidget</span> </span>{
+  <span class="hljs-type">Home</span>({<span class="hljs-type">Key</span>? key}) : <span class="hljs-keyword">super</span>(key: key);
+
+  <span class="hljs-meta">@override</span>
+  _HomeState createState() =&gt; _HomeState();
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">_HomeState</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">State&lt;Home&gt;</span> </span>{
+  <span class="hljs-meta">@override</span>
+  <span class="hljs-type">Widget</span> build(<span class="hljs-type">BuildContext</span> context) {
+    <span class="hljs-keyword">return</span> <span class="hljs-type">Scaffold</span>(
+      appBar: <span class="hljs-type">AppBar</span>(
+        title: <span class="hljs-type">Text</span>(&#x27;日期时间选择&#x27;),
+      ),
+      body: <span class="hljs-type">Column</span>(
+        children: [
+          <span class="hljs-type">Row</span>(
+            children: [
+              <span class="hljs-type">Text</span>(&#x27;时间选择：&#x27;),
+              <span class="hljs-type">Expanded</span>(
+                  child: <span class="hljs-type">TextField</span>(
+                readOnly: <span class="hljs-literal">true</span>,
+                decoration: <span class="hljs-type">InputDecoration</span>(hintText: &#x27;请选择时间&#x27;),
+                onTap: () {
+                  showTimePicker(
+                      context: context,
+                      initialTime: <span class="hljs-type">TimeOfDay</span>.now(),
+                      helpText: &#x27;请选择时间&#x27;,
+                      cancelText: &#x27;取消&#x27;,
+                      confirmText: &#x27;确定&#x27;);
+                },
+              ))
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+</code></pre>
+<h2 id="cupertinotimerpicker">CupertinoTimerPicker</h2>
+<blockquote>
+<p>IOS风格的时间选择器</p>
+</blockquote>
+<ul>
+<li><code>onTimerDurationChanged</code>：时间改变事件(必填)</li>
+<li><code>mode</code>：模式，默认为<code>CupertinoTimerPickerMode.hms(时/分/秒)</code>，可选：<code>CupertinoTimerPickerMode.hm(时/分)</code>、<code>CupertinoTimerPickerMode.ms(分/秒)</code></li>
+<li><code>initialTimerDuration</code>：初始化时间，默认为<code>Duration.zero</code></li>
+<li><code>minuteInterval</code>：分钟的粒度，必须是60的正整数因子，即一分钟可以分割为<code>60/minuteInterval</code>份，默认为<code>1</code></li>
+<li><code>secondInterval</code>：秒的粒度，必须是60的正整数因子，即一分钟可以分割为<code>60/secondInterval</code>份，默认为<code>1</code></li>
+<li><code>alignment</code>：对齐方式，默认为<code>Alignment.center</code></li>
+<li><code>backgroundColor</code>：背景色</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-keyword">import</span> <span class="hljs-symbol">&#x27;package</span>:flutter/cupertino.dart&#x27;;
+<span class="hljs-keyword">import</span> <span class="hljs-symbol">&#x27;package</span>:flutter/material.dart&#x27;;
+
+void main() {
+  runApp(<span class="hljs-type">App</span>());
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">App</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatelessWidget</span> </span>{
+  <span class="hljs-meta">@override</span>
+  <span class="hljs-type">Widget</span> build(<span class="hljs-type">BuildContext</span> context) {
+    <span class="hljs-keyword">return</span> <span class="hljs-type">MaterialApp</span>(
+      title: &#x27;日期时间选择&#x27;,
+      home: <span class="hljs-type">Home</span>(),
+    );
+  }
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Home</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatefulWidget</span> </span>{
+  <span class="hljs-type">Home</span>({<span class="hljs-type">Key</span>? key}) : <span class="hljs-keyword">super</span>(key: key);
+
+  <span class="hljs-meta">@override</span>
+  _HomeState createState() =&gt; _HomeState();
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">_HomeState</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">State&lt;Home&gt;</span> </span>{
+  <span class="hljs-meta">@override</span>
+  <span class="hljs-type">Widget</span> build(<span class="hljs-type">BuildContext</span> context) {
+    <span class="hljs-keyword">return</span> <span class="hljs-type">Scaffold</span>(
+      appBar: <span class="hljs-type">AppBar</span>(
+        title: <span class="hljs-type">Text</span>(&#x27;日期时间选择&#x27;),
+      ),
+      body: <span class="hljs-type">Column</span>(
+        children: [
+          <span class="hljs-type">Expanded</span>(
+              child: <span class="hljs-type">CupertinoTimerPicker</span>(
+            onTimerDurationChanged: (value) {
+              print(value);
+            },
+            initialTimerDuration: <span class="hljs-type">Duration</span>(hours: <span class="hljs-number">12</span>),
+            backgroundColor: <span class="hljs-type">Colors</span>.orange,
+          )),
+        ],
+      ),
+    );
+  }
+}
+</code></pre>
+</div>
+</section></main>
+</section></main>
+	
+<div class="back-top svelte-9c9s8u" style="bottom: 5rem;right: 0.625rem;display: none"><i class="iconfont icon-back-top"></i>
+</div>
+</section>
+
+
+
+	<script type="svelte-data" url="20210712164826.json">{"status":200,"statusText":"","headers":{"content-type":"text/plain;charset=UTF-8"},"body":"{\"title\":\"Wigets学习之日期时间\",\"slug\":\"Flutter Wiget\",\"time\":\"2021-07-12T16:48:47.000Z\",\"author\":\"PingTouG\",\"html\":\"\u003Ch2 id=\\\"calendardatepicker\\\"\u003ECalendarDatePicker\u003C\u002Fh2\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E日期选择器\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003EinitialDate\u003C\u002Fcode\u003E：初始化日期(必填)\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EfirstDate\u003C\u002Fcode\u003E：可选的最早日期(必填)\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003ElastDate\u003C\u002Fcode\u003E：可选的最晚日期(必填)\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EonDateChanged\u003C\u002Fcode\u003E：日期改变事件(必填)\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EcurrentDate\u003C\u002Fcode\u003E：当前选择日期\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EonDisplayedMonthChanged\u003C\u002Fcode\u003E：年月改变事件\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EinitialCalendarMode\u003C\u002Fcode\u003E：日期格式，默认为\u003Ccode\u003EDatePickerMode.day(天选择)\u003C\u002Fcode\u003E，可选值\u003Ccode\u003EDatePickerMode.year(年选择)\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EselectableDayPredicate\u003C\u002Fcode\u003E：可选择的日期，接收一个当前显示的日期参数，返回\u003Ccode\u003Etrue\u003C\u002Fcode\u003E则表示当前日期可选，返回\u003Ccode\u003Efalse\u003C\u002Fcode\u003E则当前日期不可选\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-dart\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;package\u003C\u002Fspan\u003E:flutter\u002Fmaterial.dart&#x27;;\\n\\nvoid main() {\\n  runApp(\u003Cspan class=\\\"hljs-type\\\"\u003EApp\u003C\u002Fspan\u003E());\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EApp\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EStatelessWidget\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EWidget\u003C\u002Fspan\u003E build(\u003Cspan class=\\\"hljs-type\\\"\u003EBuildContext\u003C\u002Fspan\u003E context) {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-type\\\"\u003EMaterialApp\u003C\u002Fspan\u003E(\\n      title: &#x27;日期选择&#x27;,\\n      home: \u003Cspan class=\\\"hljs-type\\\"\u003EHome\u003C\u002Fspan\u003E(),\\n    );\\n  }\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EHome\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EStatefulWidget\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EHome\u003C\u002Fspan\u003E({\u003Cspan class=\\\"hljs-type\\\"\u003EKey\u003C\u002Fspan\u003E? key}) : \u003Cspan class=\\\"hljs-keyword\\\"\u003Esuper\u003C\u002Fspan\u003E(key: key);\\n\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  _HomeState createState() =&gt; _HomeState();\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003E_HomeState\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EState&lt;Home&gt;\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EWidget\u003C\u002Fspan\u003E build(\u003Cspan class=\\\"hljs-type\\\"\u003EBuildContext\u003C\u002Fspan\u003E context) {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-type\\\"\u003EScaffold\u003C\u002Fspan\u003E(\\n      appBar: \u003Cspan class=\\\"hljs-type\\\"\u003EAppBar\u003C\u002Fspan\u003E(\\n        title: \u003Cspan class=\\\"hljs-type\\\"\u003EText\u003C\u002Fspan\u003E(&#x27;日期选择&#x27;),\\n      ),\\n      body: \u003Cspan class=\\\"hljs-type\\\"\u003EColumn\u003C\u002Fspan\u003E(\\n        children: [\\n          \u003Cspan class=\\\"hljs-type\\\"\u003ECalendarDatePicker\u003C\u002Fspan\u003E(\\n            initialDate: \u003Cspan class=\\\"hljs-type\\\"\u003EDateTime\u003C\u002Fspan\u003E.now(),\\n            firstDate: \u003Cspan class=\\\"hljs-type\\\"\u003EDateTime\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-number\\\"\u003E1970\u003C\u002Fspan\u003E),\\n            lastDate: \u003Cspan class=\\\"hljs-type\\\"\u003EDateTime\u003C\u002Fspan\u003E.now(),\\n            selectableDayPredicate: (date) {\\n              \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E date != \u003Cspan class=\\\"hljs-type\\\"\u003EDateTime\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-number\\\"\u003E2021\u003C\u002Fspan\u003E, \u003Cspan class=\\\"hljs-number\\\"\u003E7\u003C\u002Fspan\u003E, \u003Cspan class=\\\"hljs-number\\\"\u003E1\u003C\u002Fspan\u003E);\\n            },\\n            onDisplayedMonthChanged: (value) {\\n              print(\u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;onDisplayedMonthChanged\u003C\u002Fspan\u003E $value&#x27;);\\n            },\\n            onDateChanged: (value) {\\n              print(value);\\n            },\\n          )\\n        ],\\n      ),\\n    );\\n  }\\n}\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch2 id=\\\"yearpicker\\\"\u003EYearPicker\u003C\u002Fh2\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E年份选择器\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003EfirstDate\u003C\u002Fcode\u003E：可选的最早年份(必填)\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003ElastDate\u003C\u002Fcode\u003E：可选的最晚年份(必填)\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EselectedDate\u003C\u002Fcode\u003E：已选的年份(必填)\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EonChanged\u003C\u002Fcode\u003E：年份改变事件(必填)\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EcurrentDate\u003C\u002Fcode\u003E：当前选择日期\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EinitialDate\u003C\u002Fcode\u003E：初始化日期\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-dart\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;package\u003C\u002Fspan\u003E:flutter\u002Fmaterial.dart&#x27;;\\n\\nvoid main() {\\n  runApp(\u003Cspan class=\\\"hljs-type\\\"\u003EApp\u003C\u002Fspan\u003E());\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EApp\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EStatelessWidget\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EWidget\u003C\u002Fspan\u003E build(\u003Cspan class=\\\"hljs-type\\\"\u003EBuildContext\u003C\u002Fspan\u003E context) {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-type\\\"\u003EMaterialApp\u003C\u002Fspan\u003E(\\n      title: &#x27;年份选择&#x27;,\\n      home: \u003Cspan class=\\\"hljs-type\\\"\u003EHome\u003C\u002Fspan\u003E(),\\n    );\\n  }\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EHome\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EStatefulWidget\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EHome\u003C\u002Fspan\u003E({\u003Cspan class=\\\"hljs-type\\\"\u003EKey\u003C\u002Fspan\u003E? key}) : \u003Cspan class=\\\"hljs-keyword\\\"\u003Esuper\u003C\u002Fspan\u003E(key: key);\\n\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  _HomeState createState() =&gt; _HomeState();\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003E_HomeState\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EState&lt;Home&gt;\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EWidget\u003C\u002Fspan\u003E build(\u003Cspan class=\\\"hljs-type\\\"\u003EBuildContext\u003C\u002Fspan\u003E context) {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-type\\\"\u003EScaffold\u003C\u002Fspan\u003E(\\n      appBar: \u003Cspan class=\\\"hljs-type\\\"\u003EAppBar\u003C\u002Fspan\u003E(\\n        title: \u003Cspan class=\\\"hljs-type\\\"\u003EText\u003C\u002Fspan\u003E(&#x27;年份选择&#x27;),\\n      ),\\n      body: \u003Cspan class=\\\"hljs-type\\\"\u003EColumn\u003C\u002Fspan\u003E(\\n        children: [\\n          \u003Cspan class=\\\"hljs-type\\\"\u003EExpanded\u003C\u002Fspan\u003E(\\n              child: \u003Cspan class=\\\"hljs-type\\\"\u003EYearPicker\u003C\u002Fspan\u003E(\\n                  firstDate: \u003Cspan class=\\\"hljs-type\\\"\u003EDateTime\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-number\\\"\u003E1970\u003C\u002Fspan\u003E),\\n                  lastDate: \u003Cspan class=\\\"hljs-type\\\"\u003EDateTime\u003C\u002Fspan\u003E.now(),\\n                  selectedDate: \u003Cspan class=\\\"hljs-type\\\"\u003EDateTime\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-number\\\"\u003E2020\u003C\u002Fspan\u003E),\\n                  onChanged: (value) {\\n                    print(value);\\n                  })),\\n        ],\\n      ),\\n    );\\n  }\\n}\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch2 id=\\\"showdatepicker\\\"\u003EshowDatePicker\u003C\u002Fh2\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E显示日期选择器\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003Econtext\u003C\u002Fcode\u003E：上下文(必填)\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EinitialDate\u003C\u002Fcode\u003E：初始化日期(必填)\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EfirstDate\u003C\u002Fcode\u003E：可选的最早日期(必填)\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003ElastDate\u003C\u002Fcode\u003E：可选的最晚日期(必填)\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EcurrentDate\u003C\u002Fcode\u003E：当前选择日期\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EinitialEntryMode\u003C\u002Fcode\u003E：日期面板模式，默认为\u003Ccode\u003EDatePickerEntryMode.calendar(日期面板)\u003C\u002Fcode\u003E，可选\u003Ccode\u003EDatePickerEntryMode.input(输入框)\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EselectableDayPredicate\u003C\u002Fcode\u003E：可选择的日期，接收一个当前显示的日期参数，返回\u003Ccode\u003Etrue\u003C\u002Fcode\u003E则表示当前日期可选，返回\u003Ccode\u003Efalse\u003C\u002Fcode\u003E则当前日期不可选\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EhelpText\u003C\u002Fcode\u003E：顶部标题的文本\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EcancelText\u003C\u002Fcode\u003E：取消按钮的文本\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EconfirmText\u003C\u002Fcode\u003E：确定按钮的文本\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Elocale\u003C\u002Fcode\u003E：国际化配置\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EuseRootNavigator\u003C\u002Fcode\u003E：是否使用路由，默认为\u003Ccode\u003Etrue\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003ErouteSettings\u003C\u002Fcode\u003E：路由配置\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EinitialDatePickerMode\u003C\u002Fcode\u003E：日期格式，默认为\u003Ccode\u003EDatePickerMode.day(天选择)\u003C\u002Fcode\u003E，可选值\u003Ccode\u003EDatePickerMode.year(年选择)\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-dart\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;package\u003C\u002Fspan\u003E:flutter\u002Fmaterial.dart&#x27;;\\n\\nvoid main() {\\n  runApp(\u003Cspan class=\\\"hljs-type\\\"\u003EApp\u003C\u002Fspan\u003E());\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EApp\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EStatelessWidget\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EWidget\u003C\u002Fspan\u003E build(\u003Cspan class=\\\"hljs-type\\\"\u003EBuildContext\u003C\u002Fspan\u003E context) {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-type\\\"\u003EMaterialApp\u003C\u002Fspan\u003E(\\n      title: &#x27;日期选择&#x27;,\\n      home: \u003Cspan class=\\\"hljs-type\\\"\u003EHome\u003C\u002Fspan\u003E(),\\n    );\\n  }\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EHome\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EStatefulWidget\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EHome\u003C\u002Fspan\u003E({\u003Cspan class=\\\"hljs-type\\\"\u003EKey\u003C\u002Fspan\u003E? key}) : \u003Cspan class=\\\"hljs-keyword\\\"\u003Esuper\u003C\u002Fspan\u003E(key: key);\\n\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  _HomeState createState() =&gt; _HomeState();\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003E_HomeState\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EState&lt;Home&gt;\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EWidget\u003C\u002Fspan\u003E build(\u003Cspan class=\\\"hljs-type\\\"\u003EBuildContext\u003C\u002Fspan\u003E context) {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-type\\\"\u003EScaffold\u003C\u002Fspan\u003E(\\n      appBar: \u003Cspan class=\\\"hljs-type\\\"\u003EAppBar\u003C\u002Fspan\u003E(\\n        title: \u003Cspan class=\\\"hljs-type\\\"\u003EText\u003C\u002Fspan\u003E(&#x27;日期选择&#x27;),\\n      ),\\n      body: \u003Cspan class=\\\"hljs-type\\\"\u003EColumn\u003C\u002Fspan\u003E(\\n        children: [\\n          \u003Cspan class=\\\"hljs-type\\\"\u003ERow\u003C\u002Fspan\u003E(\\n            children: [\\n              \u003Cspan class=\\\"hljs-type\\\"\u003EText\u003C\u002Fspan\u003E(&#x27;日期选择：&#x27;),\\n              \u003Cspan class=\\\"hljs-type\\\"\u003EExpanded\u003C\u002Fspan\u003E(\\n                  child: \u003Cspan class=\\\"hljs-type\\\"\u003ETextField\u003C\u002Fspan\u003E(\\n                readOnly: \u003Cspan class=\\\"hljs-literal\\\"\u003Etrue\u003C\u002Fspan\u003E,\\n                decoration: \u003Cspan class=\\\"hljs-type\\\"\u003EInputDecoration\u003C\u002Fspan\u003E(hintText: &#x27;请选择日期&#x27;),\\n                onTap: () {\\n                  showDatePicker(\\n                      context: context,\\n                      initialDate: \u003Cspan class=\\\"hljs-type\\\"\u003EDateTime\u003C\u002Fspan\u003E.now(),\\n                      firstDate: \u003Cspan class=\\\"hljs-type\\\"\u003EDateTime\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-number\\\"\u003E1970\u003C\u002Fspan\u003E),\\n                      lastDate: \u003Cspan class=\\\"hljs-type\\\"\u003EDateTime\u003C\u002Fspan\u003E.now(),\\n                      selectableDayPredicate: (date) {\\n                        \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E date != \u003Cspan class=\\\"hljs-type\\\"\u003EDateTime\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-number\\\"\u003E2021\u003C\u002Fspan\u003E, \u003Cspan class=\\\"hljs-number\\\"\u003E7\u003C\u002Fspan\u003E, \u003Cspan class=\\\"hljs-number\\\"\u003E1\u003C\u002Fspan\u003E);\\n                      },\\n                      helpText: &#x27;请选择一个日期&#x27;,\\n                      cancelText: &#x27;取消&#x27;,\\n                      confirmText: &#x27;确定&#x27;,\\n                      useRootNavigator: \u003Cspan class=\\\"hljs-literal\\\"\u003Etrue\u003C\u002Fspan\u003E,\\n                      initialDatePickerMode: \u003Cspan class=\\\"hljs-type\\\"\u003EDatePickerMode\u003C\u002Fspan\u003E.day);\\n                },\\n              ))\\n            ],\\n          ),\\n        ],\\n      ),\\n    );\\n  }\\n}\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch2 id=\\\"showdaterangepicker\\\"\u003EshowDateRangePicker\u003C\u002Fh2\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E日期范围选择器\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003Econtext\u003C\u002Fcode\u003E：上下文(必填)\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EinitialDateRange\u003C\u002Fcode\u003E：初始化日期范围\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EfirstDate\u003C\u002Fcode\u003E：可选的最早日期(必填)\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003ElastDate\u003C\u002Fcode\u003E：可选的最晚日期(必填)\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EcurrentDate\u003C\u002Fcode\u003E：当前选择日期\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EinitialEntryMode\u003C\u002Fcode\u003E：日期面板模式，默认为\u003Ccode\u003EDatePickerEntryMode.calendar(日期面板)\u003C\u002Fcode\u003E，可选\u003Ccode\u003EDatePickerEntryMode.input(输入框)\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EselectableDayPredicate\u003C\u002Fcode\u003E：可选择的日期，接收一个当前显示的日期参数，返回\u003Ccode\u003Etrue\u003C\u002Fcode\u003E则表示当前日期可选，返回\u003Ccode\u003Efalse\u003C\u002Fcode\u003E则当前日期不可选\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EhelpText\u003C\u002Fcode\u003E：顶部标题的文本\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EcancelText\u003C\u002Fcode\u003E：\u003Ccode\u003EDatePickerEntryMode.input\u003C\u002Fcode\u003E模式下取消按钮的文本\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EconfirmText\u003C\u002Fcode\u003E：\u003Ccode\u003EDatePickerEntryMode.input\u003C\u002Fcode\u003E模式下确定按钮的文本\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EsaveText\u003C\u002Fcode\u003E：\u003Ccode\u003EDatePickerEntryMode.calendar\u003C\u002Fcode\u003E模式下确定按钮的文本\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EfieldStartHintText\u003C\u002Fcode\u003E：\u003Ccode\u003EDatePickerEntryMode.input\u003C\u002Fcode\u003E模式下开始日期的提示文本\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EfieldEndHintText\u003C\u002Fcode\u003E：\u003Ccode\u003EDatePickerEntryMode.input\u003C\u002Fcode\u003E模式下结束日期的提示文本\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EfieldStartLabelText\u003C\u002Fcode\u003E：\u003Ccode\u003EDatePickerEntryMode.input\u003C\u002Fcode\u003E模式下开始日期\u003Ccode\u003Elabel\u003C\u002Fcode\u003E的文本\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EfieldEndLabelText\u003C\u002Fcode\u003E：\u003Ccode\u003EDatePickerEntryMode.input\u003C\u002Fcode\u003E模式下结束日期\u003Ccode\u003Elabel\u003C\u002Fcode\u003E的文本\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Elocale\u003C\u002Fcode\u003E：国际化配置\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EuseRootNavigator\u003C\u002Fcode\u003E：是否使用路由，默认为\u003Ccode\u003Etrue\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003ErouteSettings\u003C\u002Fcode\u003E：路由配置\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-dart\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;package\u003C\u002Fspan\u003E:flutter\u002Fmaterial.dart&#x27;;\\n\\nvoid main() {\\n  runApp(\u003Cspan class=\\\"hljs-type\\\"\u003EApp\u003C\u002Fspan\u003E());\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EApp\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EStatelessWidget\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EWidget\u003C\u002Fspan\u003E build(\u003Cspan class=\\\"hljs-type\\\"\u003EBuildContext\u003C\u002Fspan\u003E context) {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-type\\\"\u003EMaterialApp\u003C\u002Fspan\u003E(\\n      title: &#x27;日期范围选择&#x27;,\\n      home: \u003Cspan class=\\\"hljs-type\\\"\u003EHome\u003C\u002Fspan\u003E(),\\n    );\\n  }\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EHome\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EStatefulWidget\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EHome\u003C\u002Fspan\u003E({\u003Cspan class=\\\"hljs-type\\\"\u003EKey\u003C\u002Fspan\u003E? key}) : \u003Cspan class=\\\"hljs-keyword\\\"\u003Esuper\u003C\u002Fspan\u003E(key: key);\\n\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  _HomeState createState() =&gt; _HomeState();\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003E_HomeState\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EState&lt;Home&gt;\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EWidget\u003C\u002Fspan\u003E build(\u003Cspan class=\\\"hljs-type\\\"\u003EBuildContext\u003C\u002Fspan\u003E context) {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-type\\\"\u003EScaffold\u003C\u002Fspan\u003E(\\n      appBar: \u003Cspan class=\\\"hljs-type\\\"\u003EAppBar\u003C\u002Fspan\u003E(\\n        title: \u003Cspan class=\\\"hljs-type\\\"\u003EText\u003C\u002Fspan\u003E(&#x27;日期范围选择&#x27;),\\n      ),\\n      body: \u003Cspan class=\\\"hljs-type\\\"\u003EColumn\u003C\u002Fspan\u003E(\\n        children: [\\n          \u003Cspan class=\\\"hljs-type\\\"\u003ERow\u003C\u002Fspan\u003E(\\n            children: [\\n              \u003Cspan class=\\\"hljs-type\\\"\u003EText\u003C\u002Fspan\u003E(&#x27;日期范围选择：&#x27;),\\n              \u003Cspan class=\\\"hljs-type\\\"\u003EExpanded\u003C\u002Fspan\u003E(\\n                  child: \u003Cspan class=\\\"hljs-type\\\"\u003ETextField\u003C\u002Fspan\u003E(\\n                readOnly: \u003Cspan class=\\\"hljs-literal\\\"\u003Etrue\u003C\u002Fspan\u003E,\\n                decoration: \u003Cspan class=\\\"hljs-type\\\"\u003EInputDecoration\u003C\u002Fspan\u003E(hintText: &#x27;请选择日期范围&#x27;),\\n                onTap: () {\\n                  showDateRangePicker(\\n                      context: context,\\n                      firstDate: \u003Cspan class=\\\"hljs-type\\\"\u003EDateTime\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-number\\\"\u003E1970\u003C\u002Fspan\u003E),\\n                      lastDate: \u003Cspan class=\\\"hljs-type\\\"\u003EDateTime\u003C\u002Fspan\u003E.now(),\\n                      helpText: &#x27;请选择日期范围&#x27;,\\n                      cancelText: &#x27;取消&#x27;,\\n                      confirmText: &#x27;确定&#x27;,\\n                      saveText: &#x27;确定&#x27;,\\n                      fieldStartHintText: &#x27;请输入开始日期&#x27;,\\n                      fieldEndHintText: &#x27;请输入结束日期&#x27;,\\n                      fieldStartLabelText: &#x27;开始日期&#x27;,\\n                      fieldEndLabelText: &#x27;结束日期&#x27;);\\n                },\\n              ))\\n            ],\\n          ),\\n        ],\\n      ),\\n    );\\n  }\\n}\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch2 id=\\\"cupertinodatepicker\\\"\u003ECupertinoDatePicker\u003C\u002Fh2\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003EIOS风格的日期时间选择器\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003EonDateTimeChanged\u003C\u002Fcode\u003E：时间改变事件(必填)\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Emode\u003C\u002Fcode\u003E：显示模式，默认为\u003Ccode\u003ECupertinoDatePickerMode.dateAndTime(日期时间)\u003C\u002Fcode\u003E，可选：\u003Ccode\u003ECupertinoDatePickerMode.time(时间)\u003C\u002Fcode\u003E、\u003Ccode\u003ECupertinoDatePickerMode.date(日期)\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EinitialDateTime\u003C\u002Fcode\u003E：初始化日期时间\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EminimumDate\u003C\u002Fcode\u003E：最小日期\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EminimumYear\u003C\u002Fcode\u003E：最小年份，默认为\u003Ccode\u003E1\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EmaximumYear\u003C\u002Fcode\u003E：最大年份\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EminuteInterval\u003C\u002Fcode\u003E：分钟的粒度，必须是60的正整数因子，即一分钟可以分割为\u003Ccode\u003E60\u002FminuteInterval\u003C\u002Fcode\u003E份，默认为\u003Ccode\u003E1\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Euse24hFormat\u003C\u002Fcode\u003E：是否使用24小时制，默认为\u003Ccode\u003Efalse\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EbackgroundColor\u003C\u002Fcode\u003E：背景色\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-dart\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;package\u003C\u002Fspan\u003E:flutter\u002Fcupertino.dart&#x27;;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;package\u003C\u002Fspan\u003E:flutter\u002Fmaterial.dart&#x27;;\\n\\nvoid main() {\\n  runApp(\u003Cspan class=\\\"hljs-type\\\"\u003EApp\u003C\u002Fspan\u003E());\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EApp\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EStatelessWidget\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EWidget\u003C\u002Fspan\u003E build(\u003Cspan class=\\\"hljs-type\\\"\u003EBuildContext\u003C\u002Fspan\u003E context) {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-type\\\"\u003EMaterialApp\u003C\u002Fspan\u003E(\\n      title: &#x27;日期时间选择&#x27;,\\n      home: \u003Cspan class=\\\"hljs-type\\\"\u003EHome\u003C\u002Fspan\u003E(),\\n    );\\n  }\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EHome\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EStatefulWidget\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EHome\u003C\u002Fspan\u003E({\u003Cspan class=\\\"hljs-type\\\"\u003EKey\u003C\u002Fspan\u003E? key}) : \u003Cspan class=\\\"hljs-keyword\\\"\u003Esuper\u003C\u002Fspan\u003E(key: key);\\n\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  _HomeState createState() =&gt; _HomeState();\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003E_HomeState\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EState&lt;Home&gt;\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EWidget\u003C\u002Fspan\u003E build(\u003Cspan class=\\\"hljs-type\\\"\u003EBuildContext\u003C\u002Fspan\u003E context) {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-type\\\"\u003EScaffold\u003C\u002Fspan\u003E(\\n      appBar: \u003Cspan class=\\\"hljs-type\\\"\u003EAppBar\u003C\u002Fspan\u003E(\\n        title: \u003Cspan class=\\\"hljs-type\\\"\u003EText\u003C\u002Fspan\u003E(&#x27;日期时间选择&#x27;),\\n      ),\\n      body: \u003Cspan class=\\\"hljs-type\\\"\u003EColumn\u003C\u002Fspan\u003E(\\n        children: [\\n          \u003Cspan class=\\\"hljs-type\\\"\u003EExpanded\u003C\u002Fspan\u003E(\\n              child: \u003Cspan class=\\\"hljs-type\\\"\u003ECupertinoDatePicker\u003C\u002Fspan\u003E(\\n            onDateTimeChanged: (value) {\\n              print(value);\\n            },\\n            initialDateTime: \u003Cspan class=\\\"hljs-type\\\"\u003EDateTime\u003C\u002Fspan\u003E.now(),\\n            minimumDate: \u003Cspan class=\\\"hljs-type\\\"\u003EDateTime\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-number\\\"\u003E2021\u003C\u002Fspan\u003E, \u003Cspan class=\\\"hljs-number\\\"\u003E6\u003C\u002Fspan\u003E),\\n            use24hFormat: \u003Cspan class=\\\"hljs-literal\\\"\u003Etrue\u003C\u002Fspan\u003E,\\n            backgroundColor: \u003Cspan class=\\\"hljs-type\\\"\u003EColors\u003C\u002Fspan\u003E.black38,\\n          )),\\n        ],\\n      ),\\n    );\\n  }\\n}\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch2 id=\\\"showtimepicker\\\"\u003EshowTimePicker\u003C\u002Fh2\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E时间选择器\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003Econtext\u003C\u002Fcode\u003E：上下文(必填)\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EinitialTime\u003C\u002Fcode\u003E：初始化时间\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EuseRootNavigator\u003C\u002Fcode\u003E：是否使用路由，默认为\u003Ccode\u003Etrue\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EinitialEntryMode\u003C\u002Fcode\u003E：时间面板模式，默认为\u003Ccode\u003ETimePickerEntryMode.dial(时钟面板)\u003C\u002Fcode\u003E，可选\u003Ccode\u003EDatePickerEntryMode.input(输入框)\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EhelpText\u003C\u002Fcode\u003E：顶部标题的文本\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EcancelText\u003C\u002Fcode\u003E：取消按钮的文本\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EconfirmText\u003C\u002Fcode\u003E：确定按钮的文本\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003ErouteSettings\u003C\u002Fcode\u003E：路由配置\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-dart\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;package\u003C\u002Fspan\u003E:flutter\u002Fmaterial.dart&#x27;;\\n\\nvoid main() {\\n  runApp(\u003Cspan class=\\\"hljs-type\\\"\u003EApp\u003C\u002Fspan\u003E());\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EApp\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EStatelessWidget\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EWidget\u003C\u002Fspan\u003E build(\u003Cspan class=\\\"hljs-type\\\"\u003EBuildContext\u003C\u002Fspan\u003E context) {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-type\\\"\u003EMaterialApp\u003C\u002Fspan\u003E(\\n      title: &#x27;日期时间选择&#x27;,\\n      home: \u003Cspan class=\\\"hljs-type\\\"\u003EHome\u003C\u002Fspan\u003E(),\\n    );\\n  }\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EHome\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EStatefulWidget\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EHome\u003C\u002Fspan\u003E({\u003Cspan class=\\\"hljs-type\\\"\u003EKey\u003C\u002Fspan\u003E? key}) : \u003Cspan class=\\\"hljs-keyword\\\"\u003Esuper\u003C\u002Fspan\u003E(key: key);\\n\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  _HomeState createState() =&gt; _HomeState();\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003E_HomeState\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EState&lt;Home&gt;\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EWidget\u003C\u002Fspan\u003E build(\u003Cspan class=\\\"hljs-type\\\"\u003EBuildContext\u003C\u002Fspan\u003E context) {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-type\\\"\u003EScaffold\u003C\u002Fspan\u003E(\\n      appBar: \u003Cspan class=\\\"hljs-type\\\"\u003EAppBar\u003C\u002Fspan\u003E(\\n        title: \u003Cspan class=\\\"hljs-type\\\"\u003EText\u003C\u002Fspan\u003E(&#x27;日期时间选择&#x27;),\\n      ),\\n      body: \u003Cspan class=\\\"hljs-type\\\"\u003EColumn\u003C\u002Fspan\u003E(\\n        children: [\\n          \u003Cspan class=\\\"hljs-type\\\"\u003ERow\u003C\u002Fspan\u003E(\\n            children: [\\n              \u003Cspan class=\\\"hljs-type\\\"\u003EText\u003C\u002Fspan\u003E(&#x27;时间选择：&#x27;),\\n              \u003Cspan class=\\\"hljs-type\\\"\u003EExpanded\u003C\u002Fspan\u003E(\\n                  child: \u003Cspan class=\\\"hljs-type\\\"\u003ETextField\u003C\u002Fspan\u003E(\\n                readOnly: \u003Cspan class=\\\"hljs-literal\\\"\u003Etrue\u003C\u002Fspan\u003E,\\n                decoration: \u003Cspan class=\\\"hljs-type\\\"\u003EInputDecoration\u003C\u002Fspan\u003E(hintText: &#x27;请选择时间&#x27;),\\n                onTap: () {\\n                  showTimePicker(\\n                      context: context,\\n                      initialTime: \u003Cspan class=\\\"hljs-type\\\"\u003ETimeOfDay\u003C\u002Fspan\u003E.now(),\\n                      helpText: &#x27;请选择时间&#x27;,\\n                      cancelText: &#x27;取消&#x27;,\\n                      confirmText: &#x27;确定&#x27;);\\n                },\\n              ))\\n            ],\\n          ),\\n        ],\\n      ),\\n    );\\n  }\\n}\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch2 id=\\\"cupertinotimerpicker\\\"\u003ECupertinoTimerPicker\u003C\u002Fh2\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003EIOS风格的时间选择器\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003EonTimerDurationChanged\u003C\u002Fcode\u003E：时间改变事件(必填)\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Emode\u003C\u002Fcode\u003E：模式，默认为\u003Ccode\u003ECupertinoTimerPickerMode.hms(时\u002F分\u002F秒)\u003C\u002Fcode\u003E，可选：\u003Ccode\u003ECupertinoTimerPickerMode.hm(时\u002F分)\u003C\u002Fcode\u003E、\u003Ccode\u003ECupertinoTimerPickerMode.ms(分\u002F秒)\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EinitialTimerDuration\u003C\u002Fcode\u003E：初始化时间，默认为\u003Ccode\u003EDuration.zero\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EminuteInterval\u003C\u002Fcode\u003E：分钟的粒度，必须是60的正整数因子，即一分钟可以分割为\u003Ccode\u003E60\u002FminuteInterval\u003C\u002Fcode\u003E份，默认为\u003Ccode\u003E1\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EsecondInterval\u003C\u002Fcode\u003E：秒的粒度，必须是60的正整数因子，即一分钟可以分割为\u003Ccode\u003E60\u002FsecondInterval\u003C\u002Fcode\u003E份，默认为\u003Ccode\u003E1\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Ealignment\u003C\u002Fcode\u003E：对齐方式，默认为\u003Ccode\u003EAlignment.center\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EbackgroundColor\u003C\u002Fcode\u003E：背景色\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-dart\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;package\u003C\u002Fspan\u003E:flutter\u002Fcupertino.dart&#x27;;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;package\u003C\u002Fspan\u003E:flutter\u002Fmaterial.dart&#x27;;\\n\\nvoid main() {\\n  runApp(\u003Cspan class=\\\"hljs-type\\\"\u003EApp\u003C\u002Fspan\u003E());\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EApp\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EStatelessWidget\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EWidget\u003C\u002Fspan\u003E build(\u003Cspan class=\\\"hljs-type\\\"\u003EBuildContext\u003C\u002Fspan\u003E context) {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-type\\\"\u003EMaterialApp\u003C\u002Fspan\u003E(\\n      title: &#x27;日期时间选择&#x27;,\\n      home: \u003Cspan class=\\\"hljs-type\\\"\u003EHome\u003C\u002Fspan\u003E(),\\n    );\\n  }\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EHome\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EStatefulWidget\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EHome\u003C\u002Fspan\u003E({\u003Cspan class=\\\"hljs-type\\\"\u003EKey\u003C\u002Fspan\u003E? key}) : \u003Cspan class=\\\"hljs-keyword\\\"\u003Esuper\u003C\u002Fspan\u003E(key: key);\\n\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  _HomeState createState() =&gt; _HomeState();\\n}\\n\\n\u003Cspan class=\\\"hljs-class\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eclass\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003E_HomeState\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eextends\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EState&lt;Home&gt;\u003C\u002Fspan\u003E \u003C\u002Fspan\u003E{\\n  \u003Cspan class=\\\"hljs-meta\\\"\u003E@override\u003C\u002Fspan\u003E\\n  \u003Cspan class=\\\"hljs-type\\\"\u003EWidget\u003C\u002Fspan\u003E build(\u003Cspan class=\\\"hljs-type\\\"\u003EBuildContext\u003C\u002Fspan\u003E context) {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-type\\\"\u003EScaffold\u003C\u002Fspan\u003E(\\n      appBar: \u003Cspan class=\\\"hljs-type\\\"\u003EAppBar\u003C\u002Fspan\u003E(\\n        title: \u003Cspan class=\\\"hljs-type\\\"\u003EText\u003C\u002Fspan\u003E(&#x27;日期时间选择&#x27;),\\n      ),\\n      body: \u003Cspan class=\\\"hljs-type\\\"\u003EColumn\u003C\u002Fspan\u003E(\\n        children: [\\n          \u003Cspan class=\\\"hljs-type\\\"\u003EExpanded\u003C\u002Fspan\u003E(\\n              child: \u003Cspan class=\\\"hljs-type\\\"\u003ECupertinoTimerPicker\u003C\u002Fspan\u003E(\\n            onTimerDurationChanged: (value) {\\n              print(value);\\n            },\\n            initialTimerDuration: \u003Cspan class=\\\"hljs-type\\\"\u003EDuration\u003C\u002Fspan\u003E(hours: \u003Cspan class=\\\"hljs-number\\\"\u003E12\u003C\u002Fspan\u003E),\\n            backgroundColor: \u003Cspan class=\\\"hljs-type\\\"\u003EColors\u003C\u002Fspan\u003E.orange,\\n          )),\\n        ],\\n      ),\\n    );\\n  }\\n}\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\"}"}</script>
+</div>
+	</body>
+</html>

@@ -1,0 +1,1 @@
+{"title":"Flutter学习之路由管理","slug":"Flutter router","time":"2021-07-12T18:20:13.000Z","author":"PingTouG","html":"<p><code>Flutter</code>中的路由和前端的路由是一样的，是指页面。<code>MaterialApp</code>中可以指定初始路由，路由表以及动态路由，动态初始路由。</p>\n<h2 id=\"materialapp中的路由\">MaterialApp中的路由</h2>\n<pre><code class=\"language-dart\">\n</code></pre>\n"}
