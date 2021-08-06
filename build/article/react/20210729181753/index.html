@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" content="#333333" />
+		<link rel="stylesheet" href="/assets/styles/global.css" />
+		<title>React Hooks</title>
+
+		
+
+		<link rel="modulepreload" href="/./_app/start-97f7b82c.js">
+		<link rel="modulepreload" href="/./_app/chunks/vendor-d00531f1.js">
+		<link rel="modulepreload" href="/./_app/pages/__layout.svelte-b0488dc3.js">
+		<link rel="modulepreload" href="/./_app/pages/article/__layout.svelte-9a26e2ca.js">
+		<link rel="modulepreload" href="/./_app/pages/article/[category]/[id].svelte-35c0c78b.js">
+		<link rel="modulepreload" href="/./_app/chunks/utils-a81d5505.js">
+		<link rel="stylesheet" href="/./_app/assets/start-a8cd1609.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/__layout.svelte-dfbf40bb.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/article/__layout.svelte-1448dd73.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/article/[category]/[id].svelte-7f79f039.css">
+
+		<script type="module">
+			import { start } from "/./_app/start-97f7b82c.js";
+			start({
+				target: document.querySelector("#svelte"),
+				paths: {"base":"","assets":"/."},
+				session: {},
+				host: location.host,
+				route: true,
+				spa: false,
+				trailing_slash: "never",
+				hydrate: {
+					status: 200,
+					error: null,
+					nodes: [
+						import("/./_app/pages/__layout.svelte-b0488dc3.js"),
+						import("/./_app/pages/article/__layout.svelte-9a26e2ca.js"),
+						import("/./_app/pages/article/[category]/[id].svelte-35c0c78b.js")
+					],
+					page: {
+						host: location.host, // TODO this is redundant
+						path: "/article/react/20210729181753",
+						query: new URLSearchParams(""),
+						params: {"category":"react","id":"20210729181753"}
+					}
+				}
+			});
+		</script>
+	</head>
+	<body>
+		<div id="svelte">
+
+
+
+<section class="svelte-jbk32v"><header class="svelte-jbk32v"><a href="/"><img class="logo svelte-jbk32v" src="/assets/images/logo.png" alt="code book logo"></a>
+<a class="github svelte-jbk32v" href="https://github.com/PingTouG" target="_blank"><i class="iconfont icon-github svelte-jbk32v"></i></a></header>
+	<main><section><main class="svelte-1fbldbu">
+
+<section class="md"><h1 class="title">React Hooks</h1>
+  <div class="info svelte-1vg5uky"><div class="author svelte-1vg5uky">作者：PingTouG</div>
+    <div class="time">时间：2021-07-29 18:18:19</div></div>
+
+  <div class="md-content"><p><code>Hooks</code>是<code>React16.8</code>新增的特性，可以在不编写<code>class</code>的情况下使用<code>state</code>以及其他特性，<code>Hooks</code>的出现主要是解决组件之间的复用状态逻辑困难，复杂组件难理解等问题</p>
+<h2 id="hook-规则">Hook 规则</h2>
+<ul>
+<li>只在最顶层使用<code>Hook</code>，即：不要在循环，条件判断或嵌套函数中调用<code>Hook</code></li>
+<li>只在<code>React</code>函数中调用<code>Hook</code></li>
+</ul>
+<h2 id="state-hook：usestate">State Hook：useState</h2>
+<blockquote>
+<p>使用<code>useState</code>创建一个响应式的状态，接收一个初始值<code>(可以是函数且函数只在初始渲染时调用)</code>，返回一个数组，数组第一个元素是<code>state</code>,第二个元素是更新<code>state</code>的函数。如果需要依据当前的<code>state</code>或<code>props</code>更新<code>state</code>，则更新<code>state</code>的函数可以接收一个函数，函数的参数是当前的<code>state</code>，返回一个需要更新的值。需要多个状态时则使用<code>useState</code>创建多个<code>state</code>即可</p>
+</blockquote>
+<pre><code class="language-tsx"><span class="hljs-keyword">import</span> React, { useState } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+
+<span class="hljs-keyword">const</span> App = <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">const</span> [count, setCount] = useState(<span class="hljs-number">0</span>);
+    <span class="hljs-keyword">const</span> onDec = <span class="hljs-function">() =&gt;</span> setCount(<span class="hljs-function">(<span class="hljs-params">count</span>) =&gt;</span> count - <span class="hljs-number">1</span>);
+    <span class="hljs-keyword">const</span> onAdd = <span class="hljs-function">() =&gt;</span> setCount(<span class="hljs-function">(<span class="hljs-params">count</span>) =&gt;</span> count + <span class="hljs-number">1</span>);
+    <span class="hljs-keyword">const</span> onReset = <span class="hljs-function">() =&gt;</span> setCount(<span class="hljs-number">0</span>);
+
+    <span class="hljs-keyword">return</span> (
+        <span class="xml"><span class="hljs-tag">&lt;&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{onDec}</span>&gt;</span>-<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>{count}<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{onAdd}</span>&gt;</span>+<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{onReset}</span>&gt;</span>reset<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+        <span class="hljs-tag">&lt;/&gt;</span></span>
+    );
+};
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> App;
+</code></pre>
+<h2 id="effect-hook：useeffect">Effect Hook：useEffect</h2>
+<blockquote>
+<p><code>useEffect</code>代替了生命周期<code>componentDidMount</code>、<code>componentDidUpdate</code>、<code>componentWillUnmount</code>。其接收两个参数：第一个参数是一个函数，此函数就相当于<code>componentDidMount</code>和<code>componentDidUpdate</code>，此函数可返回一个函数，返回的函数相当于<code>componentWillUnmount</code>。第二个参数是一个数组(非必传)，是<code>Effect Hook</code>的依赖项，如果不传，则组件首次挂载后以及<code>state</code>发生变化后会触发，如果传空数组，则只在组件首次挂载后触发，如果数组中传入依赖项，则组件首次挂载后和依赖项发生变化时会触发。可使用多个<code>useEffect</code>，执行顺序是声明的顺序</p>
+</blockquote>
+<pre><code class="language-tsx"><span class="hljs-keyword">import</span> React, { useEffect, useState } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+
+<span class="hljs-keyword">const</span> App = <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">const</span> [count, setCount] = useState(<span class="hljs-number">0</span>);
+    <span class="hljs-keyword">const</span> onDec = <span class="hljs-function">() =&gt;</span> setCount(<span class="hljs-function">(<span class="hljs-params">count</span>) =&gt;</span> count - <span class="hljs-number">1</span>);
+    <span class="hljs-keyword">const</span> onAdd = <span class="hljs-function">() =&gt;</span> setCount(<span class="hljs-function">(<span class="hljs-params">count</span>) =&gt;</span> count + <span class="hljs-number">1</span>);
+    <span class="hljs-keyword">const</span> onReset = <span class="hljs-function">() =&gt;</span> setCount(<span class="hljs-number">0</span>);
+
+    <span class="hljs-keyword">const</span> [message, setMessage] = useState(<span class="hljs-string">&#x27;React&#x27;</span>);
+    <span class="hljs-keyword">const</span> onChangeMessage = <span class="hljs-function">() =&gt;</span> setMessage(<span class="hljs-string">&#x27;Vue&#x27;</span>);
+
+    useEffect(<span class="hljs-function">() =&gt;</span> <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;只会在组件挂载后触发&#x27;</span>), []);
+    useEffect(<span class="hljs-function">() =&gt;</span> <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;组件挂载后及状态发生变化后触发&#x27;</span>));
+    useEffect(<span class="hljs-function">() =&gt;</span> <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;组件挂载后及count变化后触发&#x27;</span>), [count]);
+    useEffect(<span class="hljs-function">() =&gt;</span> {
+        <span class="hljs-keyword">const</span> timer = <span class="hljs-built_in">setInterval</span>(<span class="hljs-function">() =&gt;</span> {
+            <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;定时器运行中...&#x27;</span>);
+        }, <span class="hljs-number">1000</span>);
+
+        <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> {
+            <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;组件卸载前触发&#x27;</span>);
+            <span class="hljs-built_in">clearInterval</span>(timer);
+        };
+    });
+
+    <span class="hljs-keyword">return</span> (
+        <span class="xml"><span class="hljs-tag">&lt;&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{onDec}</span>&gt;</span>-<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>{count}<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{onAdd}</span>&gt;</span>+<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{onReset}</span>&gt;</span>reset<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{onChangeMessage}</span>&gt;</span>{message}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+        <span class="hljs-tag">&lt;/&gt;</span></span>
+    );
+};
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> App;
+</code></pre>
+<h2 id="usecontext">useContext</h2>
+<blockquote>
+<p>接收一个<code>Context</code>对象(<code>React.createContext</code>的返回值)并返回当前<code>context</code>的值，当前的<code>context</code>的值取决于上层组件中距离最近的<code>Context.Provider</code>的<code>value</code>属性决定</p>
+</blockquote>
+<pre><code class="language-tsx"><span class="hljs-keyword">import</span> React, { createContext, useContext, useState } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+
+<span class="hljs-keyword">interface</span> IProvider {
+    <span class="hljs-attr">count</span>: <span class="hljs-built_in">number</span>;
+    onDec: <span class="hljs-function">() =&gt;</span> <span class="hljs-built_in">void</span>;
+    onAdd: <span class="hljs-function">() =&gt;</span> <span class="hljs-built_in">void</span>;
+}
+<span class="hljs-keyword">const</span> context = createContext&lt;IProvider | <span class="hljs-literal">null</span>&gt;(<span class="hljs-literal">null</span>);
+
+<span class="hljs-keyword">const</span> { Provider } = context;
+
+<span class="hljs-keyword">const</span> Counter = <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">const</span> { count } = useContext(context) <span class="hljs-keyword">as</span> IProvider;
+    <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>{count}<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span></span>;
+};
+
+<span class="hljs-keyword">const</span> CountButton = <span class="hljs-function">(<span class="hljs-params">props: <span class="hljs-built_in">any</span></span>) =&gt;</span> {
+    <span class="hljs-keyword">const</span> { onDec, onAdd } = useContext(context) <span class="hljs-keyword">as</span> IProvider;
+
+    <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{props.type</span> === <span class="hljs-string">&#x27;dec&#x27;</span> ? <span class="hljs-attr">onDec</span> <span class="hljs-attr">:</span> <span class="hljs-attr">onAdd</span>}&gt;</span>{props.children}<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></span>;
+};
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">App</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">const</span> [count, setCount] = useState(<span class="hljs-number">0</span>);
+
+    <span class="hljs-keyword">const</span> provider = {
+        count,
+        <span class="hljs-attr">onDec</span>: <span class="hljs-function">() =&gt;</span> setCount(<span class="hljs-function">(<span class="hljs-params">count</span>) =&gt;</span> count - <span class="hljs-number">1</span>),
+        <span class="hljs-attr">onAdd</span>: <span class="hljs-function">() =&gt;</span> setCount(<span class="hljs-function">(<span class="hljs-params">count</span>) =&gt;</span> count + <span class="hljs-number">1</span>)
+    };
+
+    <span class="hljs-keyword">return</span> (
+        <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Provider</span> <span class="hljs-attr">value</span>=<span class="hljs-string">{provider}</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">CountButton</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;dec&quot;</span>&gt;</span>-<span class="hljs-tag">&lt;/<span class="hljs-name">CountButton</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">Counter</span> /&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">CountButton</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;add&quot;</span>&gt;</span>+<span class="hljs-tag">&lt;/<span class="hljs-name">CountButton</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">Provider</span>&gt;</span></span>
+    );
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> App;
+</code></pre>
+<h2 id="usereducer">useReducer</h2>
+<blockquote>
+<p><code>useState</code>的替代方案，第一个参数接收像<code>(state,action) =&gt; newState</code>的<code>reducer</code>，第二个参数接收一个初始值，返回当前的<code>state</code>和<code>dispatch</code>方法</p>
+</blockquote>
+<pre><code class="language-tsx">import React, { useReducer } <span class="hljs-keyword">from</span> &#x27;react&#x27;;
+
+<span class="hljs-keyword">const</span> reducer = (<span class="hljs-keyword">state</span>: <span class="hljs-literal">any</span>, action: { type: string }) =&gt; {
+    switch (action.type) {
+        case &#x27;dec&#x27;:
+            return { count: <span class="hljs-keyword">state</span>.count - <span class="hljs-number">1</span> };
+        case &#x27;add&#x27;:
+            return { count: <span class="hljs-keyword">state</span>.count + <span class="hljs-number">1</span> };
+    }
+};
+
+<span class="hljs-keyword">const</span> App = () =&gt; {
+    <span class="hljs-keyword">const</span> [<span class="hljs-keyword">state</span>, dispatch] = useReducer(reducer, { count: <span class="hljs-number">0</span> });
+    return (
+        <span class="hljs-variable">&lt;&gt;</span>
+            <span class="hljs-variable">&lt;button onClick={() =&gt;</span> dispatch({ type: &#x27;dec&#x27; })}&gt;-&lt;/button&gt;
+            <span class="hljs-variable">&lt;span&gt;</span>{<span class="hljs-keyword">state</span>?.count}&lt;/span&gt;
+            <span class="hljs-variable">&lt;button onClick={() =&gt;</span> dispatch({ type: &#x27;add&#x27; })}&gt;+&lt;/button&gt;
+        &lt;/&gt;
+    );
+};
+
+export <span class="hljs-keyword">default</span> App;
+</code></pre>
+<h2 id="usecallback">useCallback</h2>
+<blockquote>
+<p>把内联回调函数及依赖项数组作为参数传入<code>useCallback</code>，返回该回调函数的<code>memoized</code>版本的回调函数。用于性能优化(<code>可缓存函数</code>)，一般是在父组件中通过<code>useCallback</code>缓存函数，当父组件内的数据发生变化重新渲染时，主要不是<code>useCallback</code>的依赖项发生变化，子组件就不会重新渲染，子组件需要通过<code>React.memo</code>处理一下。</p>
+</blockquote>
+<pre><code class="language-tsx"><span class="hljs-keyword">import</span> React, { memo, useCallback, useEffect, useState } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+
+<span class="hljs-keyword">const</span> Message = memo(<span class="hljs-function">(<span class="hljs-params">props: { msg: <span class="hljs-built_in">string</span>; onChange: () =&gt; <span class="hljs-built_in">void</span> }</span>) =&gt;</span> {
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;Message渲染&#x27;</span>);
+    <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{props.onChange}</span>&gt;</span>Message组件：{props.msg}<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span></span>;
+});
+
+<span class="hljs-keyword">const</span> App = <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">const</span> [count, setCount] = useState(<span class="hljs-number">0</span>);
+    <span class="hljs-keyword">const</span> onDec = <span class="hljs-function">() =&gt;</span> setCount(<span class="hljs-function">(<span class="hljs-params">count</span>) =&gt;</span> count - <span class="hljs-number">1</span>);
+    <span class="hljs-keyword">const</span> onAdd = <span class="hljs-function">() =&gt;</span> setCount(<span class="hljs-function">(<span class="hljs-params">count</span>) =&gt;</span> count + <span class="hljs-number">1</span>);
+
+    <span class="hljs-keyword">const</span> [msg, setMsg] = useState(<span class="hljs-string">&#x27;hello&#x27;</span>);
+    <span class="hljs-comment">// const onChangeMsg = () =&gt;  setMsg(&#x27;world&#x27;)</span>
+    <span class="hljs-keyword">const</span> onChangeMsg = useCallback(<span class="hljs-function">() =&gt;</span> setMsg(<span class="hljs-string">&#x27;world&#x27;</span>), [msg]);
+
+    <span class="hljs-keyword">return</span> (
+        <span class="xml"><span class="hljs-tag">&lt;&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{onDec}</span>&gt;</span>-<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>{count}<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{onAdd}</span>&gt;</span>+<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">Message</span> <span class="hljs-attr">msg</span>=<span class="hljs-string">{msg}</span> <span class="hljs-attr">onChange</span>=<span class="hljs-string">{onChangeMsg}</span> /&gt;</span>
+        <span class="hljs-tag">&lt;/&gt;</span></span>
+    );
+};
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> App;
+</code></pre>
+<blockquote>
+<p>如果不使用<code>useCallback</code>，则当改变<code>count</code>是也会触发<code>Message</code>组件的渲染，当使用<code>useCallback</code>之后，只有当<code>msg</code>发生变化时，<code>Message</code>组件才会重新渲染</p>
+</blockquote>
+<h2 id="usememo">useMemo</h2>
+<blockquote>
+<p>把函数和依赖项数组作为参数传入<code>useMemo</code>，返回该回调函数的<code>memoized</code>版本的回调函数，它仅在某个依赖项改变时才会重新计算<code>memoized</code>值。用于性能优化(<code>可缓存数据</code>)，如果一个组件内存在多个可变数据，当一个数据发生变化则所有数据的处理函数都会被调用，使用<code>useMemo</code>可将某些操作绑定到指定数据，即：指定依赖，当依赖发生变化时才会重新执行操作。</p>
+</blockquote>
+<pre><code class="language-tsx"><span class="hljs-keyword">import</span> React, { useMemo, useState } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+
+<span class="hljs-keyword">const</span> App = <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">const</span> [count, setCount] = useState(<span class="hljs-number">0</span>);
+    <span class="hljs-keyword">const</span> onDec = <span class="hljs-function">() =&gt;</span> setCount(<span class="hljs-function">(<span class="hljs-params">count</span>) =&gt;</span> count - <span class="hljs-number">1</span>);
+    <span class="hljs-keyword">const</span> onAdd = <span class="hljs-function">() =&gt;</span> setCount(<span class="hljs-function">(<span class="hljs-params">count</span>) =&gt;</span> count + <span class="hljs-number">1</span>);
+
+    <span class="hljs-keyword">const</span> [msg, setMsg] = useState(<span class="hljs-string">&#x27;Hello&#x27;</span>);
+    <span class="hljs-keyword">const</span> onChangeMsg = <span class="hljs-function">() =&gt;</span> setMsg(<span class="hljs-string">&#x27;Hi&#x27;</span>);
+    <span class="hljs-comment">// const getFullMsg = () =&gt; {</span>
+    <span class="hljs-comment">//   console.log(&#x27;getFullMsg调用&#x27;)</span>
+    <span class="hljs-comment">//   return `${msg} World`</span>
+    <span class="hljs-comment">// }</span>
+
+    <span class="hljs-keyword">const</span> getFullMsg = useMemo(<span class="hljs-function">() =&gt;</span> {
+        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;getFullMsg调用&#x27;</span>);
+        <span class="hljs-keyword">return</span> <span class="hljs-string">`<span class="hljs-subst">${msg}</span> World`</span>;
+    }, [msg]);
+
+    <span class="hljs-keyword">return</span> (
+        <span class="xml"><span class="hljs-tag">&lt;&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{onDec}</span>&gt;</span>-<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>{count}<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{onAdd}</span>&gt;</span>+<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>{msg}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{onChangeMsg}</span>&gt;</span>改变msg：{getFullMsg}<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+        <span class="hljs-tag">&lt;/&gt;</span></span>
+    );
+};
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> App;
+</code></pre>
+<p>上述例子如果不使用<code>useMemo</code>,则更新<code>count</code>也会触发<code>getFullMsg</code>函数</p>
+<blockquote>
+<p>特别需要注意的是:<code>useMemo</code>返回的是一个值,不是一个函数</p>
+</blockquote>
+<h2 id="useref">useRef</h2>
+<blockquote>
+<p>返回一个可变的<code>ref</code>对象,其<code>.current</code>属性被初始化为传入的数据.一般用于获取<code>DOM</code>元素</p>
+</blockquote>
+<pre><code class="language-tsx"><span class="hljs-keyword">import</span> React, { useEffect, useRef } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+
+const App = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+    const inputRef = useRef&lt;HTMLInputElement&gt;(<span class="hljs-literal">null</span>);
+
+    useEffect(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+        inputRef.current!.focus();
+    });
+    <span class="hljs-keyword">return</span> &lt;input type=<span class="hljs-string">&quot;text&quot;</span> ref={inputRef} /&gt;;
+};
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> App;
+</code></pre>
+<h2 id="useimperativehandle">useImperativeHandle</h2>
+<blockquote>
+<p>可以在使用<code>ref</code>时自定义暴露给父组件的实例值,需要和<code>forwardRef</code>配合使用.在子组件暴露指定的内容,父组件通过<code>ref.current</code>获取当前暴露的内容</p>
+</blockquote>
+<pre><code class="language-tsx"><span class="hljs-keyword">import</span> React, { forwardRef, useEffect, useImperativeHandle, useRef } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+
+const Input = forwardRef(<span class="hljs-function"><span class="hljs-params">(_, ref)</span> =&gt;</span> {
+    const inputRef = useRef&lt;HTMLInputElement&gt;(<span class="hljs-literal">null</span>);
+
+    useImperativeHandle(ref, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> ({
+        autoFocus: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> inputRef.current?.focus()
+    }));
+
+    <span class="hljs-keyword">return</span> &lt;input type=<span class="hljs-string">&quot;text&quot;</span> ref={inputRef} /&gt;;
+});
+
+const App = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+    const inputRef = useRef&lt;any&gt;(<span class="hljs-literal">null</span>);
+
+    useEffect(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> inputRef.current?.autoFocus());
+    <span class="hljs-keyword">return</span> &lt;Input ref={inputRef} /&gt;;
+};
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> App;
+</code></pre>
+<h2 id="uselayouteffect">useLayoutEffect</h2>
+<blockquote>
+<p>同<code>useEffect</code>一样,不过<code>useLayoutEffect</code>是等所有的<code>DOM</code>更新之后同步调用<code>effect</code>.</p>
+</blockquote>
+<h2 id="usedebugvalue">useDebugValue</h2>
+<blockquote>
+<p>用于 React 开发者工具中显示自定义<code>hook</code>的标签</p>
+</blockquote>
+</div>
+</section></main>
+</section></main>
+	
+<div class="back-top svelte-9c9s8u" style="bottom: 5rem;right: 0.625rem;display: none"><i class="iconfont icon-back-top"></i>
+</div>
+</section>
+
+
+
+	<script type="svelte-data" url="20210729181753.json">{"status":200,"statusText":"","headers":{"content-type":"text/plain;charset=UTF-8"},"body":"{\"title\":\"React Hooks\",\"slug\":\"react hooks\",\"time\":\"2021-07-29T18:18:19.000Z\",\"author\":\"PingTouG\",\"html\":\"\u003Cp\u003E\u003Ccode\u003EHooks\u003C\u002Fcode\u003E是\u003Ccode\u003EReact16.8\u003C\u002Fcode\u003E新增的特性，可以在不编写\u003Ccode\u003Eclass\u003C\u002Fcode\u003E的情况下使用\u003Ccode\u003Estate\u003C\u002Fcode\u003E以及其他特性，\u003Ccode\u003EHooks\u003C\u002Fcode\u003E的出现主要是解决组件之间的复用状态逻辑困难，复杂组件难理解等问题\u003C\u002Fp\u003E\\n\u003Ch2 id=\\\"hook-规则\\\"\u003EHook 规则\u003C\u002Fh2\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E只在最顶层使用\u003Ccode\u003EHook\u003C\u002Fcode\u003E，即：不要在循环，条件判断或嵌套函数中调用\u003Ccode\u003EHook\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E只在\u003Ccode\u003EReact\u003C\u002Fcode\u003E函数中调用\u003Ccode\u003EHook\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Ch2 id=\\\"state-hook：usestate\\\"\u003EState Hook：useState\u003C\u002Fh2\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E使用\u003Ccode\u003EuseState\u003C\u002Fcode\u003E创建一个响应式的状态，接收一个初始值\u003Ccode\u003E(可以是函数且函数只在初始渲染时调用)\u003C\u002Fcode\u003E，返回一个数组，数组第一个元素是\u003Ccode\u003Estate\u003C\u002Fcode\u003E,第二个元素是更新\u003Ccode\u003Estate\u003C\u002Fcode\u003E的函数。如果需要依据当前的\u003Ccode\u003Estate\u003C\u002Fcode\u003E或\u003Ccode\u003Eprops\u003C\u002Fcode\u003E更新\u003Ccode\u003Estate\u003C\u002Fcode\u003E，则更新\u003Ccode\u003Estate\u003C\u002Fcode\u003E的函数可以接收一个函数，函数的参数是当前的\u003Ccode\u003Estate\u003C\u002Fcode\u003E，返回一个需要更新的值。需要多个状态时则使用\u003Ccode\u003EuseState\u003C\u002Fcode\u003E创建多个\u003Ccode\u003Estate\u003C\u002Fcode\u003E即可\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-tsx\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E React, { useState } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;react&#x27;\u003C\u002Fspan\u003E;\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E App = \u003Cspan class=\\\"hljs-function\\\"\u003E() =&gt;\u003C\u002Fspan\u003E {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E [count, setCount] = useState(\u003Cspan class=\\\"hljs-number\\\"\u003E0\u003C\u002Fspan\u003E);\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E onDec = \u003Cspan class=\\\"hljs-function\\\"\u003E() =&gt;\u003C\u002Fspan\u003E setCount(\u003Cspan class=\\\"hljs-function\\\"\u003E(\u003Cspan class=\\\"hljs-params\\\"\u003Ecount\u003C\u002Fspan\u003E) =&gt;\u003C\u002Fspan\u003E count - \u003Cspan class=\\\"hljs-number\\\"\u003E1\u003C\u002Fspan\u003E);\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E onAdd = \u003Cspan class=\\\"hljs-function\\\"\u003E() =&gt;\u003C\u002Fspan\u003E setCount(\u003Cspan class=\\\"hljs-function\\\"\u003E(\u003Cspan class=\\\"hljs-params\\\"\u003Ecount\u003C\u002Fspan\u003E) =&gt;\u003C\u002Fspan\u003E count + \u003Cspan class=\\\"hljs-number\\\"\u003E1\u003C\u002Fspan\u003E);\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E onReset = \u003Cspan class=\\\"hljs-function\\\"\u003E() =&gt;\u003C\u002Fspan\u003E setCount(\u003Cspan class=\\\"hljs-number\\\"\u003E0\u003C\u002Fspan\u003E);\\n\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E (\\n        \u003Cspan class=\\\"xml\\\"\u003E\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;&gt;\u003C\u002Fspan\u003E\\n            \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Ebutton\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003EonClick\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E{onDec}\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E-\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Ebutton\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n            \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Espan\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E{count}\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Espan\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n            \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Ebutton\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003EonClick\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E{onAdd}\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E+\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Ebutton\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n            \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Ebutton\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003EonClick\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E{onReset}\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003Ereset\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Ebutton\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n        \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F&gt;\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E\\n    );\\n};\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eexport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Edefault\u003C\u002Fspan\u003E App;\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch2 id=\\\"effect-hook：useeffect\\\"\u003EEffect Hook：useEffect\u003C\u002Fh2\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E\u003Ccode\u003EuseEffect\u003C\u002Fcode\u003E代替了生命周期\u003Ccode\u003EcomponentDidMount\u003C\u002Fcode\u003E、\u003Ccode\u003EcomponentDidUpdate\u003C\u002Fcode\u003E、\u003Ccode\u003EcomponentWillUnmount\u003C\u002Fcode\u003E。其接收两个参数：第一个参数是一个函数，此函数就相当于\u003Ccode\u003EcomponentDidMount\u003C\u002Fcode\u003E和\u003Ccode\u003EcomponentDidUpdate\u003C\u002Fcode\u003E，此函数可返回一个函数，返回的函数相当于\u003Ccode\u003EcomponentWillUnmount\u003C\u002Fcode\u003E。第二个参数是一个数组(非必传)，是\u003Ccode\u003EEffect Hook\u003C\u002Fcode\u003E的依赖项，如果不传，则组件首次挂载后以及\u003Ccode\u003Estate\u003C\u002Fcode\u003E发生变化后会触发，如果传空数组，则只在组件首次挂载后触发，如果数组中传入依赖项，则组件首次挂载后和依赖项发生变化时会触发。可使用多个\u003Ccode\u003EuseEffect\u003C\u002Fcode\u003E，执行顺序是声明的顺序\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-tsx\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E React, { useEffect, useState } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;react&#x27;\u003C\u002Fspan\u003E;\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E App = \u003Cspan class=\\\"hljs-function\\\"\u003E() =&gt;\u003C\u002Fspan\u003E {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E [count, setCount] = useState(\u003Cspan class=\\\"hljs-number\\\"\u003E0\u003C\u002Fspan\u003E);\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E onDec = \u003Cspan class=\\\"hljs-function\\\"\u003E() =&gt;\u003C\u002Fspan\u003E setCount(\u003Cspan class=\\\"hljs-function\\\"\u003E(\u003Cspan class=\\\"hljs-params\\\"\u003Ecount\u003C\u002Fspan\u003E) =&gt;\u003C\u002Fspan\u003E count - \u003Cspan class=\\\"hljs-number\\\"\u003E1\u003C\u002Fspan\u003E);\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E onAdd = \u003Cspan class=\\\"hljs-function\\\"\u003E() =&gt;\u003C\u002Fspan\u003E setCount(\u003Cspan class=\\\"hljs-function\\\"\u003E(\u003Cspan class=\\\"hljs-params\\\"\u003Ecount\u003C\u002Fspan\u003E) =&gt;\u003C\u002Fspan\u003E count + \u003Cspan class=\\\"hljs-number\\\"\u003E1\u003C\u002Fspan\u003E);\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E onReset = \u003Cspan class=\\\"hljs-function\\\"\u003E() =&gt;\u003C\u002Fspan\u003E setCount(\u003Cspan class=\\\"hljs-number\\\"\u003E0\u003C\u002Fspan\u003E);\\n\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E [message, setMessage] = useState(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;React&#x27;\u003C\u002Fspan\u003E);\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E onChangeMessage = \u003Cspan class=\\\"hljs-function\\\"\u003E() =&gt;\u003C\u002Fspan\u003E setMessage(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;Vue&#x27;\u003C\u002Fspan\u003E);\\n\\n    useEffect(\u003Cspan class=\\\"hljs-function\\\"\u003E() =&gt;\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-built_in\\\"\u003Econsole\u003C\u002Fspan\u003E.log(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;只会在组件挂载后触发&#x27;\u003C\u002Fspan\u003E), []);\\n    useEffect(\u003Cspan class=\\\"hljs-function\\\"\u003E() =&gt;\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-built_in\\\"\u003Econsole\u003C\u002Fspan\u003E.log(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;组件挂载后及状态发生变化后触发&#x27;\u003C\u002Fspan\u003E));\\n    useEffect(\u003Cspan class=\\\"hljs-function\\\"\u003E() =&gt;\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-built_in\\\"\u003Econsole\u003C\u002Fspan\u003E.log(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;组件挂载后及count变化后触发&#x27;\u003C\u002Fspan\u003E), [count]);\\n    useEffect(\u003Cspan class=\\\"hljs-function\\\"\u003E() =&gt;\u003C\u002Fspan\u003E {\\n        \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E timer = \u003Cspan class=\\\"hljs-built_in\\\"\u003EsetInterval\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-function\\\"\u003E() =&gt;\u003C\u002Fspan\u003E {\\n            \u003Cspan class=\\\"hljs-built_in\\\"\u003Econsole\u003C\u002Fspan\u003E.log(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;定时器运行中...&#x27;\u003C\u002Fspan\u003E);\\n        }, \u003Cspan class=\\\"hljs-number\\\"\u003E1000\u003C\u002Fspan\u003E);\\n\\n        \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-function\\\"\u003E() =&gt;\u003C\u002Fspan\u003E {\\n            \u003Cspan class=\\\"hljs-built_in\\\"\u003Econsole\u003C\u002Fspan\u003E.log(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;组件卸载前触发&#x27;\u003C\u002Fspan\u003E);\\n            \u003Cspan class=\\\"hljs-built_in\\\"\u003EclearInterval\u003C\u002Fspan\u003E(timer);\\n        };\\n    });\\n\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E (\\n        \u003Cspan class=\\\"xml\\\"\u003E\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;&gt;\u003C\u002Fspan\u003E\\n            \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Ebutton\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003EonClick\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E{onDec}\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E-\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Ebutton\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n            \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Espan\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E{count}\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Espan\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n            \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Ebutton\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003EonClick\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E{onAdd}\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E+\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Ebutton\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n            \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Ebutton\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003EonClick\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E{onReset}\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003Ereset\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Ebutton\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n            \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Ediv\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003EonClick\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E{onChangeMessage}\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E{message}\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Ediv\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n        \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F&gt;\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E\\n    );\\n};\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eexport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Edefault\u003C\u002Fspan\u003E App;\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch2 id=\\\"usecontext\\\"\u003EuseContext\u003C\u002Fh2\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E接收一个\u003Ccode\u003EContext\u003C\u002Fcode\u003E对象(\u003Ccode\u003EReact.createContext\u003C\u002Fcode\u003E的返回值)并返回当前\u003Ccode\u003Econtext\u003C\u002Fcode\u003E的值，当前的\u003Ccode\u003Econtext\u003C\u002Fcode\u003E的值取决于上层组件中距离最近的\u003Ccode\u003EContext.Provider\u003C\u002Fcode\u003E的\u003Ccode\u003Evalue\u003C\u002Fcode\u003E属性决定\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-tsx\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E React, { createContext, useContext, useState } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;react&#x27;\u003C\u002Fspan\u003E;\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Einterface\u003C\u002Fspan\u003E IProvider {\\n    \u003Cspan class=\\\"hljs-attr\\\"\u003Ecount\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-built_in\\\"\u003Enumber\u003C\u002Fspan\u003E;\\n    onDec: \u003Cspan class=\\\"hljs-function\\\"\u003E() =&gt;\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-built_in\\\"\u003Evoid\u003C\u002Fspan\u003E;\\n    onAdd: \u003Cspan class=\\\"hljs-function\\\"\u003E() =&gt;\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-built_in\\\"\u003Evoid\u003C\u002Fspan\u003E;\\n}\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E context = createContext&lt;IProvider | \u003Cspan class=\\\"hljs-literal\\\"\u003Enull\u003C\u002Fspan\u003E&gt;(\u003Cspan class=\\\"hljs-literal\\\"\u003Enull\u003C\u002Fspan\u003E);\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E { Provider } = context;\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E Counter = \u003Cspan class=\\\"hljs-function\\\"\u003E() =&gt;\u003C\u002Fspan\u003E {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E { count } = useContext(context) \u003Cspan class=\\\"hljs-keyword\\\"\u003Eas\u003C\u002Fspan\u003E IProvider;\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"xml\\\"\u003E\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Espan\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E{count}\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Espan\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E;\\n};\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E CountButton = \u003Cspan class=\\\"hljs-function\\\"\u003E(\u003Cspan class=\\\"hljs-params\\\"\u003Eprops: \u003Cspan class=\\\"hljs-built_in\\\"\u003Eany\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E) =&gt;\u003C\u002Fspan\u003E {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E { onDec, onAdd } = useContext(context) \u003Cspan class=\\\"hljs-keyword\\\"\u003Eas\u003C\u002Fspan\u003E IProvider;\\n\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"xml\\\"\u003E\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Ebutton\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003EonClick\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E{props.type\u003C\u002Fspan\u003E === \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;dec&#x27;\u003C\u002Fspan\u003E ? \u003Cspan class=\\\"hljs-attr\\\"\u003EonDec\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003E:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003EonAdd\u003C\u002Fspan\u003E}&gt;\u003C\u002Fspan\u003E{props.children}\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Ebutton\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E;\\n};\\n\\n\u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Efunction\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003EApp\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-params\\\"\u003E\u003C\u002Fspan\u003E) \u003C\u002Fspan\u003E{\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E [count, setCount] = useState(\u003Cspan class=\\\"hljs-number\\\"\u003E0\u003C\u002Fspan\u003E);\\n\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E provider = {\\n        count,\\n        \u003Cspan class=\\\"hljs-attr\\\"\u003EonDec\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-function\\\"\u003E() =&gt;\u003C\u002Fspan\u003E setCount(\u003Cspan class=\\\"hljs-function\\\"\u003E(\u003Cspan class=\\\"hljs-params\\\"\u003Ecount\u003C\u002Fspan\u003E) =&gt;\u003C\u002Fspan\u003E count - \u003Cspan class=\\\"hljs-number\\\"\u003E1\u003C\u002Fspan\u003E),\\n        \u003Cspan class=\\\"hljs-attr\\\"\u003EonAdd\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-function\\\"\u003E() =&gt;\u003C\u002Fspan\u003E setCount(\u003Cspan class=\\\"hljs-function\\\"\u003E(\u003Cspan class=\\\"hljs-params\\\"\u003Ecount\u003C\u002Fspan\u003E) =&gt;\u003C\u002Fspan\u003E count + \u003Cspan class=\\\"hljs-number\\\"\u003E1\u003C\u002Fspan\u003E)\\n    };\\n\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E (\\n        \u003Cspan class=\\\"xml\\\"\u003E\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003EProvider\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003Evalue\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E{provider}\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n            \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003ECountButton\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003Etype\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E&quot;dec&quot;\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E-\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003ECountButton\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n            \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003ECounter\u003C\u002Fspan\u003E \u002F&gt;\u003C\u002Fspan\u003E\\n            \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003ECountButton\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003Etype\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E&quot;add&quot;\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E+\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003ECountButton\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n        \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003EProvider\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E\\n    );\\n}\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eexport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Edefault\u003C\u002Fspan\u003E App;\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch2 id=\\\"usereducer\\\"\u003EuseReducer\u003C\u002Fh2\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E\u003Ccode\u003EuseState\u003C\u002Fcode\u003E的替代方案，第一个参数接收像\u003Ccode\u003E(state,action) =&gt; newState\u003C\u002Fcode\u003E的\u003Ccode\u003Ereducer\u003C\u002Fcode\u003E，第二个参数接收一个初始值，返回当前的\u003Ccode\u003Estate\u003C\u002Fcode\u003E和\u003Ccode\u003Edispatch\u003C\u002Fcode\u003E方法\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-tsx\\\"\u003Eimport React, { useReducer } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E &#x27;react&#x27;;\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E reducer = (\u003Cspan class=\\\"hljs-keyword\\\"\u003Estate\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-literal\\\"\u003Eany\u003C\u002Fspan\u003E, action: { type: string }) =&gt; {\\n    switch (action.type) {\\n        case &#x27;dec&#x27;:\\n            return { count: \u003Cspan class=\\\"hljs-keyword\\\"\u003Estate\u003C\u002Fspan\u003E.count - \u003Cspan class=\\\"hljs-number\\\"\u003E1\u003C\u002Fspan\u003E };\\n        case &#x27;add&#x27;:\\n            return { count: \u003Cspan class=\\\"hljs-keyword\\\"\u003Estate\u003C\u002Fspan\u003E.count + \u003Cspan class=\\\"hljs-number\\\"\u003E1\u003C\u002Fspan\u003E };\\n    }\\n};\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E App = () =&gt; {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E [\u003Cspan class=\\\"hljs-keyword\\\"\u003Estate\u003C\u002Fspan\u003E, dispatch] = useReducer(reducer, { count: \u003Cspan class=\\\"hljs-number\\\"\u003E0\u003C\u002Fspan\u003E });\\n    return (\\n        \u003Cspan class=\\\"hljs-variable\\\"\u003E&lt;&gt;\u003C\u002Fspan\u003E\\n            \u003Cspan class=\\\"hljs-variable\\\"\u003E&lt;button onClick={() =&gt;\u003C\u002Fspan\u003E dispatch({ type: &#x27;dec&#x27; })}&gt;-&lt;\u002Fbutton&gt;\\n            \u003Cspan class=\\\"hljs-variable\\\"\u003E&lt;span&gt;\u003C\u002Fspan\u003E{\u003Cspan class=\\\"hljs-keyword\\\"\u003Estate\u003C\u002Fspan\u003E?.count}&lt;\u002Fspan&gt;\\n            \u003Cspan class=\\\"hljs-variable\\\"\u003E&lt;button onClick={() =&gt;\u003C\u002Fspan\u003E dispatch({ type: &#x27;add&#x27; })}&gt;+&lt;\u002Fbutton&gt;\\n        &lt;\u002F&gt;\\n    );\\n};\\n\\nexport \u003Cspan class=\\\"hljs-keyword\\\"\u003Edefault\u003C\u002Fspan\u003E App;\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch2 id=\\\"usecallback\\\"\u003EuseCallback\u003C\u002Fh2\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E把内联回调函数及依赖项数组作为参数传入\u003Ccode\u003EuseCallback\u003C\u002Fcode\u003E，返回该回调函数的\u003Ccode\u003Ememoized\u003C\u002Fcode\u003E版本的回调函数。用于性能优化(\u003Ccode\u003E可缓存函数\u003C\u002Fcode\u003E)，一般是在父组件中通过\u003Ccode\u003EuseCallback\u003C\u002Fcode\u003E缓存函数，当父组件内的数据发生变化重新渲染时，主要不是\u003Ccode\u003EuseCallback\u003C\u002Fcode\u003E的依赖项发生变化，子组件就不会重新渲染，子组件需要通过\u003Ccode\u003EReact.memo\u003C\u002Fcode\u003E处理一下。\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-tsx\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E React, { memo, useCallback, useEffect, useState } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;react&#x27;\u003C\u002Fspan\u003E;\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E Message = memo(\u003Cspan class=\\\"hljs-function\\\"\u003E(\u003Cspan class=\\\"hljs-params\\\"\u003Eprops: { msg: \u003Cspan class=\\\"hljs-built_in\\\"\u003Estring\u003C\u002Fspan\u003E; onChange: () =&gt; \u003Cspan class=\\\"hljs-built_in\\\"\u003Evoid\u003C\u002Fspan\u003E }\u003C\u002Fspan\u003E) =&gt;\u003C\u002Fspan\u003E {\\n    \u003Cspan class=\\\"hljs-built_in\\\"\u003Econsole\u003C\u002Fspan\u003E.log(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;Message渲染&#x27;\u003C\u002Fspan\u003E);\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"xml\\\"\u003E\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Espan\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003EonClick\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E{props.onChange}\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003EMessage组件：{props.msg}\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Espan\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E;\\n});\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E App = \u003Cspan class=\\\"hljs-function\\\"\u003E() =&gt;\u003C\u002Fspan\u003E {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E [count, setCount] = useState(\u003Cspan class=\\\"hljs-number\\\"\u003E0\u003C\u002Fspan\u003E);\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E onDec = \u003Cspan class=\\\"hljs-function\\\"\u003E() =&gt;\u003C\u002Fspan\u003E setCount(\u003Cspan class=\\\"hljs-function\\\"\u003E(\u003Cspan class=\\\"hljs-params\\\"\u003Ecount\u003C\u002Fspan\u003E) =&gt;\u003C\u002Fspan\u003E count - \u003Cspan class=\\\"hljs-number\\\"\u003E1\u003C\u002Fspan\u003E);\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E onAdd = \u003Cspan class=\\\"hljs-function\\\"\u003E() =&gt;\u003C\u002Fspan\u003E setCount(\u003Cspan class=\\\"hljs-function\\\"\u003E(\u003Cspan class=\\\"hljs-params\\\"\u003Ecount\u003C\u002Fspan\u003E) =&gt;\u003C\u002Fspan\u003E count + \u003Cspan class=\\\"hljs-number\\\"\u003E1\u003C\u002Fspan\u003E);\\n\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E [msg, setMsg] = useState(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;hello&#x27;\u003C\u002Fspan\u003E);\\n    \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F const onChangeMsg = () =&gt;  setMsg(&#x27;world&#x27;)\u003C\u002Fspan\u003E\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E onChangeMsg = useCallback(\u003Cspan class=\\\"hljs-function\\\"\u003E() =&gt;\u003C\u002Fspan\u003E setMsg(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;world&#x27;\u003C\u002Fspan\u003E), [msg]);\\n\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E (\\n        \u003Cspan class=\\\"xml\\\"\u003E\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;&gt;\u003C\u002Fspan\u003E\\n            \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Ebutton\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003EonClick\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E{onDec}\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E-\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Ebutton\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n            \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Espan\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E{count}\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Espan\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n            \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Ebutton\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003EonClick\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E{onAdd}\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E+\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Ebutton\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n            \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003EMessage\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003Emsg\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E{msg}\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003EonChange\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E{onChangeMsg}\u003C\u002Fspan\u003E \u002F&gt;\u003C\u002Fspan\u003E\\n        \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F&gt;\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E\\n    );\\n};\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eexport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Edefault\u003C\u002Fspan\u003E App;\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E如果不使用\u003Ccode\u003EuseCallback\u003C\u002Fcode\u003E，则当改变\u003Ccode\u003Ecount\u003C\u002Fcode\u003E是也会触发\u003Ccode\u003EMessage\u003C\u002Fcode\u003E组件的渲染，当使用\u003Ccode\u003EuseCallback\u003C\u002Fcode\u003E之后，只有当\u003Ccode\u003Emsg\u003C\u002Fcode\u003E发生变化时，\u003Ccode\u003EMessage\u003C\u002Fcode\u003E组件才会重新渲染\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Ch2 id=\\\"usememo\\\"\u003EuseMemo\u003C\u002Fh2\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E把函数和依赖项数组作为参数传入\u003Ccode\u003EuseMemo\u003C\u002Fcode\u003E，返回该回调函数的\u003Ccode\u003Ememoized\u003C\u002Fcode\u003E版本的回调函数，它仅在某个依赖项改变时才会重新计算\u003Ccode\u003Ememoized\u003C\u002Fcode\u003E值。用于性能优化(\u003Ccode\u003E可缓存数据\u003C\u002Fcode\u003E)，如果一个组件内存在多个可变数据，当一个数据发生变化则所有数据的处理函数都会被调用，使用\u003Ccode\u003EuseMemo\u003C\u002Fcode\u003E可将某些操作绑定到指定数据，即：指定依赖，当依赖发生变化时才会重新执行操作。\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-tsx\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E React, { useMemo, useState } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;react&#x27;\u003C\u002Fspan\u003E;\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E App = \u003Cspan class=\\\"hljs-function\\\"\u003E() =&gt;\u003C\u002Fspan\u003E {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E [count, setCount] = useState(\u003Cspan class=\\\"hljs-number\\\"\u003E0\u003C\u002Fspan\u003E);\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E onDec = \u003Cspan class=\\\"hljs-function\\\"\u003E() =&gt;\u003C\u002Fspan\u003E setCount(\u003Cspan class=\\\"hljs-function\\\"\u003E(\u003Cspan class=\\\"hljs-params\\\"\u003Ecount\u003C\u002Fspan\u003E) =&gt;\u003C\u002Fspan\u003E count - \u003Cspan class=\\\"hljs-number\\\"\u003E1\u003C\u002Fspan\u003E);\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E onAdd = \u003Cspan class=\\\"hljs-function\\\"\u003E() =&gt;\u003C\u002Fspan\u003E setCount(\u003Cspan class=\\\"hljs-function\\\"\u003E(\u003Cspan class=\\\"hljs-params\\\"\u003Ecount\u003C\u002Fspan\u003E) =&gt;\u003C\u002Fspan\u003E count + \u003Cspan class=\\\"hljs-number\\\"\u003E1\u003C\u002Fspan\u003E);\\n\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E [msg, setMsg] = useState(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;Hello&#x27;\u003C\u002Fspan\u003E);\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E onChangeMsg = \u003Cspan class=\\\"hljs-function\\\"\u003E() =&gt;\u003C\u002Fspan\u003E setMsg(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;Hi&#x27;\u003C\u002Fspan\u003E);\\n    \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F const getFullMsg = () =&gt; {\u003C\u002Fspan\u003E\\n    \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F   console.log(&#x27;getFullMsg调用&#x27;)\u003C\u002Fspan\u003E\\n    \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F   return `${msg} World`\u003C\u002Fspan\u003E\\n    \u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F }\u003C\u002Fspan\u003E\\n\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E getFullMsg = useMemo(\u003Cspan class=\\\"hljs-function\\\"\u003E() =&gt;\u003C\u002Fspan\u003E {\\n        \u003Cspan class=\\\"hljs-built_in\\\"\u003Econsole\u003C\u002Fspan\u003E.log(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;getFullMsg调用&#x27;\u003C\u002Fspan\u003E);\\n        \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E`\u003Cspan class=\\\"hljs-subst\\\"\u003E${msg}\u003C\u002Fspan\u003E World`\u003C\u002Fspan\u003E;\\n    }, [msg]);\\n\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E (\\n        \u003Cspan class=\\\"xml\\\"\u003E\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;&gt;\u003C\u002Fspan\u003E\\n            \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Ediv\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n                \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Ebutton\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003EonClick\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E{onDec}\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E-\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Ebutton\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n                \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Espan\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E{count}\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Espan\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n                \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Ebutton\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003EonClick\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E{onAdd}\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E+\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Ebutton\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n            \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Ediv\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n            \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Ediv\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n                \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Ediv\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E{msg}\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Ediv\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n                \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Ebutton\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003EonClick\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E{onChangeMsg}\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E改变msg：{getFullMsg}\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Ebutton\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n            \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Ediv\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n        \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F&gt;\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E\\n    );\\n};\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eexport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Edefault\u003C\u002Fspan\u003E App;\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cp\u003E上述例子如果不使用\u003Ccode\u003EuseMemo\u003C\u002Fcode\u003E,则更新\u003Ccode\u003Ecount\u003C\u002Fcode\u003E也会触发\u003Ccode\u003EgetFullMsg\u003C\u002Fcode\u003E函数\u003C\u002Fp\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E特别需要注意的是:\u003Ccode\u003EuseMemo\u003C\u002Fcode\u003E返回的是一个值,不是一个函数\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Ch2 id=\\\"useref\\\"\u003EuseRef\u003C\u002Fh2\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E返回一个可变的\u003Ccode\u003Eref\u003C\u002Fcode\u003E对象,其\u003Ccode\u003E.current\u003C\u002Fcode\u003E属性被初始化为传入的数据.一般用于获取\u003Ccode\u003EDOM\u003C\u002Fcode\u003E元素\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-tsx\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E React, { useEffect, useRef } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;react&#x27;\u003C\u002Fspan\u003E;\\n\\nconst App = \u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-params\\\"\u003E()\u003C\u002Fspan\u003E =&gt;\u003C\u002Fspan\u003E {\\n    const inputRef = useRef&lt;HTMLInputElement&gt;(\u003Cspan class=\\\"hljs-literal\\\"\u003Enull\u003C\u002Fspan\u003E);\\n\\n    useEffect(\u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-params\\\"\u003E()\u003C\u002Fspan\u003E =&gt;\u003C\u002Fspan\u003E {\\n        inputRef.current!.focus();\\n    });\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E &lt;input type=\u003Cspan class=\\\"hljs-string\\\"\u003E&quot;text&quot;\u003C\u002Fspan\u003E ref={inputRef} \u002F&gt;;\\n};\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eexport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Edefault\u003C\u002Fspan\u003E App;\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch2 id=\\\"useimperativehandle\\\"\u003EuseImperativeHandle\u003C\u002Fh2\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E可以在使用\u003Ccode\u003Eref\u003C\u002Fcode\u003E时自定义暴露给父组件的实例值,需要和\u003Ccode\u003EforwardRef\u003C\u002Fcode\u003E配合使用.在子组件暴露指定的内容,父组件通过\u003Ccode\u003Eref.current\u003C\u002Fcode\u003E获取当前暴露的内容\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-tsx\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E React, { forwardRef, useEffect, useImperativeHandle, useRef } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;react&#x27;\u003C\u002Fspan\u003E;\\n\\nconst Input = forwardRef(\u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-params\\\"\u003E(_, ref)\u003C\u002Fspan\u003E =&gt;\u003C\u002Fspan\u003E {\\n    const inputRef = useRef&lt;HTMLInputElement&gt;(\u003Cspan class=\\\"hljs-literal\\\"\u003Enull\u003C\u002Fspan\u003E);\\n\\n    useImperativeHandle(ref, \u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-params\\\"\u003E()\u003C\u002Fspan\u003E =&gt;\u003C\u002Fspan\u003E ({\\n        autoFocus: \u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-params\\\"\u003E()\u003C\u002Fspan\u003E =&gt;\u003C\u002Fspan\u003E inputRef.current?.focus()\\n    }));\\n\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E &lt;input type=\u003Cspan class=\\\"hljs-string\\\"\u003E&quot;text&quot;\u003C\u002Fspan\u003E ref={inputRef} \u002F&gt;;\\n});\\n\\nconst App = \u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-params\\\"\u003E()\u003C\u002Fspan\u003E =&gt;\u003C\u002Fspan\u003E {\\n    const inputRef = useRef&lt;any&gt;(\u003Cspan class=\\\"hljs-literal\\\"\u003Enull\u003C\u002Fspan\u003E);\\n\\n    useEffect(\u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-params\\\"\u003E()\u003C\u002Fspan\u003E =&gt;\u003C\u002Fspan\u003E inputRef.current?.autoFocus());\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E &lt;Input ref={inputRef} \u002F&gt;;\\n};\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eexport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Edefault\u003C\u002Fspan\u003E App;\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch2 id=\\\"uselayouteffect\\\"\u003EuseLayoutEffect\u003C\u002Fh2\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E同\u003Ccode\u003EuseEffect\u003C\u002Fcode\u003E一样,不过\u003Ccode\u003EuseLayoutEffect\u003C\u002Fcode\u003E是等所有的\u003Ccode\u003EDOM\u003C\u002Fcode\u003E更新之后同步调用\u003Ccode\u003Eeffect\u003C\u002Fcode\u003E.\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Ch2 id=\\\"usedebugvalue\\\"\u003EuseDebugValue\u003C\u002Fh2\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E用于 React 开发者工具中显示自定义\u003Ccode\u003Ehook\u003C\u002Fcode\u003E的标签\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\"}"}</script>
+</div>
+	</body>
+</html>
