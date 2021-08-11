@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" content="#333333" />
+		<link rel="stylesheet" href="/assets/styles/global.css" />
+		<title>React状态管理：Recoil</title>
+
+		
+
+		<link rel="modulepreload" href="/./_app/start-97f7b82c.js">
+		<link rel="modulepreload" href="/./_app/chunks/vendor-d00531f1.js">
+		<link rel="modulepreload" href="/./_app/pages/__layout.svelte-b0488dc3.js">
+		<link rel="modulepreload" href="/./_app/pages/article/__layout.svelte-9a26e2ca.js">
+		<link rel="modulepreload" href="/./_app/pages/article/[category]/[id].svelte-35c0c78b.js">
+		<link rel="modulepreload" href="/./_app/chunks/utils-a81d5505.js">
+		<link rel="stylesheet" href="/./_app/assets/start-a8cd1609.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/__layout.svelte-dfbf40bb.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/article/__layout.svelte-1448dd73.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/article/[category]/[id].svelte-7f79f039.css">
+
+		<script type="module">
+			import { start } from "/./_app/start-97f7b82c.js";
+			start({
+				target: document.querySelector("#svelte"),
+				paths: {"base":"","assets":"/."},
+				session: {},
+				host: location.host,
+				route: true,
+				spa: false,
+				trailing_slash: "never",
+				hydrate: {
+					status: 200,
+					error: null,
+					nodes: [
+						import("/./_app/pages/__layout.svelte-b0488dc3.js"),
+						import("/./_app/pages/article/__layout.svelte-9a26e2ca.js"),
+						import("/./_app/pages/article/[category]/[id].svelte-35c0c78b.js")
+					],
+					page: {
+						host: location.host, // TODO this is redundant
+						path: "/article/react/20210810225412",
+						query: new URLSearchParams(""),
+						params: {"category":"react","id":"20210810225412"}
+					}
+				}
+			});
+		</script>
+	</head>
+	<body>
+		<div id="svelte">
+
+
+
+<section class="svelte-jbk32v"><header class="svelte-jbk32v"><a href="/"><img class="logo svelte-jbk32v" src="/assets/images/logo.png" alt="code book logo"></a>
+<a class="github svelte-jbk32v" href="https://github.com/PingTouG" target="_blank"><i class="iconfont icon-github svelte-jbk32v"></i></a></header>
+	<main><section><main class="svelte-1fbldbu">
+
+<section class="md"><h1 class="title">React状态管理：Recoil</h1>
+  <div class="info svelte-1vg5uky"><div class="author svelte-1vg5uky">作者：PingTouG</div>
+    <div class="time">时间：2021-08-10 22:55:16</div></div>
+
+  <div class="md-content"><p>在<code>React</code>中有时需要不同层级的组件状态共享，虽然<code>context</code>可以实现，但在比较复杂的场景中有点乏力，所以慢慢的变出现了状态管理，比较常用的状态管理库有：<code>Redux</code>、<code>mobx</code>。但这些库其实都是第三方维护，在<code>React Europe 2020 Conference</code>上，<code>Facebook</code>开源了一款状态管理<code>Recoil</code>。</p>
+<h2 id="特点">特点</h2>
+<ul>
+<li><code>极简的React设计风格</code>：拥有与<code>React</code>一样的工作方式与原理。将其添加到应用中可获取快速、灵活的状态共享</li>
+<li><code>数据流图</code>：针对派生数据(Derived data)和异步查询采用纯函数以及高效订阅的方式进行处理</li>
+<li><code>应用程序全局监听</code>：通过监听应用程序中所有状态的变化来实现持久化存储，路由，时间旅行调试或撤销，并且不会影响代码分割</li>
+</ul>
+<h2 id="安装">安装</h2>
+<pre><code class="language-bash">npm install recoil <span class="hljs-regexp">//</span> or yarn add recoil
+</code></pre>
+<h2 id="核心概念">核心概念</h2>
+<p><code>Recoil</code>创建一个数据流有向图，状态的变化从该图的顶点(<code>atom(共享状态)</code>)开始，流经<code>selector(纯函数)</code>，再流向<code>React</code>组件。<code>Atom</code>是组件可以订阅的<code>state</code>，<code>selector</code>可以同步或异步改变此<code>state</code>。可以大概想象一下，数据流形成的向图：一个<code>atom</code>被多个组件订阅，则此<code>atom</code>指向每个组件，第二个也被多个组件订阅，则第二个<code>atom</code>也指向多个组件，这两个<code>atom</code>的被订阅组件可能是同一个，也可能不是同一个，则便形成了<code>atom</code>指向多个组件的交叉向图。</p>
+<p><code>Recoil</code>的概念很少，只有<code>Atom</code>和<code>Selector</code>，下面依次了解一下</p>
+<h2 id="atom">Atom</h2>
+<p><code>Atom</code>是状态的单位，可以更新也可订阅，当<code>atom</code>被更新，每个被订阅的组件都会用新值重新渲染。可用<code>atom</code>来代替组件内部状态，当多个组件使用相同的<code>atom</code>，则这些组件共享<code>atom</code>的状态。</p>
+<h3 id="创建">创建</h3>
+<p><code>Atom</code>由<code>Recoil.atom</code>函数创建，接收一个对象：</p>
+<ul>
+<li><code>key</code>：标识当前<code>atom</code>的唯一<code>key</code>值，请记住：<code>key</code>需要保持全局唯一</li>
+<li><code>default</code>：默认值</li>
+<li><code>dangerouslyAllowMutability</code>：设置允许<code>atom</code>中的对象可变，对象变化不代表<code>status</code>的变化</li>
+</ul>
+<pre><code class="language-ts"><span class="hljs-keyword">import</span> { atom } from <span class="hljs-symbol">&#x27;recoil</span>
+const countState = atom({
+    key:<span class="hljs-symbol">&#x27;coun</span>t&#x27;,
+    <span class="hljs-keyword">default</span>: <span class="hljs-number">0</span>
+})
+</code></pre>
+<h3 id="使用">使用</h3>
+<p>创建的<code>atom</code>不能直接使用，需要通过<code>Recoil</code>提供的<code>hook</code>来使用，比如：需要读写<code>atom</code>的状态值，则可以使用<code>Recoil.useRecoilState</code>函数</p>
+<pre><code class="language-tsx"><span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+<span class="hljs-keyword">import</span> { atom, RecoilRoot, useRecoilState } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;recoil&#x27;</span>;
+
+<span class="hljs-keyword">const</span> countState = atom({
+    <span class="hljs-attr">key</span>: <span class="hljs-string">&#x27;count&#x27;</span>,
+    <span class="hljs-attr">default</span>: <span class="hljs-number">0</span>
+});
+
+<span class="hljs-keyword">const</span> Counter = <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">const</span> [count, setCount] = useRecoilState(countState);
+
+    <span class="hljs-keyword">return</span> (
+        <span class="xml"><span class="hljs-tag">&lt;&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> setCount((count) =&gt; count - 1)}&gt;-<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>{count}<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> setCount((count) =&gt; count + 1)}&gt;+<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+        <span class="hljs-tag">&lt;/&gt;</span></span>
+    );
+};
+
+<span class="hljs-keyword">const</span> App = <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">return</span> (
+        <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">RecoilRoot</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">Counter</span> /&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">RecoilRoot</span>&gt;</span></span>
+    );
+};
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> App;
+</code></pre>
+<blockquote>
+<p>注意：所有使用<code>Recoil</code>的组件需要使用<code>RecoilRoot</code>包裹</p>
+</blockquote>
+<p>上述例子和使用<code>useState</code>比起来似乎没有什么变化只是新创建了一个<code>countState</code>并通过<code>useRecoilState</code>使用，但是<code>countState</code>是可以多组件共享的，为了实现多组件共享，将上述代码改造一下。</p>
+<p><code>store/count.ts</code></p>
+<pre><code class="language-ts"><span class="hljs-keyword">import</span> { atom } from <span class="hljs-string">&#x27;recoil&#x27;</span>;
+
+export <span class="hljs-function"><span class="hljs-keyword">default</span> <span class="hljs-title">atom</span><span class="hljs-params">({
+    key: <span class="hljs-string">&#x27;count&#x27;</span>,
+    <span class="hljs-keyword">default</span>: <span class="hljs-number">0</span>
+})</span></span>;
+</code></pre>
+<p><code>components/Count/index.tsx</code></p>
+<pre><code class="language-tsx"><span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+<span class="hljs-keyword">import</span> { useRecoilValue } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;recoil&#x27;</span>;
+<span class="hljs-keyword">import</span> coutnState <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../store/count&#x27;</span>;
+
+<span class="hljs-keyword">const</span> Count = <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">const</span> count = useRecoilValue(coutnState);
+    <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>{count}<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span></span>;
+};
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> Count;
+</code></pre>
+<p><code>components/Count/CountButton.tsx</code></p>
+<pre><code class="language-tsx"><span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+<span class="hljs-keyword">import</span> { useSetRecoilState } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;recoil&#x27;</span>;
+<span class="hljs-keyword">import</span> coutnState <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../store/count&#x27;</span>;
+
+<span class="hljs-keyword">const</span> CountButton = <span class="hljs-function">(<span class="hljs-params">props: { <span class="hljs-keyword">type</span>: <span class="hljs-built_in">string</span> }</span>) =&gt;</span> {
+    <span class="hljs-keyword">const</span> setCount = useSetRecoilState(coutnState);
+    <span class="hljs-keyword">const</span> onAdd = <span class="hljs-function">() =&gt;</span> setCount(<span class="hljs-function">(<span class="hljs-params">count</span>) =&gt;</span> count + <span class="hljs-number">1</span>);
+    <span class="hljs-keyword">const</span> onDec = <span class="hljs-function">() =&gt;</span> setCount(<span class="hljs-function">(<span class="hljs-params">count</span>) =&gt;</span> count - <span class="hljs-number">1</span>);
+
+    <span class="hljs-keyword">const</span> text = props.type === <span class="hljs-string">&#x27;add&#x27;</span> ? <span class="hljs-string">&#x27;+&#x27;</span> : <span class="hljs-string">&#x27;-&#x27;</span>;
+    <span class="hljs-keyword">const</span> onClick = props.type === <span class="hljs-string">&#x27;add&#x27;</span> ? onAdd : onDec;
+
+    <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{onClick}</span>&gt;</span>{text}<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></span>;
+};
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> CountButton;
+</code></pre>
+<p><code>App.tsx</code></p>
+<pre><code class="language-tsx"><span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+<span class="hljs-keyword">import</span> { RecoilRoot } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;recoil&#x27;</span>;
+<span class="hljs-keyword">import</span> Count <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./components/Count&#x27;</span>;
+<span class="hljs-keyword">import</span> CountButton <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./components/Count/CountButton&#x27;</span>;
+
+<span class="hljs-keyword">const</span> App = <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">return</span> (
+        <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">RecoilRoot</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">CountButton</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;dec&quot;</span> /&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">Count</span> /&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">CountButton</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;add&quot;</span> /&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">RecoilRoot</span>&gt;</span></span>
+    );
+};
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> App;
+</code></pre>
+<p>通过改造的代码之后，可以看出只要使用<code>Recoil</code>用于状态管理是多么简单</p>
+<h2 id="selector">Selector</h2>
+<p><code>Selector</code>是一个纯函数，入参是<code>atom</code>或<code>selector</code>。当传入的<code>atom</code>或<code>selector</code>更新时，将会重新执行<code>selector</code>函数重新渲染组件，类似<code>Vue</code>中的<code>compoted</code>。一般被用于计算基于<code>state</code>的派生数据，可避免冗余的<code>state</code>。</p>
+<h3 id="创建-1">创建</h3>
+<p><code>Selector</code>由<code>Recoil.selector</code>创建，接收一个对象：</p>
+<ul>
+<li><code>key</code>：同<code>atom</code>的<code>key</code></li>
+<li><code>get</code>：用于计算的函数，接收一个对象，对象中有一个<code>get</code>函数用于获取其他的<code>atom</code>或<code>selector</code>的值</li>
+</ul>
+<pre><code class="language-tsx"><span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+<span class="hljs-keyword">import</span> { atom, RecoilRoot, selector, useRecoilState, useRecoilValue } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;recoil&#x27;</span>;
+
+<span class="hljs-keyword">const</span> countState = atom({
+    <span class="hljs-attr">key</span>: <span class="hljs-string">&#x27;count&#x27;</span>,
+    <span class="hljs-attr">default</span>: <span class="hljs-number">0</span>
+});
+
+<span class="hljs-keyword">const</span> doubleCountSelector = selector({
+    <span class="hljs-attr">key</span>: <span class="hljs-string">&#x27;doubleCount&#x27;</span>,
+    <span class="hljs-attr">get</span>: <span class="hljs-function">(<span class="hljs-params">{ get }</span>) =&gt;</span> get(countState) * <span class="hljs-number">2</span>
+});
+
+<span class="hljs-keyword">const</span> Count = <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">const</span> [count, setCount] = useRecoilState(countState);
+    <span class="hljs-keyword">const</span> doubleCount = useRecoilValue(doubleCountSelector);
+
+    <span class="hljs-keyword">return</span> (
+        <span class="xml"><span class="hljs-tag">&lt;&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> setCount((count) =&gt; count - 1)}&gt;-<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>count: {count}<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> setCount((count) =&gt; count + 1)}&gt;+<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>double count: {doubleCount}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+        <span class="hljs-tag">&lt;/&gt;</span></span>
+    );
+};
+
+<span class="hljs-keyword">const</span> App = <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">return</span> (
+        <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">RecoilRoot</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">Count</span> /&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">RecoilRoot</span>&gt;</span></span>
+    );
+};
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> App;
+</code></pre>
+<p>上述只是<code>Selector</code>的基础用法，还有更多的<code>Selector</code>用法，比如<code>set</code>，异步<code>Selector</code>，此文章只是先简单了解一下<code>Recoil</code>。</p>
+</div>
+</section></main>
+</section></main>
+	
+<div class="back-top svelte-9c9s8u" style="bottom: 5rem;right: 0.625rem;display: none"><i class="iconfont icon-back-top"></i>
+</div>
+</section>
+
+
+
+	<script type="svelte-data" url="20210810225412.json">{"status":200,"statusText":"","headers":{"content-type":"text/plain;charset=UTF-8"},"body":"{\"title\":\"React状态管理：Recoil\",\"slug\":\"react store\",\"time\":\"2021-08-10T22:55:16.000Z\",\"author\":\"PingTouG\",\"status\":\"done\",\"html\":\"\u003Cp\u003E在\u003Ccode\u003EReact\u003C\u002Fcode\u003E中有时需要不同层级的组件状态共享，虽然\u003Ccode\u003Econtext\u003C\u002Fcode\u003E可以实现，但在比较复杂的场景中有点乏力，所以慢慢的变出现了状态管理，比较常用的状态管理库有：\u003Ccode\u003ERedux\u003C\u002Fcode\u003E、\u003Ccode\u003Emobx\u003C\u002Fcode\u003E。但这些库其实都是第三方维护，在\u003Ccode\u003EReact Europe 2020 Conference\u003C\u002Fcode\u003E上，\u003Ccode\u003EFacebook\u003C\u002Fcode\u003E开源了一款状态管理\u003Ccode\u003ERecoil\u003C\u002Fcode\u003E。\u003C\u002Fp\u003E\\n\u003Ch2 id=\\\"特点\\\"\u003E特点\u003C\u002Fh2\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003E极简的React设计风格\u003C\u002Fcode\u003E：拥有与\u003Ccode\u003EReact\u003C\u002Fcode\u003E一样的工作方式与原理。将其添加到应用中可获取快速、灵活的状态共享\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003E数据流图\u003C\u002Fcode\u003E：针对派生数据(Derived data)和异步查询采用纯函数以及高效订阅的方式进行处理\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003E应用程序全局监听\u003C\u002Fcode\u003E：通过监听应用程序中所有状态的变化来实现持久化存储，路由，时间旅行调试或撤销，并且不会影响代码分割\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Ch2 id=\\\"安装\\\"\u003E安装\u003C\u002Fh2\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-bash\\\"\u003Enpm install recoil \u003Cspan class=\\\"hljs-regexp\\\"\u003E\u002F\u002F\u003C\u002Fspan\u003E or yarn add recoil\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch2 id=\\\"核心概念\\\"\u003E核心概念\u003C\u002Fh2\u003E\\n\u003Cp\u003E\u003Ccode\u003ERecoil\u003C\u002Fcode\u003E创建一个数据流有向图，状态的变化从该图的顶点(\u003Ccode\u003Eatom(共享状态)\u003C\u002Fcode\u003E)开始，流经\u003Ccode\u003Eselector(纯函数)\u003C\u002Fcode\u003E，再流向\u003Ccode\u003EReact\u003C\u002Fcode\u003E组件。\u003Ccode\u003EAtom\u003C\u002Fcode\u003E是组件可以订阅的\u003Ccode\u003Estate\u003C\u002Fcode\u003E，\u003Ccode\u003Eselector\u003C\u002Fcode\u003E可以同步或异步改变此\u003Ccode\u003Estate\u003C\u002Fcode\u003E。可以大概想象一下，数据流形成的向图：一个\u003Ccode\u003Eatom\u003C\u002Fcode\u003E被多个组件订阅，则此\u003Ccode\u003Eatom\u003C\u002Fcode\u003E指向每个组件，第二个也被多个组件订阅，则第二个\u003Ccode\u003Eatom\u003C\u002Fcode\u003E也指向多个组件，这两个\u003Ccode\u003Eatom\u003C\u002Fcode\u003E的被订阅组件可能是同一个，也可能不是同一个，则便形成了\u003Ccode\u003Eatom\u003C\u002Fcode\u003E指向多个组件的交叉向图。\u003C\u002Fp\u003E\\n\u003Cp\u003E\u003Ccode\u003ERecoil\u003C\u002Fcode\u003E的概念很少，只有\u003Ccode\u003EAtom\u003C\u002Fcode\u003E和\u003Ccode\u003ESelector\u003C\u002Fcode\u003E，下面依次了解一下\u003C\u002Fp\u003E\\n\u003Ch2 id=\\\"atom\\\"\u003EAtom\u003C\u002Fh2\u003E\\n\u003Cp\u003E\u003Ccode\u003EAtom\u003C\u002Fcode\u003E是状态的单位，可以更新也可订阅，当\u003Ccode\u003Eatom\u003C\u002Fcode\u003E被更新，每个被订阅的组件都会用新值重新渲染。可用\u003Ccode\u003Eatom\u003C\u002Fcode\u003E来代替组件内部状态，当多个组件使用相同的\u003Ccode\u003Eatom\u003C\u002Fcode\u003E，则这些组件共享\u003Ccode\u003Eatom\u003C\u002Fcode\u003E的状态。\u003C\u002Fp\u003E\\n\u003Ch3 id=\\\"创建\\\"\u003E创建\u003C\u002Fh3\u003E\\n\u003Cp\u003E\u003Ccode\u003EAtom\u003C\u002Fcode\u003E由\u003Ccode\u003ERecoil.atom\u003C\u002Fcode\u003E函数创建，接收一个对象：\u003C\u002Fp\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003Ekey\u003C\u002Fcode\u003E：标识当前\u003Ccode\u003Eatom\u003C\u002Fcode\u003E的唯一\u003Ccode\u003Ekey\u003C\u002Fcode\u003E值，请记住：\u003Ccode\u003Ekey\u003C\u002Fcode\u003E需要保持全局唯一\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Edefault\u003C\u002Fcode\u003E：默认值\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EdangerouslyAllowMutability\u003C\u002Fcode\u003E：设置允许\u003Ccode\u003Eatom\u003C\u002Fcode\u003E中的对象可变，对象变化不代表\u003Ccode\u003Estatus\u003C\u002Fcode\u003E的变化\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-ts\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E { atom } from \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;recoil\u003C\u002Fspan\u003E\\nconst countState = atom({\\n    key:\u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;coun\u003C\u002Fspan\u003Et&#x27;,\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Edefault\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-number\\\"\u003E0\u003C\u002Fspan\u003E\\n})\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch3 id=\\\"使用\\\"\u003E使用\u003C\u002Fh3\u003E\\n\u003Cp\u003E创建的\u003Ccode\u003Eatom\u003C\u002Fcode\u003E不能直接使用，需要通过\u003Ccode\u003ERecoil\u003C\u002Fcode\u003E提供的\u003Ccode\u003Ehook\u003C\u002Fcode\u003E来使用，比如：需要读写\u003Ccode\u003Eatom\u003C\u002Fcode\u003E的状态值，则可以使用\u003Ccode\u003ERecoil.useRecoilState\u003C\u002Fcode\u003E函数\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-tsx\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E React \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;react&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E { atom, RecoilRoot, useRecoilState } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;recoil&#x27;\u003C\u002Fspan\u003E;\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E countState = atom({\\n    \u003Cspan class=\\\"hljs-attr\\\"\u003Ekey\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;count&#x27;\u003C\u002Fspan\u003E,\\n    \u003Cspan class=\\\"hljs-attr\\\"\u003Edefault\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-number\\\"\u003E0\u003C\u002Fspan\u003E\\n});\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E Counter = \u003Cspan class=\\\"hljs-function\\\"\u003E() =&gt;\u003C\u002Fspan\u003E {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E [count, setCount] = useRecoilState(countState);\\n\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E (\\n        \u003Cspan class=\\\"xml\\\"\u003E\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;&gt;\u003C\u002Fspan\u003E\\n            \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Ebutton\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003EonClick\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E{()\u003C\u002Fspan\u003E =&gt;\u003C\u002Fspan\u003E setCount((count) =&gt; count - 1)}&gt;-\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Ebutton\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n            \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Espan\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E{count}\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Espan\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n            \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Ebutton\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003EonClick\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E{()\u003C\u002Fspan\u003E =&gt;\u003C\u002Fspan\u003E setCount((count) =&gt; count + 1)}&gt;+\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Ebutton\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n        \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F&gt;\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E\\n    );\\n};\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E App = \u003Cspan class=\\\"hljs-function\\\"\u003E() =&gt;\u003C\u002Fspan\u003E {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E (\\n        \u003Cspan class=\\\"xml\\\"\u003E\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003ERecoilRoot\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n            \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003ECounter\u003C\u002Fspan\u003E \u002F&gt;\u003C\u002Fspan\u003E\\n        \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003ERecoilRoot\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E\\n    );\\n};\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eexport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Edefault\u003C\u002Fspan\u003E App;\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E注意：所有使用\u003Ccode\u003ERecoil\u003C\u002Fcode\u003E的组件需要使用\u003Ccode\u003ERecoilRoot\u003C\u002Fcode\u003E包裹\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cp\u003E上述例子和使用\u003Ccode\u003EuseState\u003C\u002Fcode\u003E比起来似乎没有什么变化只是新创建了一个\u003Ccode\u003EcountState\u003C\u002Fcode\u003E并通过\u003Ccode\u003EuseRecoilState\u003C\u002Fcode\u003E使用，但是\u003Ccode\u003EcountState\u003C\u002Fcode\u003E是可以多组件共享的，为了实现多组件共享，将上述代码改造一下。\u003C\u002Fp\u003E\\n\u003Cp\u003E\u003Ccode\u003Estore\u002Fcount.ts\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-ts\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E { atom } from \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;recoil&#x27;\u003C\u002Fspan\u003E;\\n\\nexport \u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Edefault\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-title\\\"\u003Eatom\u003C\u002Fspan\u003E\u003Cspan class=\\\"hljs-params\\\"\u003E({\\n    key: \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;count&#x27;\u003C\u002Fspan\u003E,\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Edefault\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-number\\\"\u003E0\u003C\u002Fspan\u003E\\n})\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E;\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cp\u003E\u003Ccode\u003Ecomponents\u002FCount\u002Findex.tsx\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-tsx\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E React \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;react&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E { useRecoilValue } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;recoil&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E coutnState \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;..\u002F..\u002Fstore\u002Fcount&#x27;\u003C\u002Fspan\u003E;\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E Count = \u003Cspan class=\\\"hljs-function\\\"\u003E() =&gt;\u003C\u002Fspan\u003E {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E count = useRecoilValue(coutnState);\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"xml\\\"\u003E\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Espan\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E{count}\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Espan\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E;\\n};\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eexport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Edefault\u003C\u002Fspan\u003E Count;\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cp\u003E\u003Ccode\u003Ecomponents\u002FCount\u002FCountButton.tsx\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-tsx\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E React \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;react&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E { useSetRecoilState } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;recoil&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E coutnState \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;..\u002F..\u002Fstore\u002Fcount&#x27;\u003C\u002Fspan\u003E;\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E CountButton = \u003Cspan class=\\\"hljs-function\\\"\u003E(\u003Cspan class=\\\"hljs-params\\\"\u003Eprops: { \u003Cspan class=\\\"hljs-keyword\\\"\u003Etype\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-built_in\\\"\u003Estring\u003C\u002Fspan\u003E }\u003C\u002Fspan\u003E) =&gt;\u003C\u002Fspan\u003E {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E setCount = useSetRecoilState(coutnState);\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E onAdd = \u003Cspan class=\\\"hljs-function\\\"\u003E() =&gt;\u003C\u002Fspan\u003E setCount(\u003Cspan class=\\\"hljs-function\\\"\u003E(\u003Cspan class=\\\"hljs-params\\\"\u003Ecount\u003C\u002Fspan\u003E) =&gt;\u003C\u002Fspan\u003E count + \u003Cspan class=\\\"hljs-number\\\"\u003E1\u003C\u002Fspan\u003E);\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E onDec = \u003Cspan class=\\\"hljs-function\\\"\u003E() =&gt;\u003C\u002Fspan\u003E setCount(\u003Cspan class=\\\"hljs-function\\\"\u003E(\u003Cspan class=\\\"hljs-params\\\"\u003Ecount\u003C\u002Fspan\u003E) =&gt;\u003C\u002Fspan\u003E count - \u003Cspan class=\\\"hljs-number\\\"\u003E1\u003C\u002Fspan\u003E);\\n\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E text = props.type === \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;add&#x27;\u003C\u002Fspan\u003E ? \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;+&#x27;\u003C\u002Fspan\u003E : \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;-&#x27;\u003C\u002Fspan\u003E;\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E onClick = props.type === \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;add&#x27;\u003C\u002Fspan\u003E ? onAdd : onDec;\\n\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"xml\\\"\u003E\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Ebutton\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003EonClick\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E{onClick}\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E{text}\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Ebutton\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E;\\n};\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eexport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Edefault\u003C\u002Fspan\u003E CountButton;\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cp\u003E\u003Ccode\u003EApp.tsx\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-tsx\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E React \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;react&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E { RecoilRoot } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;recoil&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E Count \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;.\u002Fcomponents\u002FCount&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E CountButton \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;.\u002Fcomponents\u002FCount\u002FCountButton&#x27;\u003C\u002Fspan\u003E;\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E App = \u003Cspan class=\\\"hljs-function\\\"\u003E() =&gt;\u003C\u002Fspan\u003E {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E (\\n        \u003Cspan class=\\\"xml\\\"\u003E\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003ERecoilRoot\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n            \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003ECountButton\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003Etype\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E&quot;dec&quot;\u003C\u002Fspan\u003E \u002F&gt;\u003C\u002Fspan\u003E\\n            \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003ECount\u003C\u002Fspan\u003E \u002F&gt;\u003C\u002Fspan\u003E\\n            \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003ECountButton\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003Etype\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E&quot;add&quot;\u003C\u002Fspan\u003E \u002F&gt;\u003C\u002Fspan\u003E\\n        \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003ERecoilRoot\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E\\n    );\\n};\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eexport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Edefault\u003C\u002Fspan\u003E App;\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cp\u003E通过改造的代码之后，可以看出只要使用\u003Ccode\u003ERecoil\u003C\u002Fcode\u003E用于状态管理是多么简单\u003C\u002Fp\u003E\\n\u003Ch2 id=\\\"selector\\\"\u003ESelector\u003C\u002Fh2\u003E\\n\u003Cp\u003E\u003Ccode\u003ESelector\u003C\u002Fcode\u003E是一个纯函数，入参是\u003Ccode\u003Eatom\u003C\u002Fcode\u003E或\u003Ccode\u003Eselector\u003C\u002Fcode\u003E。当传入的\u003Ccode\u003Eatom\u003C\u002Fcode\u003E或\u003Ccode\u003Eselector\u003C\u002Fcode\u003E更新时，将会重新执行\u003Ccode\u003Eselector\u003C\u002Fcode\u003E函数重新渲染组件，类似\u003Ccode\u003EVue\u003C\u002Fcode\u003E中的\u003Ccode\u003Ecompoted\u003C\u002Fcode\u003E。一般被用于计算基于\u003Ccode\u003Estate\u003C\u002Fcode\u003E的派生数据，可避免冗余的\u003Ccode\u003Estate\u003C\u002Fcode\u003E。\u003C\u002Fp\u003E\\n\u003Ch3 id=\\\"创建-1\\\"\u003E创建\u003C\u002Fh3\u003E\\n\u003Cp\u003E\u003Ccode\u003ESelector\u003C\u002Fcode\u003E由\u003Ccode\u003ERecoil.selector\u003C\u002Fcode\u003E创建，接收一个对象：\u003C\u002Fp\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003Ekey\u003C\u002Fcode\u003E：同\u003Ccode\u003Eatom\u003C\u002Fcode\u003E的\u003Ccode\u003Ekey\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Eget\u003C\u002Fcode\u003E：用于计算的函数，接收一个对象，对象中有一个\u003Ccode\u003Eget\u003C\u002Fcode\u003E函数用于获取其他的\u003Ccode\u003Eatom\u003C\u002Fcode\u003E或\u003Ccode\u003Eselector\u003C\u002Fcode\u003E的值\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-tsx\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E React \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;react&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E { atom, RecoilRoot, selector, useRecoilState, useRecoilValue } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;recoil&#x27;\u003C\u002Fspan\u003E;\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E countState = atom({\\n    \u003Cspan class=\\\"hljs-attr\\\"\u003Ekey\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;count&#x27;\u003C\u002Fspan\u003E,\\n    \u003Cspan class=\\\"hljs-attr\\\"\u003Edefault\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-number\\\"\u003E0\u003C\u002Fspan\u003E\\n});\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E doubleCountSelector = selector({\\n    \u003Cspan class=\\\"hljs-attr\\\"\u003Ekey\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;doubleCount&#x27;\u003C\u002Fspan\u003E,\\n    \u003Cspan class=\\\"hljs-attr\\\"\u003Eget\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-function\\\"\u003E(\u003Cspan class=\\\"hljs-params\\\"\u003E{ get }\u003C\u002Fspan\u003E) =&gt;\u003C\u002Fspan\u003E get(countState) * \u003Cspan class=\\\"hljs-number\\\"\u003E2\u003C\u002Fspan\u003E\\n});\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E Count = \u003Cspan class=\\\"hljs-function\\\"\u003E() =&gt;\u003C\u002Fspan\u003E {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E [count, setCount] = useRecoilState(countState);\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E doubleCount = useRecoilValue(doubleCountSelector);\\n\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E (\\n        \u003Cspan class=\\\"xml\\\"\u003E\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;&gt;\u003C\u002Fspan\u003E\\n            \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Ediv\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n                \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Ebutton\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003EonClick\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E{()\u003C\u002Fspan\u003E =&gt;\u003C\u002Fspan\u003E setCount((count) =&gt; count - 1)}&gt;-\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Ebutton\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n                \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Espan\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003Ecount: {count}\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Espan\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n                \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Ebutton\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003EonClick\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E{()\u003C\u002Fspan\u003E =&gt;\u003C\u002Fspan\u003E setCount((count) =&gt; count + 1)}&gt;+\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Ebutton\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n            \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Ediv\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n            \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Ediv\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003Edouble count: {doubleCount}\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Ediv\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n        \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F&gt;\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E\\n    );\\n};\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E App = \u003Cspan class=\\\"hljs-function\\\"\u003E() =&gt;\u003C\u002Fspan\u003E {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E (\\n        \u003Cspan class=\\\"xml\\\"\u003E\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003ERecoilRoot\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n            \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003ECount\u003C\u002Fspan\u003E \u002F&gt;\u003C\u002Fspan\u003E\\n        \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003ERecoilRoot\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E\\n    );\\n};\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eexport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Edefault\u003C\u002Fspan\u003E App;\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cp\u003E上述只是\u003Ccode\u003ESelector\u003C\u002Fcode\u003E的基础用法，还有更多的\u003Ccode\u003ESelector\u003C\u002Fcode\u003E用法，比如\u003Ccode\u003Eset\u003C\u002Fcode\u003E，异步\u003Ccode\u003ESelector\u003C\u002Fcode\u003E，此文章只是先简单了解一下\u003Ccode\u003ERecoil\u003C\u002Fcode\u003E。\u003C\u002Fp\u003E\\n\"}"}</script>
+</div>
+	</body>
+</html>
