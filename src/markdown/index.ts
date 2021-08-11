@@ -30,15 +30,16 @@ export const loadMarkdownDir = (dir:string):Array<Article> => {
 
 	const articles:Array<Article> = fileList.map(filename => {
 		const markdown = loadMarkdown(`${dir}/${filename}`)
-		const { data:{title,slug,time,author} } = grayMatter(markdown)
+		const { data:{title,slug,time,author,status} } = grayMatter(markdown)
 		return {
 			id:filename.replace('.md',''),
 			title,
 			slug,
 			time,
-			author
+			author,
+			status
 		}
-	})
+	}).filter(item => item?.status === 'done')
 
 	return articles
 }

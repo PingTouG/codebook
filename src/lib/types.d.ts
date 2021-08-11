@@ -8,4 +8,5 @@
     slug:Array<string>
     time:string
     author:string
+    status:string
 }
