@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" content="#333333" />
+		<link rel="stylesheet" href="/assets/styles/global.css" />
+		<title>React最佳实践</title>
+
+		
+
+		<link rel="modulepreload" href="/./_app/start-97f7b82c.js">
+		<link rel="modulepreload" href="/./_app/chunks/vendor-d00531f1.js">
+		<link rel="modulepreload" href="/./_app/pages/__layout.svelte-b0488dc3.js">
+		<link rel="modulepreload" href="/./_app/pages/article/__layout.svelte-9a26e2ca.js">
+		<link rel="modulepreload" href="/./_app/pages/article/[category]/[id].svelte-35c0c78b.js">
+		<link rel="modulepreload" href="/./_app/chunks/utils-a81d5505.js">
+		<link rel="stylesheet" href="/./_app/assets/start-a8cd1609.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/__layout.svelte-dfbf40bb.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/article/__layout.svelte-1448dd73.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/article/[category]/[id].svelte-7f79f039.css">
+
+		<script type="module">
+			import { start } from "/./_app/start-97f7b82c.js";
+			start({
+				target: document.querySelector("#svelte"),
+				paths: {"base":"","assets":"/."},
+				session: {},
+				host: location.host,
+				route: true,
+				spa: false,
+				trailing_slash: "never",
+				hydrate: {
+					status: 200,
+					error: null,
+					nodes: [
+						import("/./_app/pages/__layout.svelte-b0488dc3.js"),
+						import("/./_app/pages/article/__layout.svelte-9a26e2ca.js"),
+						import("/./_app/pages/article/[category]/[id].svelte-35c0c78b.js")
+					],
+					page: {
+						host: location.host, // TODO this is redundant
+						path: "/article/react/20210814193903",
+						query: new URLSearchParams(""),
+						params: {"category":"react","id":"20210814193903"}
+					}
+				}
+			});
+		</script>
+	</head>
+	<body>
+		<div id="svelte">
+
+
+
+<section class="svelte-jbk32v"><header class="svelte-jbk32v"><a href="/"><img class="logo svelte-jbk32v" src="/assets/images/logo.png" alt="code book logo"></a>
+<a class="github svelte-jbk32v" href="https://github.com/PingTouG" target="_blank"><i class="iconfont icon-github svelte-jbk32v"></i></a></header>
+	<main><section><main class="svelte-1fbldbu">
+
+<section class="md"><h1 class="title">React最佳实践</h1>
+  <div class="info svelte-1vg5uky"><div class="author svelte-1vg5uky">作者：PingTouG</div>
+    <div class="time">时间：2021-08-14 19:40:13</div></div>
+
+  <div class="md-content"><p>尝试着使用<code>React</code>技术栈做一个后台管理系统，主要是为了探索<code>React</code>的最佳实践。用到的技术栈如下：</p>
+<ul>
+<li><code>vitejs</code>：下一代前端开发与构建工具，用于替代<code>create-react-app</code>脚手架</li>
+<li><code>React</code>：全部使用<code>hooks</code>开发</li>
+<li><code>react-router-dom</code>：路由</li>
+<li><code>react-router-config</code>：路由辅助库，用于集中配置路由</li>
+<li><code>recoil</code>：<code>Facebook</code>官方出品的状态管理，不是<code>React</code>团队出的，是<code>Facebook</code>官方</li>
+<li><code>antd</code>：阿里出的组件库，一般<code>React</code>技术栈做<code>pc</code>网站开发首选都是这个组件库</li>
+</ul>
+<h2 id="创建项目">创建项目</h2>
+<pre><code class="language-bash">yarn <span class="hljs-keyword">create</span> @vitejs/app react-<span class="hljs-keyword">admin</span> <span class="hljs-comment">--template react-ts</span>
+</code></pre>
+<h2 id="配置eslint、prettier、stylelint">配置<code>ESlint</code>、<code>Prettier</code>、<code>Stylelint</code></h2>
+<h3 id="配置eslint、prettier">配置<code>ESlint</code>、<code>Prettier</code></h3>
+<h4 id="安装依赖">安装依赖</h4>
+<pre><code class="language-bash">yarn <span class="hljs-keyword">add</span> -D eslint prettier eslint-config-prettier eslint-plugin-prettier <span class="hljs-title">@typescript-eslint</span>/eslint-plugin <span class="hljs-title">@typescript-eslint</span>/parser
+</code></pre>
+<h4 id="配置eslint">配置<code>ESlint</code></h4>
+<p>在项目根目录下创建<code>.eslintrc.js</code>文件，内容如下：</p>
+<pre><code class="language-js"><span class="hljs-string">module.exports</span> <span class="hljs-string">=</span> {
+    <span class="hljs-attr">parser:</span> <span class="hljs-string">&#x27;@typescript-eslint/parser&#x27;</span>,
+    <span class="hljs-attr">parserOptions:</span> {
+        <span class="hljs-attr">parser:</span> <span class="hljs-string">&#x27;@typescript-eslint/parser&#x27;</span>,
+        <span class="hljs-attr">ecmaVersion:</span> <span class="hljs-number">2020</span>,
+        <span class="hljs-attr">sourceType:</span> <span class="hljs-string">&#x27;module&#x27;</span>,
+        <span class="hljs-attr">ecmaFeatures:</span> {
+            <span class="hljs-attr">jsx:</span> <span class="hljs-literal">true</span>
+        }
+    },
+    <span class="hljs-attr">env:</span> {
+        <span class="hljs-attr">node:</span> <span class="hljs-literal">true</span>,
+        <span class="hljs-attr">es6:</span> <span class="hljs-literal">true</span>,
+        <span class="hljs-attr">browser:</span> <span class="hljs-literal">true</span>
+    },
+    <span class="hljs-attr">extends:</span> [
+        <span class="hljs-string">&#x27;plugin:@typescript-eslint/recommended&#x27;</span>,
+        <span class="hljs-string">&#x27;plugin:prettier/recommended&#x27;</span>,
+        <span class="hljs-string">&#x27;eslint:recommended&#x27;</span>
+    ]
+}<span class="hljs-string">;</span>
+</code></pre>
+<h4 id="配置prettier">配置<code>Prettier</code></h4>
+<p>在项目根目录下创建<code>.prettierrc</code>文件，内容如下：</p>
+<pre><code class="language-json">{
+    <span class="hljs-attr">&quot;semi&quot;</span>: <span class="hljs-literal">false</span>,
+    <span class="hljs-attr">&quot;singleQuote&quot;</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attr">&quot;printWidth&quot;</span>: <span class="hljs-number">100</span>,
+    <span class="hljs-attr">&quot;tabWidth&quot;</span>: <span class="hljs-number">2</span>,
+    <span class="hljs-attr">&quot;endOfLine&quot;</span>: <span class="hljs-string">&quot;auto&quot;</span>
+}
+</code></pre>
+<p>可根据自己的喜好自行配置规则</p>
+<h4 id="配置vscode">配置<code>VSCODE</code></h4>
+<p>需要安装插件<code>ESlint</code>和<code>Prettier</code>并在设置中设置<code>Prettier</code>或在用户设置文件<code>settings.json</code>添加以下代码：</p>
+<pre><code class="language-json">{
+    <span class="hljs-attr">&quot;prettier.jsxSingleQuote&quot;</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attr">&quot;prettier.requireConfig&quot;</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attr">&quot;prettier.semi&quot;</span>: <span class="hljs-literal">false</span>,
+    <span class="hljs-attr">&quot;prettier.singleQuote&quot;</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attr">&quot;prettier.arrowParens&quot;</span>: <span class="hljs-string">&quot;avoid&quot;</span>,
+    <span class="hljs-attr">&quot;prettier.endOfLine&quot;</span>: <span class="hljs-string">&quot;auto&quot;</span>,
+    <span class="hljs-attr">&quot;editor.formatOnSave&quot;</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attr">&quot;editor.codeActionsOnSave&quot;</span>: {
+        <span class="hljs-attr">&quot;source.fixAll.eslint&quot;</span>: <span class="hljs-literal">true</span>
+    }
+}
+</code></pre>
+<p>其中，<code>editor.formatOnSave</code>表示是否在保存时执行格式化操作，<code>editor.codeActionsOnSave</code>表示在保存时执行的操作，其中<code>&quot;source.fixAll.eslint&quot;: true</code>表示自动修复，即：保存时自动修复错误格式</p>
+<h3 id="配置stylelint">配置<code>Stylelint</code></h3>
+<h4 id="安装依赖-1">安装依赖</h4>
+<pre><code class="language-bash">yarn <span class="hljs-keyword">add </span>-D stylelint stylelint-<span class="hljs-built_in">config</span>-standard stylelint-<span class="hljs-keyword">order </span>stylelint-<span class="hljs-built_in">config</span>-property-sort-<span class="hljs-keyword">order-smacss</span>
+</code></pre>
+<ul>
+<li><code>stylelint</code>：<code>stylelint</code>基础依赖</li>
+<li><code>stylelint-config-standard</code>：<code>stylelint</code>标准配置</li>
+<li><code>stylelint-order</code>：属性排序配置</li>
+<li><code>stylelint-config-property-sort-order-smacss</code>：基于<a href="http://smacss.com">SMACSS</a>方法的属性排序的<code>Stylelint</code>配置。</li>
+</ul>
+<h4 id="配置stylelint-1">配置<code>Stylelint</code></h4>
+<p>在项目根目录下创建<code>.stylelintrc</code>文件</p>
+<pre><code class="language-json">{
+    <span class="hljs-attr">&quot;extends&quot;</span>: [<span class="hljs-string">&quot;stylelint-config-standard&quot;</span>, <span class="hljs-string">&quot;stylelint-config-property-sort-order-smacss&quot;</span>],
+    <span class="hljs-attr">&quot;plugins&quot;</span>: [<span class="hljs-string">&quot;stylelint-order&quot;</span>]
+}
+</code></pre>
+<h4 id="配置vscode-1">配置<code>VSCODE</code></h4>
+<p>安装插件<code>stylelint</code></p>
+<h4 id="常用忽略注释">常用忽略注释</h4>
+<ul>
+<li><code>/* stylelint-disable */</code>：全文件关闭规则校验</li>
+<li><code>/* stylelint-disable-line */</code>：当前行关闭规则校验</li>
+<li><code>/* stylelint-disable-next-line */</code>：下一行关闭规则校验</li>
+</ul>
+<p>空格加规则可只关闭某个规则，规则列表用<code>,</code>隔开，如：<code>/* stylelint-disable selector-no-id, declaration-no-important */</code>。<code>.stylelintignore</code>文件可指定忽略的文件</p>
+<h2 id="配置husky和lint-staged">配置<code>husky</code>和<code>lint-staged</code></h2>
+<p><code>husky</code>是一个增强<code>githook</code>的工具，可以添加<code>commit</code>钩子函数，帮助在提交时做一些验证，<code>lint-staged</code>过滤出暂存区文件</p>
+<h3 id="安装依赖-2">安装依赖</h3>
+<pre><code class="language-bash">yarn <span class="hljs-builtin-name">add</span> -D husky lint-staged
+</code></pre>
+<blockquote>
+<p>注意：<code>husky@4.x</code>和<code>husky@7.x</code>配置有区别</p>
+</blockquote>
+<h3 id="配置husky">配置<code>husky</code></h3>
+<p>在<code>package.json</code>的<code>scripts</code>中添加<code>&quot;prepare&quot;: &quot;husky install&quot;</code>，然后执行<code>npm run prepare</code>，会在根目录下生成<code>.husky</code>目录，然后执行<code>npx husky add .husky/pre-commit &quot;npx lint-staged&quot;</code>，则在<code>.husky</code>目录下会生成<code>pre-commit</code>。当执行<code>git commit</code>操作时会触发<code>npx lint-staged</code>命令</p>
+<h3 id="配置lint-staged">配置<code>lint-staged</code></h3>
+<p>在项目根目录下创建<code>.lintstagedrc.js</code>文件，文件内容如下：</p>
+<pre><code class="language-js">module.exports = {
+    <span class="hljs-symbol">&#x27;src</span>/**/*.{js,jsx,ts,tsx,json,html}<span class="hljs-string">&#x27;: [&#x27;</span>eslint&#x27;, <span class="hljs-symbol">&#x27;prettier</span> --write&#x27;, <span class="hljs-symbol">&#x27;git</span> add&#x27;],
+    <span class="hljs-symbol">&#x27;src</span>/**/*.{css,less}<span class="hljs-string">&#x27;: [&#x27;</span>stylelint --fix&#x27;, <span class="hljs-symbol">&#x27;git</span> add&#x27;]
+};
+</code></pre>
+<h2 id="目录设计">目录设计</h2>
+<ul>
+<li><code>@types</code>：与数据模型无关的<code>TS</code>的类型定义</li>
+<li><code>antd</code>：组件库<code>Antd</code>相关</li>
+<li><code>api</code>：后端接口的封装</li>
+<li><code>assets</code>：静态资源(样式、图片、字体)</li>
+<li><code>components</code>：通用的组件</li>
+<li><code>layouts</code>：布局相关的组件</li>
+<li><code>mocks</code>：<code>mock</code>数据</li>
+<li><code>models</code>：与数据模型相关的<code>TS</code>的类型定义</li>
+<li><code>pages</code>：页面相关的组件</li>
+<li><code>router</code>：路由相关</li>
+<li><code>store</code>：状态管理相关</li>
+<li><code>utils</code>：通用方法相关</li>
+</ul>
+<h3 id="设置目录别名">设置目录别名</h3>
+<p>需要修改<code>tsconfig.json</code>和<code>vite.config.ts</code></p>
+<p><code>tsconfig.json</code></p>
+<pre><code class="language-diff">{
+  <span class="hljs-string">&quot;compilerOptions&quot;</span>: {
+    <span class="hljs-string">&quot;target&quot;</span>: <span class="hljs-string">&quot;ESNext&quot;</span>,
+    <span class="hljs-string">&quot;lib&quot;</span>: [<span class="hljs-string">&quot;DOM&quot;</span>, <span class="hljs-string">&quot;DOM.Iterable&quot;</span>, <span class="hljs-string">&quot;ESNext&quot;</span>],
+    <span class="hljs-string">&quot;allowJs&quot;</span>: <span class="hljs-literal">false</span>,
+    <span class="hljs-string">&quot;skipLibCheck&quot;</span>: <span class="hljs-literal">false</span>,
+    <span class="hljs-string">&quot;esModuleInterop&quot;</span>: <span class="hljs-literal">false</span>,
+    <span class="hljs-string">&quot;allowSyntheticDefaultImports&quot;</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-string">&quot;strict&quot;</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-string">&quot;forceConsistentCasingInFileNames&quot;</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-string">&quot;module&quot;</span>: <span class="hljs-string">&quot;ESNext&quot;</span>,
+    <span class="hljs-string">&quot;moduleResolution&quot;</span>: <span class="hljs-string">&quot;Node&quot;</span>,
+    <span class="hljs-string">&quot;resolveJsonModule&quot;</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-string">&quot;isolatedModules&quot;</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-string">&quot;noEmit&quot;</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-string">&quot;jsx&quot;</span>: <span class="hljs-string">&quot;react&quot;</span>,
++    <span class="hljs-string">&quot;baseUrl&quot;</span>: <span class="hljs-string">&quot;.&quot;</span>,
++    <span class="hljs-string">&quot;paths&quot;</span>: {
++      <span class="hljs-string">&quot;@/*&quot;</span>:[<span class="hljs-string">&quot;./src/*&quot;</span>]
++    }
+  },
+-  <span class="hljs-string">&quot;include&quot;</span>: [<span class="hljs-string">&quot;./src&quot;</span>]
++  <span class="hljs-string">&quot;include&quot;</span>: [<span class="hljs-string">&quot;src/**/*.ts&quot;</span>, <span class="hljs-string">&quot;src/**/*.d.ts&quot;</span>, <span class="hljs-string">&quot;src/**/*.tsx&quot;</span>]
+}
+</code></pre>
+<p><code>vite.config.ts</code></p>
+<pre><code class="language-diff"><span class="hljs-keyword">import</span> { defineConfig } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vite&#x27;</span>
+<span class="hljs-keyword">import</span> reactRefresh <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@vitejs/plugin-react-refresh&#x27;</span>
+
+<span class="hljs-regexp">// https://</span>vitejs.dev<span class="hljs-regexp">/config/</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> defineConfig({
+  plugins: [reactRefresh()],
++  resolve: {
++    alias: [{ find: <span class="hljs-string">&#x27;@&#x27;</span>, replacement: <span class="hljs-string">&#x27;/src&#x27;</span> }],
++  },
+})
+</code></pre>
+<h2 id="路由">路由</h2>
+<h3 id="安装">安装</h3>
+<pre><code class="language-bash">yarn <span class="hljs-keyword">add </span>react-router-dom react-router-<span class="hljs-built_in">config</span>
+</code></pre>
+<pre><code class="language-bash">yarn <span class="hljs-keyword">add</span> -D <span class="hljs-title">@types</span>/react-router-dom <span class="hljs-title">@types</span>/react-router-config
+</code></pre>
+<h3 id="目录介绍">目录介绍</h3>
+<p><code>router/index.ts</code>：所有的路由相关内容导出文件
+<code>router/routes.ts</code>：所有路由配置文件</p>
+<p>创建<code>router/index.ts</code>文件</p>
+<pre><code class="language-ts"><span class="hljs-builtin-name">export</span> { BrowserRouter } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-router-dom&#x27;</span>;
+<span class="hljs-builtin-name">export</span> {<span class="hljs-built_in"> default </span>as routes } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./routes&#x27;</span>;
+</code></pre>
+<p>创建<code>router/routes.ts</code>文件并添加路由配置</p>
+<pre><code class="language-ts"><span class="hljs-keyword">import</span> { lazy } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+<span class="hljs-keyword">import</span> type { RouteConfig } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-router-config&#x27;</span>;
+
+const routes: <span class="hljs-built_in">Array</span>&lt;RouteConfig&gt; = [
+    {
+        path: <span class="hljs-string">&#x27;/&#x27;</span>,
+        exact: <span class="hljs-literal">true</span>,
+        component: lazy(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-keyword">import</span>(<span class="hljs-string">&#x27;@/pages/home&#x27;</span>))
+    },
+    {
+        path: <span class="hljs-string">&#x27;/login&#x27;</span>,
+        component: lazy(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-keyword">import</span>(<span class="hljs-string">&#x27;@/pages/user/login&#x27;</span>))
+    }
+];
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> routes;
+</code></pre>
+<p>创建页面路由<code>pages/user/login.tsx</code>和<code>pages/home/index.tsx</code></p>
+<p><code>pages/user/login.tsx</code></p>
+<pre><code class="language-tsx"><span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-keyword">type</span> { ReactElement } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+
+<span class="hljs-keyword">const</span> Login = (): <span class="hljs-function"><span class="hljs-params">ReactElement</span> =&gt;</span> {
+    <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>login<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>;
+};
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> Login;
+</code></pre>
+<p><code>pages/home/index.tsx</code></p>
+<pre><code class="language-tsx"><span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-keyword">type</span> { ReactElement } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+
+<span class="hljs-keyword">const</span> Home = (): <span class="hljs-function"><span class="hljs-params">ReactElement</span> =&gt;</span> {
+    <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>Home<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span></span>;
+};
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> Home;
+</code></pre>
+<h3 id="使用">使用</h3>
+<p>在<code>main.tsx</code>文件中添加<code>BrowserRouter</code>组件</p>
+<pre><code class="language-tsx"><span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+<span class="hljs-keyword">import</span> ReactDOM <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-dom&#x27;</span>;
+<span class="hljs-keyword">import</span> App <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@/App&#x27;</span>;
+<span class="hljs-keyword">import</span> { BrowserRouter } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@/router&#x27;</span>;
+
+ReactDOM.render(
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">React.StrictMode</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">BrowserRouter</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">App</span> /&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">BrowserRouter</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">React.StrictMode</span>&gt;</span></span>,
+    <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">&#x27;root&#x27;</span>)
+);
+</code></pre>
+<p>在<code>App</code>中渲染所有路由，因为用到懒加载，所以使用了<code>Suspense</code></p>
+<pre><code class="language-tsx"><span class="hljs-keyword">import</span> React, { Suspense } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-keyword">type</span> { ReactElement } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+<span class="hljs-keyword">import</span> { renderRoutes } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-router-config&#x27;</span>;
+<span class="hljs-keyword">import</span> { routes } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@/router&#x27;</span>;
+
+<span class="hljs-keyword">const</span> App = (): <span class="hljs-function"><span class="hljs-params">ReactElement</span> =&gt;</span> {
+    <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Suspense</span> <span class="hljs-attr">fallback</span>=<span class="hljs-string">{</span>&lt;<span class="hljs-attr">div</span>&gt;</span>loading...<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>}&gt;{renderRoutes(routes)}<span class="hljs-tag">&lt;/<span class="hljs-name">Suspense</span>&gt;</span></span>;
+};
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> App;
+</code></pre>
+<p>运行<code>yarn dev</code>看看是否运行正常</p>
+<h3 id="路由鉴权">路由鉴权</h3>
+<p>添加<code>router/AuthRoute.tsx</code>用于路由鉴权</p>
+<pre><code class="language-tsx"><span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+<span class="hljs-keyword">import</span> { withRouter } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-router&#x27;</span>;
+<span class="hljs-keyword">import</span> { Redirect } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-router-dom&#x27;</span>;
+<span class="hljs-keyword">import</span> storage, { TOKEN } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@/utils/storage&#x27;</span>;
+
+<span class="hljs-keyword">const</span> AuthRoute = withRouter(<span class="hljs-function">(<span class="hljs-params">props: <span class="hljs-built_in">any</span></span>) =&gt;</span> {
+    <span class="hljs-keyword">const</span> { children, history } = props;
+
+    <span class="hljs-keyword">const</span> token = storage.get(TOKEN);
+
+    <span class="hljs-keyword">if</span> (history.location.pathname !== <span class="hljs-string">&#x27;/login&#x27;</span> &amp;&amp; !token) {
+        <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Redirect</span> <span class="hljs-attr">to</span>=<span class="hljs-string">&quot;/login&quot;</span> /&gt;</span></span>;
+    }
+
+    <span class="hljs-keyword">return</span> children;
+});
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> AuthRoute;
+</code></pre>
+<p>其中使用了<code>storage</code>封装，所以添加一下<code>utils/storage.ts</code></p>
+<pre><code class="language-ts"><span class="hljs-keyword">import</span> { isUndef } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./tools&#x27;</span>;
+
+<span class="hljs-comment">// token</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> TOKEN = <span class="hljs-string">&#x27;ADMIN_TOKEN&#x27;</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> {
+    <span class="hljs-attr">get</span>: (key: <span class="hljs-built_in">string</span>): <span class="hljs-function"><span class="hljs-params">any</span> =&gt;</span> {
+        <span class="hljs-keyword">const</span> data: <span class="hljs-built_in">string</span> | <span class="hljs-literal">null</span> = <span class="hljs-built_in">window</span>.localStorage.getItem(key);
+        <span class="hljs-keyword">try</span> {
+            <span class="hljs-keyword">return</span> data === <span class="hljs-literal">null</span> ? data : <span class="hljs-built_in">JSON</span>.parse(data);
+        } <span class="hljs-keyword">catch</span> {
+            <span class="hljs-keyword">return</span> data;
+        }
+    },
+    <span class="hljs-attr">set</span>: (key: <span class="hljs-built_in">string</span>, <span class="hljs-attr">data</span>: unknown): <span class="hljs-function"><span class="hljs-params">void</span> =&gt;</span> {
+        <span class="hljs-keyword">if</span> (!isUndef(key) &amp;&amp; !isUndef(data)) {
+            <span class="hljs-keyword">let</span> payload = &lt;<span class="hljs-built_in">string</span>&gt;data;
+
+            <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> data !== <span class="hljs-string">&#x27;string&#x27;</span>) {
+                payload = <span class="hljs-built_in">JSON</span>.stringify(data);
+            }
+
+            <span class="hljs-built_in">window</span>.localStorage.setItem(key, payload);
+        }
+    },
+    <span class="hljs-attr">remove</span>: (key: <span class="hljs-built_in">string</span>): <span class="hljs-function"><span class="hljs-params">void</span> =&gt;</span> <span class="hljs-built_in">window</span>.localStorage.removeItem(key)
+};
+</code></pre>
+<p>其中使用了<code>utils/tools.ts</code>，所有创建<code>utils/tools.ts</code>文件</p>
+<pre><code class="language-ts"><span class="hljs-comment">// 判断是否未定义</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> isUndef = (v: unknown): <span class="hljs-function"><span class="hljs-params">boolean</span> =&gt;</span> v === <span class="hljs-literal">undefined</span> || v === <span class="hljs-literal">null</span>;
+</code></pre>
+<p>然后将<code>AuthRoute</code>组件通过<code>router/index.ts</code>导出</p>
+<pre><code class="language-ts"><span class="hljs-builtin-name">export</span> { BrowserRouter } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-router-dom&#x27;</span>;
+<span class="hljs-builtin-name">export</span> {<span class="hljs-built_in"> default </span>as routes } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./routes&#x27;</span>;
+<span class="hljs-builtin-name">export</span> {<span class="hljs-built_in"> default </span>as AuthRoute } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./AuthRoute&#x27;</span>;
+</code></pre>
+<p>然后在<code>App.tsx</code>中使用</p>
+<pre><code class="language-tsx"><span class="hljs-keyword">import</span> React, { Suspense } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-keyword">type</span> { ReactElement } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+<span class="hljs-keyword">import</span> { renderRoutes } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-router-config&#x27;</span>;
+<span class="hljs-keyword">import</span> { routes, AuthRoute } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@/router&#x27;</span>;
+
+<span class="hljs-keyword">const</span> App = (): <span class="hljs-function"><span class="hljs-params">ReactElement</span> =&gt;</span> {
+    <span class="hljs-keyword">return</span> (
+        <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Suspense</span> <span class="hljs-attr">fallback</span>=<span class="hljs-string">{</span>&lt;<span class="hljs-attr">div</span>&gt;</span>loading...<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>}&gt;
+            <span class="hljs-tag">&lt;<span class="hljs-name">AuthRoute</span>&gt;</span>{renderRoutes(routes)}<span class="hljs-tag">&lt;/<span class="hljs-name">AuthRoute</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">Suspense</span>&gt;</span></span>
+    );
+};
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> App;
+</code></pre>
+<h2 id="组件库-antd">组件库 Antd</h2>
+<h3 id="安装-1">安装</h3>
+<pre><code class="language-bash">yarn <span class="hljs-builtin-name">add</span> antd
+</code></pre>
+<p>在定制<code>Antd</code>主题时准备使用<code>less</code>变量定制，所以还需要安装<code>less</code></p>
+<pre><code class="language-bash">yarn <span class="hljs-builtin-name">add</span> -D less
+</code></pre>
+<h3 id="使用-1">使用</h3>
+<p>创建<code>antd/index.ts</code>文件，用于引入项目所需的组件，其实可以在需要的地方引入，但是统一地方引入为了方便管理</p>
+<pre><code class="language-ts"><span class="hljs-builtin-name">export</span> { Spin } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;antd&#x27;</span>;
+</code></pre>
+<p>创建<code>antd/theme.less</code>文件，用于主题定制</p>
+<pre><code class="language-less"><span class="hljs-keyword">@import</span> <span class="hljs-string">&#x27;~antd/lib/style/themes/default.less&#x27;</span>;
+<span class="hljs-keyword">@import</span> <span class="hljs-string">&#x27;~antd/dist/antd.less&#x27;</span>;
+
+<span class="hljs-comment">// 通过less变量定制主题色</span>
+<span class="hljs-comment">// @primary-color: #1890ff; // 全局主色</span>
+</code></pre>
+<p>为了使用<code>~</code>引入<code>Antd</code>样式需要添加别名,以及解决引入<code>Antd</code>样式报错，还需要添加<code>less</code>配置</p>
+<pre><code class="language-ts">import { defineConfig } from <span class="hljs-string">&#x27;vite&#x27;</span>;
+import reactRefresh from <span class="hljs-string">&#x27;@vitejs/plugin-react-refresh&#x27;</span>;
+
+<span class="hljs-regexp">//</span> https:<span class="hljs-regexp">//</span>vitejs.dev<span class="hljs-regexp">/config/</span>
+export default defineConfig({
+    plugins: [reactRefresh()],
+    resolve: {
+        alias: [
+            <span class="hljs-regexp">//</span> 处理通过<span class="hljs-string">&quot;~&quot;</span>引入Antd问题
+            { find: <span class="hljs-regexp">/^~/</span>, replacement: <span class="hljs-string">&#x27;&#x27;</span> },
+            { find: <span class="hljs-string">&#x27;@&#x27;</span>, replacement: <span class="hljs-string">&#x27;/src&#x27;</span> }
+        ]
+    },
+    <span class="hljs-regexp">//</span> 处理引入Antd样式报错问题
+    css: {
+        preprocessorOptions: {
+            less: {
+                javascriptEnabled: true
+            }
+        }
+    }
+});
+</code></pre>
+<p>然后创建<code>assets/styles/app.less</code>文件,用于引入全局的样式</p>
+<pre><code class="language-less"><span class="hljs-keyword">@import</span> <span class="hljs-string">&#x27;../../antd/theme&#x27;</span>;
+
+<span class="hljs-selector-class">.page-loading</span> {
+    <span class="hljs-attribute">display</span>: flex;
+    <span class="hljs-attribute">z-index</span>: <span class="hljs-number">9999</span>;
+    <span class="hljs-attribute">align-items</span>: center;
+    <span class="hljs-attribute">justify-content</span>: center;
+    <span class="hljs-attribute">width</span>: <span class="hljs-number">100vw</span>;
+    <span class="hljs-attribute">height</span>: <span class="hljs-number">100vh</span>;
+    <span class="hljs-attribute">background-color</span>: <span class="hljs-built_in">rgba</span>(<span class="hljs-number">255</span>, <span class="hljs-number">255</span>, <span class="hljs-number">255</span>, <span class="hljs-number">0.8</span>);
+}
+</code></pre>
+<p>在<code>App.tsx</code>引入样式</p>
+<pre><code class="language-tsx"><span class="hljs-keyword">import</span> React, { Suspense } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-keyword">type</span> { ReactElement } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+<span class="hljs-keyword">import</span> { renderRoutes } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-router-config&#x27;</span>;
+<span class="hljs-keyword">import</span> { routes, AuthRoute } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@/router&#x27;</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-string">&#x27;@/assets/styles/app.less&#x27;</span>;
+<span class="hljs-keyword">import</span> { Spin } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@/antd&#x27;</span>;
+
+<span class="hljs-keyword">const</span> App = (): <span class="hljs-function"><span class="hljs-params">ReactElement</span> =&gt;</span> {
+    <span class="hljs-keyword">const</span> Loading = <span class="hljs-function">() =&gt;</span> {
+        <span class="hljs-keyword">return</span> (
+            <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;page-loading&quot;</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">Spin</span> /&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+        );
+    };
+    <span class="hljs-keyword">return</span> (
+        <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Suspense</span> <span class="hljs-attr">fallback</span>=<span class="hljs-string">{</span>&lt;<span class="hljs-attr">Loading</span> /&gt;</span>}&gt;
+            <span class="hljs-tag">&lt;<span class="hljs-name">AuthRoute</span>&gt;</span>{renderRoutes(routes)}<span class="hljs-tag">&lt;/<span class="hljs-name">AuthRoute</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">Suspense</span>&gt;</span></span>
+    );
+};
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> App;
+</code></pre>
+<p>创建文件<code>src/antd/index.ts</code></p>
+<p>国际化默认是英文，在<code>main.tsx</code>中引入中文并配置</p>
+<pre><code class="language-tsx"><span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+<span class="hljs-keyword">import</span> ReactDOM <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-dom&#x27;</span>;
+<span class="hljs-keyword">import</span> App <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@/App&#x27;</span>;
+<span class="hljs-keyword">import</span> { BrowserRouter } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@/router&#x27;</span>;
+<span class="hljs-keyword">import</span> zhCN <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;antd/lib/locale/zh_CN&#x27;</span>;
+<span class="hljs-keyword">import</span> { ConfigProvider } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@/antd&#x27;</span>;
+
+ReactDOM.render(
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">ConfigProvider</span> <span class="hljs-attr">locale</span>=<span class="hljs-string">{zhCN}</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">BrowserRouter</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">App</span> /&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">BrowserRouter</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">ConfigProvider</span>&gt;</span></span>,
+    <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">&#x27;root&#x27;</span>)
+);
+</code></pre>
+<h2 id="添加-axios">添加 Axios</h2>
+<h3 id="安装-2">安装</h3>
+<pre><code class="language-bash">yarn <span class="hljs-builtin-name">add</span> axios
+</code></pre>
+<p>请求数据时需要加上进度条，所以需要安装<code>nprogress</code></p>
+<pre><code class="language-bash">yarn <span class="hljs-builtin-name">add</span> nprogress
+</code></pre>
+<pre><code class="language-bash">yarn <span class="hljs-keyword">add</span> -D <span class="hljs-title">@types</span>/nprogress
+</code></pre>
+<h3 id="封装">封装</h3>
+<p><code>api/axios.ts</code></p>
+<pre><code class="language-ts"><span class="hljs-keyword">import</span> axios <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;axios&#x27;</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-built_in">type</span> { AxiosRequestConfig, AxiosResponse, AxiosInstance } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;axios&#x27;</span>;
+<span class="hljs-keyword">import</span> storage, { TOKEN, USER_INFO } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@/utils/storage&#x27;</span>;
+<span class="hljs-keyword">import</span> { message } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@/antd&#x27;</span>;
+<span class="hljs-keyword">import</span> { isUndef } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@/utils/tools&#x27;</span>;
+<span class="hljs-keyword">import</span> NProgress <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;nprogress&#x27;</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-string">&#x27;nprogress/nprogress.css&#x27;</span>;
+
+NProgress.configure({ <span class="hljs-name">showSpinner</span>: <span class="hljs-literal">false</span> });
+
+const <span class="hljs-name">instance</span>: AxiosInstance = axios.create({
+    <span class="hljs-name">baseURL</span>: <span class="hljs-keyword">import</span>.meta.env.VITE_BASE_URL as <span class="hljs-built_in">string</span>
+});
+
+instance.interceptors.request.use(
+    <span class="hljs-function"><span class="hljs-params">(config: AxiosRequestConfig)</span> =&gt;</span> {
+        NProgress.start();
+        const token = storage.get(TOKEN);
+        !isUndef(token) &amp;&amp; (config.headers[<span class="hljs-string">&#x27;token&#x27;</span>] = token);
+
+        <span class="hljs-keyword">return</span> config;
+    },
+    <span class="hljs-function"><span class="hljs-params">(<span class="hljs-built_in">error</span>)</span> =&gt;</span> {
+        <span class="hljs-keyword">return</span> Promise.reject(<span class="hljs-built_in">error</span>);
+    }
+);
+
+instance.interceptors.response.use(
+    <span class="hljs-function"><span class="hljs-params">(response: AxiosResponse)</span> =&gt;</span> {
+        <span class="hljs-keyword">if</span> (response?.data?.code === <span class="hljs-number">0</span>) {
+            message.<span class="hljs-built_in">error</span>(response.data.msg);
+            <span class="hljs-keyword">return</span> Promise.reject(response.data.msg);
+        }
+
+        <span class="hljs-keyword">if</span> (response?.data?.code === <span class="hljs-number">401</span> || response?.data?.code === <span class="hljs-string">&#x27;401&#x27;</span>) {
+            storage.remove(TOKEN);
+            storage.remove(USER_INFO);
+            <span class="hljs-keyword">return</span> Promise.reject(response.data);
+        }
+        NProgress.done();
+
+        <span class="hljs-keyword">return</span> response.data;
+    },
+    async (<span class="hljs-built_in">error</span>) =&gt; {
+        NProgress.done();
+
+        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">error</span>.response) {
+            <span class="hljs-keyword">if</span> (<span class="hljs-built_in">error</span>.response.status === <span class="hljs-number">401</span> || <span class="hljs-built_in">error</span>?.data?.code === <span class="hljs-string">&#x27;401&#x27;</span>) {
+                storage.remove(TOKEN);
+                storage.remove(USER_INFO);
+            }
+
+            <span class="hljs-keyword">if</span> (<span class="hljs-built_in">error</span>.response.status === <span class="hljs-number">404</span>) {
+                message.<span class="hljs-built_in">error</span>(`未找到接口：${<span class="hljs-built_in">error</span>.response.config.url}`);
+            }
+
+            <span class="hljs-keyword">if</span> (<span class="hljs-built_in">error</span>.response.status === <span class="hljs-number">500</span>) {
+                message.<span class="hljs-built_in">error</span>(`接口：${<span class="hljs-built_in">error</span>.response.config.url}在服务端发生未知错误`);
+            }
+
+            <span class="hljs-keyword">return</span> Promise.reject(<span class="hljs-built_in">error</span>.response.data);
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">return</span> Promise.reject(<span class="hljs-built_in">error</span>);
+        }
+    }
+);
+
+<span class="hljs-keyword">export</span> default instance;
+</code></pre>
+<h2 id="添加mock">添加<code>Mock</code></h2>
+<h3 id="安装-3">安装</h3>
+<pre><code class="language-bash">yarn <span class="hljs-keyword">add</span> -D mockjs <span class="hljs-title">@types</span>/mockjs
+</code></pre>
+<p>创建文件<code>src/mocks/index.ts</code></p>
+<pre><code class="language-ts"><span class="hljs-keyword">import</span> Mock <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;mockjs&#x27;</span>;
+<span class="hljs-keyword">import</span> user <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./modules/user&#x27;</span>;
+
+<span class="hljs-keyword">const</span> mockStart = (): <span class="hljs-literal">void</span> =&gt; {
+    Mock.setup({
+        timeout: <span class="hljs-string">&#x27;200-3000&#x27;</span>
+    });
+
+    user();
+};
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> mockStart;
+</code></pre>
+<p>在<code>mocks</code>目录下添加<code>modules</code>目录作为每个模块的请求</p>
+<p><code>mocks/modules/user.ts</code></p>
+<pre><code class="language-ts"><span class="hljs-keyword">import</span> Mock <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;mockjs&#x27;</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> (): <span class="hljs-function"><span class="hljs-params">void</span> =&gt;</span> {
+    Mock.mock(<span class="hljs-string">&#x27;/api/login&#x27;</span>, <span class="hljs-string">&#x27;post&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">{ body }: <span class="hljs-built_in">any</span></span>) =&gt;</span> {
+        <span class="hljs-keyword">const</span> { username, password } = <span class="hljs-built_in">JSON</span>.parse(body);
+
+        <span class="hljs-keyword">if</span> (username === <span class="hljs-string">&#x27;admin&#x27;</span> &amp;&amp; password === <span class="hljs-string">&#x27;123456&#x27;</span>) {
+            <span class="hljs-keyword">return</span> {
+                <span class="hljs-attr">code</span>: <span class="hljs-number">1</span>,
+                <span class="hljs-attr">data</span>: {
+                    <span class="hljs-attr">id</span>: Mock.Random.id(),
+                    <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;admin&#x27;</span>,
+                    <span class="hljs-attr">avatar</span>: Mock.Random.image(<span class="hljs-string">&#x27;600x600&#x27;</span>, <span class="hljs-string">&#x27;#50B347&#x27;</span>, <span class="hljs-string">&#x27;A&#x27;</span>),
+                    <span class="hljs-attr">token</span>: Mock.Random.guid()
+                }
+            };
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">return</span> {
+                <span class="hljs-attr">code</span>: <span class="hljs-number">0</span>,
+                <span class="hljs-attr">msg</span>: <span class="hljs-string">&#x27;账号或密码错误&#x27;</span>
+            };
+        }
+    });
+};
+</code></pre>
+<p>在<code>main.tsx</code>下添加代码，仅当开发环境才会启动<code>mock</code></p>
+<pre><code class="language-tsx"><span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+<span class="hljs-keyword">import</span> ReactDOM <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-dom&#x27;</span>;
+<span class="hljs-keyword">import</span> App <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@/App&#x27;</span>;
+<span class="hljs-keyword">import</span> { BrowserRouter } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@/router&#x27;</span>;
+<span class="hljs-keyword">import</span> mockStart <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@/mocks&#x27;</span>;
+<span class="hljs-keyword">import</span> zhCN <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;antd/lib/locale/zh_CN&#x27;</span>;
+<span class="hljs-keyword">import</span> { ConfigProvider } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@/antd&#x27;</span>;
+
+<span class="hljs-comment">// 开发环境才启动mock</span>
+<span class="hljs-keyword">import</span>.meta.env.DEV &amp;&amp; mockStart();
+
+ReactDOM.render(
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">ConfigProvider</span> <span class="hljs-attr">locale</span>=<span class="hljs-string">{zhCN}</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">BrowserRouter</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">App</span> /&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">BrowserRouter</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">ConfigProvider</span>&gt;</span></span>,
+    <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">&#x27;root&#x27;</span>)
+);
+</code></pre>
+<h2 id="状态管理">状态管理</h2>
+<h3 id="安装-4">安装</h3>
+<pre><code class="language-bash">yarn <span class="hljs-builtin-name">add</span> recoil
+</code></pre>
+<p>在<code>main.tsx</code>引入<code>RecoilRoot</code></p>
+<pre><code class="language-tsx"><span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+<span class="hljs-keyword">import</span> ReactDOM <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-dom&#x27;</span>;
+<span class="hljs-keyword">import</span> App <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@/App&#x27;</span>;
+<span class="hljs-keyword">import</span> { BrowserRouter } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@/router&#x27;</span>;
+<span class="hljs-keyword">import</span> mockStart <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@/mocks&#x27;</span>;
+<span class="hljs-keyword">import</span> { RecoilRoot } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;recoil&#x27;</span>;
+<span class="hljs-keyword">import</span> zhCN <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;antd/lib/locale/zh_CN&#x27;</span>;
+<span class="hljs-keyword">import</span> { ConfigProvider } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@/antd&#x27;</span>;
+
+<span class="hljs-comment">// 开发环境才启动mock</span>
+<span class="hljs-keyword">import</span>.meta.env.DEV &amp;&amp; mockStart();
+
+ReactDOM.render(
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">ConfigProvider</span> <span class="hljs-attr">locale</span>=<span class="hljs-string">{zhCN}</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">RecoilRoot</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">BrowserRouter</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">App</span> /&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">BrowserRouter</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">RecoilRoot</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">ConfigProvider</span>&gt;</span></span>,
+    <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">&#x27;root&#x27;</span>)
+);
+</code></pre>
+<p>创建文件<code>src/store/app.ts</code>，用于放置应用全局状态，如果需要划分模块，在<code>src/store/modules</code>下创建相应模块既可</p>
+<pre><code class="language-ts"><span class="hljs-keyword">import</span> { atom, atomFamily } from <span class="hljs-string">&#x27;recoil&#x27;</span>;
+
+<span class="hljs-comment">// 菜单是否折叠</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> collapsedAtom = atom({
+    key: <span class="hljs-string">&#x27;collapsedAtom&#x27;</span>,
+    <span class="hljs-keyword">default</span>: <span class="hljs-keyword">false</span>
+});
+<span class="hljs-comment">// 当前路径</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> activePathAtom = atomFamily({
+    key: <span class="hljs-string">&#x27;activePathAtom&#x27;</span>,
+    <span class="hljs-keyword">default</span>: (path: string) =&gt; path
+});
+<span class="hljs-comment">// 是否为深色模式</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> isDarkModeAtom = atom({
+    key: <span class="hljs-string">&#x27;isDarkModeAtom&#x27;</span>,
+    <span class="hljs-keyword">default</span>: <span class="hljs-keyword">false</span>
+});
+</code></pre>
+<h2 id="其他">其他</h2>
+<ul>
+<li>所有目录及文件使用短横线命名法</li>
+<li>所有的<code>CSS</code>样式集<code>class</code>使用<code>BEM命名法</code></li>
+<li>私有自定义组件，应在当前目录下的<code>_components</code>下创建，超过 3 个以上用到的应提取到通用组件目录下<code>components</code></li>
+<li>所有的<code>js</code>导出函数应使用<code>JSDoc</code>注释</li>
+</ul>
+</div>
+</section></main>
+</section></main>
+	
+<div class="back-top svelte-9c9s8u" style="bottom: 5rem;right: 0.625rem;display: none"><i class="iconfont icon-back-top"></i>
+</div>
+</section>
+
+
+
+	<script type="svelte-data" url="20210814193903.json">{"status":200,"statusText":"","headers":{"content-type":"text/plain;charset=UTF-8"},"body":"{\"title\":\"React最佳实践\",\"slug\":\"react\",\"time\":\"2021-08-14T19:40:13.000Z\",\"author\":\"PingTouG\",\"status\":\"done\",\"html\":\"\u003Cp\u003E尝试着使用\u003Ccode\u003EReact\u003C\u002Fcode\u003E技术栈做一个后台管理系统，主要是为了探索\u003Ccode\u003EReact\u003C\u002Fcode\u003E的最佳实践。用到的技术栈如下：\u003C\u002Fp\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003Evitejs\u003C\u002Fcode\u003E：下一代前端开发与构建工具，用于替代\u003Ccode\u003Ecreate-react-app\u003C\u002Fcode\u003E脚手架\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003EReact\u003C\u002Fcode\u003E：全部使用\u003Ccode\u003Ehooks\u003C\u002Fcode\u003E开发\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Ereact-router-dom\u003C\u002Fcode\u003E：路由\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Ereact-router-config\u003C\u002Fcode\u003E：路由辅助库，用于集中配置路由\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Erecoil\u003C\u002Fcode\u003E：\u003Ccode\u003EFacebook\u003C\u002Fcode\u003E官方出品的状态管理，不是\u003Ccode\u003EReact\u003C\u002Fcode\u003E团队出的，是\u003Ccode\u003EFacebook\u003C\u002Fcode\u003E官方\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Eantd\u003C\u002Fcode\u003E：阿里出的组件库，一般\u003Ccode\u003EReact\u003C\u002Fcode\u003E技术栈做\u003Ccode\u003Epc\u003C\u002Fcode\u003E网站开发首选都是这个组件库\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Ch2 id=\\\"创建项目\\\"\u003E创建项目\u003C\u002Fh2\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-bash\\\"\u003Eyarn \u003Cspan class=\\\"hljs-keyword\\\"\u003Ecreate\u003C\u002Fspan\u003E @vitejs\u002Fapp react-\u003Cspan class=\\\"hljs-keyword\\\"\u003Eadmin\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-comment\\\"\u003E--template react-ts\u003C\u002Fspan\u003E\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch2 id=\\\"配置eslint、prettier、stylelint\\\"\u003E配置\u003Ccode\u003EESlint\u003C\u002Fcode\u003E、\u003Ccode\u003EPrettier\u003C\u002Fcode\u003E、\u003Ccode\u003EStylelint\u003C\u002Fcode\u003E\u003C\u002Fh2\u003E\\n\u003Ch3 id=\\\"配置eslint、prettier\\\"\u003E配置\u003Ccode\u003EESlint\u003C\u002Fcode\u003E、\u003Ccode\u003EPrettier\u003C\u002Fcode\u003E\u003C\u002Fh3\u003E\\n\u003Ch4 id=\\\"安装依赖\\\"\u003E安装依赖\u003C\u002Fh4\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-bash\\\"\u003Eyarn \u003Cspan class=\\\"hljs-keyword\\\"\u003Eadd\u003C\u002Fspan\u003E -D eslint prettier eslint-config-prettier eslint-plugin-prettier \u003Cspan class=\\\"hljs-title\\\"\u003E@typescript-eslint\u003C\u002Fspan\u003E\u002Feslint-plugin \u003Cspan class=\\\"hljs-title\\\"\u003E@typescript-eslint\u003C\u002Fspan\u003E\u002Fparser\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch4 id=\\\"配置eslint\\\"\u003E配置\u003Ccode\u003EESlint\u003C\u002Fcode\u003E\u003C\u002Fh4\u003E\\n\u003Cp\u003E在项目根目录下创建\u003Ccode\u003E.eslintrc.js\u003C\u002Fcode\u003E文件，内容如下：\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-js\\\"\u003E\u003Cspan class=\\\"hljs-string\\\"\u003Emodule.exports\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E=\u003C\u002Fspan\u003E {\\n    \u003Cspan class=\\\"hljs-attr\\\"\u003Eparser:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;@typescript-eslint\u002Fparser&#x27;\u003C\u002Fspan\u003E,\\n    \u003Cspan class=\\\"hljs-attr\\\"\u003EparserOptions:\u003C\u002Fspan\u003E {\\n        \u003Cspan class=\\\"hljs-attr\\\"\u003Eparser:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;@typescript-eslint\u002Fparser&#x27;\u003C\u002Fspan\u003E,\\n        \u003Cspan class=\\\"hljs-attr\\\"\u003EecmaVersion:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-number\\\"\u003E2020\u003C\u002Fspan\u003E,\\n        \u003Cspan class=\\\"hljs-attr\\\"\u003EsourceType:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;module&#x27;\u003C\u002Fspan\u003E,\\n        \u003Cspan class=\\\"hljs-attr\\\"\u003EecmaFeatures:\u003C\u002Fspan\u003E {\\n            \u003Cspan class=\\\"hljs-attr\\\"\u003Ejsx:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-literal\\\"\u003Etrue\u003C\u002Fspan\u003E\\n        }\\n    },\\n    \u003Cspan class=\\\"hljs-attr\\\"\u003Eenv:\u003C\u002Fspan\u003E {\\n        \u003Cspan class=\\\"hljs-attr\\\"\u003Enode:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-literal\\\"\u003Etrue\u003C\u002Fspan\u003E,\\n        \u003Cspan class=\\\"hljs-attr\\\"\u003Ees6:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-literal\\\"\u003Etrue\u003C\u002Fspan\u003E,\\n        \u003Cspan class=\\\"hljs-attr\\\"\u003Ebrowser:\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-literal\\\"\u003Etrue\u003C\u002Fspan\u003E\\n    },\\n    \u003Cspan class=\\\"hljs-attr\\\"\u003Eextends:\u003C\u002Fspan\u003E [\\n        \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;plugin:@typescript-eslint\u002Frecommended&#x27;\u003C\u002Fspan\u003E,\\n        \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;plugin:prettier\u002Frecommended&#x27;\u003C\u002Fspan\u003E,\\n        \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;eslint:recommended&#x27;\u003C\u002Fspan\u003E\\n    ]\\n}\u003Cspan class=\\\"hljs-string\\\"\u003E;\u003C\u002Fspan\u003E\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch4 id=\\\"配置prettier\\\"\u003E配置\u003Ccode\u003EPrettier\u003C\u002Fcode\u003E\u003C\u002Fh4\u003E\\n\u003Cp\u003E在项目根目录下创建\u003Ccode\u003E.prettierrc\u003C\u002Fcode\u003E文件，内容如下：\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-json\\\"\u003E{\\n    \u003Cspan class=\\\"hljs-attr\\\"\u003E&quot;semi&quot;\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-literal\\\"\u003Efalse\u003C\u002Fspan\u003E,\\n    \u003Cspan class=\\\"hljs-attr\\\"\u003E&quot;singleQuote&quot;\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-literal\\\"\u003Etrue\u003C\u002Fspan\u003E,\\n    \u003Cspan class=\\\"hljs-attr\\\"\u003E&quot;printWidth&quot;\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-number\\\"\u003E100\u003C\u002Fspan\u003E,\\n    \u003Cspan class=\\\"hljs-attr\\\"\u003E&quot;tabWidth&quot;\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-number\\\"\u003E2\u003C\u002Fspan\u003E,\\n    \u003Cspan class=\\\"hljs-attr\\\"\u003E&quot;endOfLine&quot;\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;auto&quot;\u003C\u002Fspan\u003E\\n}\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cp\u003E可根据自己的喜好自行配置规则\u003C\u002Fp\u003E\\n\u003Ch4 id=\\\"配置vscode\\\"\u003E配置\u003Ccode\u003EVSCODE\u003C\u002Fcode\u003E\u003C\u002Fh4\u003E\\n\u003Cp\u003E需要安装插件\u003Ccode\u003EESlint\u003C\u002Fcode\u003E和\u003Ccode\u003EPrettier\u003C\u002Fcode\u003E并在设置中设置\u003Ccode\u003EPrettier\u003C\u002Fcode\u003E或在用户设置文件\u003Ccode\u003Esettings.json\u003C\u002Fcode\u003E添加以下代码：\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-json\\\"\u003E{\\n    \u003Cspan class=\\\"hljs-attr\\\"\u003E&quot;prettier.jsxSingleQuote&quot;\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-literal\\\"\u003Etrue\u003C\u002Fspan\u003E,\\n    \u003Cspan class=\\\"hljs-attr\\\"\u003E&quot;prettier.requireConfig&quot;\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-literal\\\"\u003Etrue\u003C\u002Fspan\u003E,\\n    \u003Cspan class=\\\"hljs-attr\\\"\u003E&quot;prettier.semi&quot;\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-literal\\\"\u003Efalse\u003C\u002Fspan\u003E,\\n    \u003Cspan class=\\\"hljs-attr\\\"\u003E&quot;prettier.singleQuote&quot;\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-literal\\\"\u003Etrue\u003C\u002Fspan\u003E,\\n    \u003Cspan class=\\\"hljs-attr\\\"\u003E&quot;prettier.arrowParens&quot;\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;avoid&quot;\u003C\u002Fspan\u003E,\\n    \u003Cspan class=\\\"hljs-attr\\\"\u003E&quot;prettier.endOfLine&quot;\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;auto&quot;\u003C\u002Fspan\u003E,\\n    \u003Cspan class=\\\"hljs-attr\\\"\u003E&quot;editor.formatOnSave&quot;\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-literal\\\"\u003Etrue\u003C\u002Fspan\u003E,\\n    \u003Cspan class=\\\"hljs-attr\\\"\u003E&quot;editor.codeActionsOnSave&quot;\u003C\u002Fspan\u003E: {\\n        \u003Cspan class=\\\"hljs-attr\\\"\u003E&quot;source.fixAll.eslint&quot;\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-literal\\\"\u003Etrue\u003C\u002Fspan\u003E\\n    }\\n}\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cp\u003E其中，\u003Ccode\u003Eeditor.formatOnSave\u003C\u002Fcode\u003E表示是否在保存时执行格式化操作，\u003Ccode\u003Eeditor.codeActionsOnSave\u003C\u002Fcode\u003E表示在保存时执行的操作，其中\u003Ccode\u003E&quot;source.fixAll.eslint&quot;: true\u003C\u002Fcode\u003E表示自动修复，即：保存时自动修复错误格式\u003C\u002Fp\u003E\\n\u003Ch3 id=\\\"配置stylelint\\\"\u003E配置\u003Ccode\u003EStylelint\u003C\u002Fcode\u003E\u003C\u002Fh3\u003E\\n\u003Ch4 id=\\\"安装依赖-1\\\"\u003E安装依赖\u003C\u002Fh4\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-bash\\\"\u003Eyarn \u003Cspan class=\\\"hljs-keyword\\\"\u003Eadd \u003C\u002Fspan\u003E-D stylelint stylelint-\u003Cspan class=\\\"hljs-built_in\\\"\u003Econfig\u003C\u002Fspan\u003E-standard stylelint-\u003Cspan class=\\\"hljs-keyword\\\"\u003Eorder \u003C\u002Fspan\u003Estylelint-\u003Cspan class=\\\"hljs-built_in\\\"\u003Econfig\u003C\u002Fspan\u003E-property-sort-\u003Cspan class=\\\"hljs-keyword\\\"\u003Eorder-smacss\u003C\u002Fspan\u003E\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003Estylelint\u003C\u002Fcode\u003E：\u003Ccode\u003Estylelint\u003C\u002Fcode\u003E基础依赖\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Estylelint-config-standard\u003C\u002Fcode\u003E：\u003Ccode\u003Estylelint\u003C\u002Fcode\u003E标准配置\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Estylelint-order\u003C\u002Fcode\u003E：属性排序配置\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Estylelint-config-property-sort-order-smacss\u003C\u002Fcode\u003E：基于\u003Ca href=\\\"http:\u002F\u002Fsmacss.com\\\"\u003ESMACSS\u003C\u002Fa\u003E方法的属性排序的\u003Ccode\u003EStylelint\u003C\u002Fcode\u003E配置。\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Ch4 id=\\\"配置stylelint-1\\\"\u003E配置\u003Ccode\u003EStylelint\u003C\u002Fcode\u003E\u003C\u002Fh4\u003E\\n\u003Cp\u003E在项目根目录下创建\u003Ccode\u003E.stylelintrc\u003C\u002Fcode\u003E文件\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-json\\\"\u003E{\\n    \u003Cspan class=\\\"hljs-attr\\\"\u003E&quot;extends&quot;\u003C\u002Fspan\u003E: [\u003Cspan class=\\\"hljs-string\\\"\u003E&quot;stylelint-config-standard&quot;\u003C\u002Fspan\u003E, \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;stylelint-config-property-sort-order-smacss&quot;\u003C\u002Fspan\u003E],\\n    \u003Cspan class=\\\"hljs-attr\\\"\u003E&quot;plugins&quot;\u003C\u002Fspan\u003E: [\u003Cspan class=\\\"hljs-string\\\"\u003E&quot;stylelint-order&quot;\u003C\u002Fspan\u003E]\\n}\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch4 id=\\\"配置vscode-1\\\"\u003E配置\u003Ccode\u003EVSCODE\u003C\u002Fcode\u003E\u003C\u002Fh4\u003E\\n\u003Cp\u003E安装插件\u003Ccode\u003Estylelint\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003Ch4 id=\\\"常用忽略注释\\\"\u003E常用忽略注释\u003C\u002Fh4\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003E\u002F* stylelint-disable *\u002F\u003C\u002Fcode\u003E：全文件关闭规则校验\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003E\u002F* stylelint-disable-line *\u002F\u003C\u002Fcode\u003E：当前行关闭规则校验\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003E\u002F* stylelint-disable-next-line *\u002F\u003C\u002Fcode\u003E：下一行关闭规则校验\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Cp\u003E空格加规则可只关闭某个规则，规则列表用\u003Ccode\u003E,\u003C\u002Fcode\u003E隔开，如：\u003Ccode\u003E\u002F* stylelint-disable selector-no-id, declaration-no-important *\u002F\u003C\u002Fcode\u003E。\u003Ccode\u003E.stylelintignore\u003C\u002Fcode\u003E文件可指定忽略的文件\u003C\u002Fp\u003E\\n\u003Ch2 id=\\\"配置husky和lint-staged\\\"\u003E配置\u003Ccode\u003Ehusky\u003C\u002Fcode\u003E和\u003Ccode\u003Elint-staged\u003C\u002Fcode\u003E\u003C\u002Fh2\u003E\\n\u003Cp\u003E\u003Ccode\u003Ehusky\u003C\u002Fcode\u003E是一个增强\u003Ccode\u003Egithook\u003C\u002Fcode\u003E的工具，可以添加\u003Ccode\u003Ecommit\u003C\u002Fcode\u003E钩子函数，帮助在提交时做一些验证，\u003Ccode\u003Elint-staged\u003C\u002Fcode\u003E过滤出暂存区文件\u003C\u002Fp\u003E\\n\u003Ch3 id=\\\"安装依赖-2\\\"\u003E安装依赖\u003C\u002Fh3\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-bash\\\"\u003Eyarn \u003Cspan class=\\\"hljs-builtin-name\\\"\u003Eadd\u003C\u002Fspan\u003E -D husky lint-staged\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003E注意：\u003Ccode\u003Ehusky@4.x\u003C\u002Fcode\u003E和\u003Ccode\u003Ehusky@7.x\u003C\u002Fcode\u003E配置有区别\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Ch3 id=\\\"配置husky\\\"\u003E配置\u003Ccode\u003Ehusky\u003C\u002Fcode\u003E\u003C\u002Fh3\u003E\\n\u003Cp\u003E在\u003Ccode\u003Epackage.json\u003C\u002Fcode\u003E的\u003Ccode\u003Escripts\u003C\u002Fcode\u003E中添加\u003Ccode\u003E&quot;prepare&quot;: &quot;husky install&quot;\u003C\u002Fcode\u003E，然后执行\u003Ccode\u003Enpm run prepare\u003C\u002Fcode\u003E，会在根目录下生成\u003Ccode\u003E.husky\u003C\u002Fcode\u003E目录，然后执行\u003Ccode\u003Enpx husky add .husky\u002Fpre-commit &quot;npx lint-staged&quot;\u003C\u002Fcode\u003E，则在\u003Ccode\u003E.husky\u003C\u002Fcode\u003E目录下会生成\u003Ccode\u003Epre-commit\u003C\u002Fcode\u003E。当执行\u003Ccode\u003Egit commit\u003C\u002Fcode\u003E操作时会触发\u003Ccode\u003Enpx lint-staged\u003C\u002Fcode\u003E命令\u003C\u002Fp\u003E\\n\u003Ch3 id=\\\"配置lint-staged\\\"\u003E配置\u003Ccode\u003Elint-staged\u003C\u002Fcode\u003E\u003C\u002Fh3\u003E\\n\u003Cp\u003E在项目根目录下创建\u003Ccode\u003E.lintstagedrc.js\u003C\u002Fcode\u003E文件，文件内容如下：\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-js\\\"\u003Emodule.exports = {\\n    \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;src\u003C\u002Fspan\u003E\u002F**\u002F*.{js,jsx,ts,tsx,json,html}\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;: [&#x27;\u003C\u002Fspan\u003Eeslint&#x27;, \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;prettier\u003C\u002Fspan\u003E --write&#x27;, \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;git\u003C\u002Fspan\u003E add&#x27;],\\n    \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;src\u003C\u002Fspan\u003E\u002F**\u002F*.{css,less}\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;: [&#x27;\u003C\u002Fspan\u003Estylelint --fix&#x27;, \u003Cspan class=\\\"hljs-symbol\\\"\u003E&#x27;git\u003C\u002Fspan\u003E add&#x27;]\\n};\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch2 id=\\\"目录设计\\\"\u003E目录设计\u003C\u002Fh2\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E\u003Ccode\u003E@types\u003C\u002Fcode\u003E：与数据模型无关的\u003Ccode\u003ETS\u003C\u002Fcode\u003E的类型定义\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Eantd\u003C\u002Fcode\u003E：组件库\u003Ccode\u003EAntd\u003C\u002Fcode\u003E相关\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Eapi\u003C\u002Fcode\u003E：后端接口的封装\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Eassets\u003C\u002Fcode\u003E：静态资源(样式、图片、字体)\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Ecomponents\u003C\u002Fcode\u003E：通用的组件\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Elayouts\u003C\u002Fcode\u003E：布局相关的组件\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Emocks\u003C\u002Fcode\u003E：\u003Ccode\u003Emock\u003C\u002Fcode\u003E数据\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Emodels\u003C\u002Fcode\u003E：与数据模型相关的\u003Ccode\u003ETS\u003C\u002Fcode\u003E的类型定义\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Epages\u003C\u002Fcode\u003E：页面相关的组件\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Erouter\u003C\u002Fcode\u003E：路由相关\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Estore\u003C\u002Fcode\u003E：状态管理相关\u003C\u002Fli\u003E\\n\u003Cli\u003E\u003Ccode\u003Eutils\u003C\u002Fcode\u003E：通用方法相关\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\u003Ch3 id=\\\"设置目录别名\\\"\u003E设置目录别名\u003C\u002Fh3\u003E\\n\u003Cp\u003E需要修改\u003Ccode\u003Etsconfig.json\u003C\u002Fcode\u003E和\u003Ccode\u003Evite.config.ts\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003Cp\u003E\u003Ccode\u003Etsconfig.json\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-diff\\\"\u003E{\\n  \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;compilerOptions&quot;\u003C\u002Fspan\u003E: {\\n    \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;target&quot;\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;ESNext&quot;\u003C\u002Fspan\u003E,\\n    \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;lib&quot;\u003C\u002Fspan\u003E: [\u003Cspan class=\\\"hljs-string\\\"\u003E&quot;DOM&quot;\u003C\u002Fspan\u003E, \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;DOM.Iterable&quot;\u003C\u002Fspan\u003E, \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;ESNext&quot;\u003C\u002Fspan\u003E],\\n    \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;allowJs&quot;\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-literal\\\"\u003Efalse\u003C\u002Fspan\u003E,\\n    \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;skipLibCheck&quot;\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-literal\\\"\u003Efalse\u003C\u002Fspan\u003E,\\n    \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;esModuleInterop&quot;\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-literal\\\"\u003Efalse\u003C\u002Fspan\u003E,\\n    \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;allowSyntheticDefaultImports&quot;\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-literal\\\"\u003Etrue\u003C\u002Fspan\u003E,\\n    \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;strict&quot;\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-literal\\\"\u003Etrue\u003C\u002Fspan\u003E,\\n    \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;forceConsistentCasingInFileNames&quot;\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-literal\\\"\u003Etrue\u003C\u002Fspan\u003E,\\n    \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;module&quot;\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;ESNext&quot;\u003C\u002Fspan\u003E,\\n    \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;moduleResolution&quot;\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;Node&quot;\u003C\u002Fspan\u003E,\\n    \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;resolveJsonModule&quot;\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-literal\\\"\u003Etrue\u003C\u002Fspan\u003E,\\n    \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;isolatedModules&quot;\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-literal\\\"\u003Etrue\u003C\u002Fspan\u003E,\\n    \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;noEmit&quot;\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-literal\\\"\u003Etrue\u003C\u002Fspan\u003E,\\n    \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;jsx&quot;\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;react&quot;\u003C\u002Fspan\u003E,\\n+    \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;baseUrl&quot;\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;.&quot;\u003C\u002Fspan\u003E,\\n+    \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;paths&quot;\u003C\u002Fspan\u003E: {\\n+      \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;@\u002F*&quot;\u003C\u002Fspan\u003E:[\u003Cspan class=\\\"hljs-string\\\"\u003E&quot;.\u002Fsrc\u002F*&quot;\u003C\u002Fspan\u003E]\\n+    }\\n  },\\n-  \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;include&quot;\u003C\u002Fspan\u003E: [\u003Cspan class=\\\"hljs-string\\\"\u003E&quot;.\u002Fsrc&quot;\u003C\u002Fspan\u003E]\\n+  \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;include&quot;\u003C\u002Fspan\u003E: [\u003Cspan class=\\\"hljs-string\\\"\u003E&quot;src\u002F**\u002F*.ts&quot;\u003C\u002Fspan\u003E, \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;src\u002F**\u002F*.d.ts&quot;\u003C\u002Fspan\u003E, \u003Cspan class=\\\"hljs-string\\\"\u003E&quot;src\u002F**\u002F*.tsx&quot;\u003C\u002Fspan\u003E]\\n}\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cp\u003E\u003Ccode\u003Evite.config.ts\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-diff\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E { defineConfig } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;vite&#x27;\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E reactRefresh \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;@vitejs\u002Fplugin-react-refresh&#x27;\u003C\u002Fspan\u003E\\n\\n\u003Cspan class=\\\"hljs-regexp\\\"\u003E\u002F\u002F https:\u002F\u002F\u003C\u002Fspan\u003Evitejs.dev\u003Cspan class=\\\"hljs-regexp\\\"\u003E\u002Fconfig\u002F\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eexport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Edefault\u003C\u002Fspan\u003E defineConfig({\\n  plugins: [reactRefresh()],\\n+  resolve: {\\n+    alias: [{ find: \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;@&#x27;\u003C\u002Fspan\u003E, replacement: \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;\u002Fsrc&#x27;\u003C\u002Fspan\u003E }],\\n+  },\\n})\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch2 id=\\\"路由\\\"\u003E路由\u003C\u002Fh2\u003E\\n\u003Ch3 id=\\\"安装\\\"\u003E安装\u003C\u002Fh3\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-bash\\\"\u003Eyarn \u003Cspan class=\\\"hljs-keyword\\\"\u003Eadd \u003C\u002Fspan\u003Ereact-router-dom react-router-\u003Cspan class=\\\"hljs-built_in\\\"\u003Econfig\u003C\u002Fspan\u003E\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-bash\\\"\u003Eyarn \u003Cspan class=\\\"hljs-keyword\\\"\u003Eadd\u003C\u002Fspan\u003E -D \u003Cspan class=\\\"hljs-title\\\"\u003E@types\u003C\u002Fspan\u003E\u002Freact-router-dom \u003Cspan class=\\\"hljs-title\\\"\u003E@types\u003C\u002Fspan\u003E\u002Freact-router-config\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch3 id=\\\"目录介绍\\\"\u003E目录介绍\u003C\u002Fh3\u003E\\n\u003Cp\u003E\u003Ccode\u003Erouter\u002Findex.ts\u003C\u002Fcode\u003E：所有的路由相关内容导出文件\\n\u003Ccode\u003Erouter\u002Froutes.ts\u003C\u002Fcode\u003E：所有路由配置文件\u003C\u002Fp\u003E\\n\u003Cp\u003E创建\u003Ccode\u003Erouter\u002Findex.ts\u003C\u002Fcode\u003E文件\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-ts\\\"\u003E\u003Cspan class=\\\"hljs-builtin-name\\\"\u003Eexport\u003C\u002Fspan\u003E { BrowserRouter } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;react-router-dom&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-builtin-name\\\"\u003Eexport\u003C\u002Fspan\u003E {\u003Cspan class=\\\"hljs-built_in\\\"\u003E default \u003C\u002Fspan\u003Eas routes } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;.\u002Froutes&#x27;\u003C\u002Fspan\u003E;\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cp\u003E创建\u003Ccode\u003Erouter\u002Froutes.ts\u003C\u002Fcode\u003E文件并添加路由配置\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-ts\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E { lazy } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;react&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E type { RouteConfig } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;react-router-config&#x27;\u003C\u002Fspan\u003E;\\n\\nconst routes: \u003Cspan class=\\\"hljs-built_in\\\"\u003EArray\u003C\u002Fspan\u003E&lt;RouteConfig&gt; = [\\n    {\\n        path: \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;\u002F&#x27;\u003C\u002Fspan\u003E,\\n        exact: \u003Cspan class=\\\"hljs-literal\\\"\u003Etrue\u003C\u002Fspan\u003E,\\n        component: lazy(\u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-params\\\"\u003E()\u003C\u002Fspan\u003E =&gt;\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;@\u002Fpages\u002Fhome&#x27;\u003C\u002Fspan\u003E))\\n    },\\n    {\\n        path: \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;\u002Flogin&#x27;\u003C\u002Fspan\u003E,\\n        component: lazy(\u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-params\\\"\u003E()\u003C\u002Fspan\u003E =&gt;\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;@\u002Fpages\u002Fuser\u002Flogin&#x27;\u003C\u002Fspan\u003E))\\n    }\\n];\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eexport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Edefault\u003C\u002Fspan\u003E routes;\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cp\u003E创建页面路由\u003Ccode\u003Epages\u002Fuser\u002Flogin.tsx\u003C\u002Fcode\u003E和\u003Ccode\u003Epages\u002Fhome\u002Findex.tsx\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003Cp\u003E\u003Ccode\u003Epages\u002Fuser\u002Flogin.tsx\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-tsx\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E React \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;react&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Etype\u003C\u002Fspan\u003E { ReactElement } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;react&#x27;\u003C\u002Fspan\u003E;\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E Login = (): \u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-params\\\"\u003EReactElement\u003C\u002Fspan\u003E =&gt;\u003C\u002Fspan\u003E {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"xml\\\"\u003E\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Ediv\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003Elogin\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Ediv\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E;\\n};\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eexport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Edefault\u003C\u002Fspan\u003E Login;\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cp\u003E\u003Ccode\u003Epages\u002Fhome\u002Findex.tsx\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-tsx\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E React \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;react&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Etype\u003C\u002Fspan\u003E { ReactElement } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;react&#x27;\u003C\u002Fspan\u003E;\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E Home = (): \u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-params\\\"\u003EReactElement\u003C\u002Fspan\u003E =&gt;\u003C\u002Fspan\u003E {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"xml\\\"\u003E\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Eh1\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003EHome\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Eh1\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E;\\n};\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eexport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Edefault\u003C\u002Fspan\u003E Home;\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch3 id=\\\"使用\\\"\u003E使用\u003C\u002Fh3\u003E\\n\u003Cp\u003E在\u003Ccode\u003Emain.tsx\u003C\u002Fcode\u003E文件中添加\u003Ccode\u003EBrowserRouter\u003C\u002Fcode\u003E组件\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-tsx\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E React \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;react&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E ReactDOM \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;react-dom&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E App \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;@\u002FApp&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E { BrowserRouter } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;@\u002Frouter&#x27;\u003C\u002Fspan\u003E;\\n\\nReactDOM.render(\\n    \u003Cspan class=\\\"xml\\\"\u003E\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003EReact.StrictMode\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n        \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003EBrowserRouter\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n            \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003EApp\u003C\u002Fspan\u003E \u002F&gt;\u003C\u002Fspan\u003E\\n        \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003EBrowserRouter\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n    \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003EReact.StrictMode\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E,\\n    \u003Cspan class=\\\"hljs-built_in\\\"\u003Edocument\u003C\u002Fspan\u003E.getElementById(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;root&#x27;\u003C\u002Fspan\u003E)\\n);\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cp\u003E在\u003Ccode\u003EApp\u003C\u002Fcode\u003E中渲染所有路由，因为用到懒加载，所以使用了\u003Ccode\u003ESuspense\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-tsx\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E React, { Suspense } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;react&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Etype\u003C\u002Fspan\u003E { ReactElement } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;react&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E { renderRoutes } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;react-router-config&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E { routes } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;@\u002Frouter&#x27;\u003C\u002Fspan\u003E;\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E App = (): \u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-params\\\"\u003EReactElement\u003C\u002Fspan\u003E =&gt;\u003C\u002Fspan\u003E {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"xml\\\"\u003E\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003ESuspense\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003Efallback\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E{\u003C\u002Fspan\u003E&lt;\u003Cspan class=\\\"hljs-attr\\\"\u003Ediv\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003Eloading...\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Ediv\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E}&gt;{renderRoutes(routes)}\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003ESuspense\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E;\\n};\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eexport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Edefault\u003C\u002Fspan\u003E App;\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cp\u003E运行\u003Ccode\u003Eyarn dev\u003C\u002Fcode\u003E看看是否运行正常\u003C\u002Fp\u003E\\n\u003Ch3 id=\\\"路由鉴权\\\"\u003E路由鉴权\u003C\u002Fh3\u003E\\n\u003Cp\u003E添加\u003Ccode\u003Erouter\u002FAuthRoute.tsx\u003C\u002Fcode\u003E用于路由鉴权\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-tsx\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E React \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;react&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E { withRouter } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;react-router&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E { Redirect } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;react-router-dom&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E storage, { TOKEN } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;@\u002Futils\u002Fstorage&#x27;\u003C\u002Fspan\u003E;\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E AuthRoute = withRouter(\u003Cspan class=\\\"hljs-function\\\"\u003E(\u003Cspan class=\\\"hljs-params\\\"\u003Eprops: \u003Cspan class=\\\"hljs-built_in\\\"\u003Eany\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E) =&gt;\u003C\u002Fspan\u003E {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E { children, history } = props;\\n\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E token = storage.get(TOKEN);\\n\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Eif\u003C\u002Fspan\u003E (history.location.pathname !== \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;\u002Flogin&#x27;\u003C\u002Fspan\u003E &amp;&amp; !token) {\\n        \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E \u003Cspan class=\\\"xml\\\"\u003E\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003ERedirect\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003Eto\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E&quot;\u002Flogin&quot;\u003C\u002Fspan\u003E \u002F&gt;\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E;\\n    }\\n\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E children;\\n});\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eexport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Edefault\u003C\u002Fspan\u003E AuthRoute;\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cp\u003E其中使用了\u003Ccode\u003Estorage\u003C\u002Fcode\u003E封装，所以添加一下\u003Ccode\u003Eutils\u002Fstorage.ts\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-ts\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E { isUndef } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;.\u002Ftools&#x27;\u003C\u002Fspan\u003E;\\n\\n\u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F token\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eexport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E TOKEN = \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;ADMIN_TOKEN&#x27;\u003C\u002Fspan\u003E;\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eexport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Edefault\u003C\u002Fspan\u003E {\\n    \u003Cspan class=\\\"hljs-attr\\\"\u003Eget\u003C\u002Fspan\u003E: (key: \u003Cspan class=\\\"hljs-built_in\\\"\u003Estring\u003C\u002Fspan\u003E): \u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-params\\\"\u003Eany\u003C\u002Fspan\u003E =&gt;\u003C\u002Fspan\u003E {\\n        \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E data: \u003Cspan class=\\\"hljs-built_in\\\"\u003Estring\u003C\u002Fspan\u003E | \u003Cspan class=\\\"hljs-literal\\\"\u003Enull\u003C\u002Fspan\u003E = \u003Cspan class=\\\"hljs-built_in\\\"\u003Ewindow\u003C\u002Fspan\u003E.localStorage.getItem(key);\\n        \u003Cspan class=\\\"hljs-keyword\\\"\u003Etry\u003C\u002Fspan\u003E {\\n            \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E data === \u003Cspan class=\\\"hljs-literal\\\"\u003Enull\u003C\u002Fspan\u003E ? data : \u003Cspan class=\\\"hljs-built_in\\\"\u003EJSON\u003C\u002Fspan\u003E.parse(data);\\n        } \u003Cspan class=\\\"hljs-keyword\\\"\u003Ecatch\u003C\u002Fspan\u003E {\\n            \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E data;\\n        }\\n    },\\n    \u003Cspan class=\\\"hljs-attr\\\"\u003Eset\u003C\u002Fspan\u003E: (key: \u003Cspan class=\\\"hljs-built_in\\\"\u003Estring\u003C\u002Fspan\u003E, \u003Cspan class=\\\"hljs-attr\\\"\u003Edata\u003C\u002Fspan\u003E: unknown): \u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-params\\\"\u003Evoid\u003C\u002Fspan\u003E =&gt;\u003C\u002Fspan\u003E {\\n        \u003Cspan class=\\\"hljs-keyword\\\"\u003Eif\u003C\u002Fspan\u003E (!isUndef(key) &amp;&amp; !isUndef(data)) {\\n            \u003Cspan class=\\\"hljs-keyword\\\"\u003Elet\u003C\u002Fspan\u003E payload = &lt;\u003Cspan class=\\\"hljs-built_in\\\"\u003Estring\u003C\u002Fspan\u003E&gt;data;\\n\\n            \u003Cspan class=\\\"hljs-keyword\\\"\u003Eif\u003C\u002Fspan\u003E (\u003Cspan class=\\\"hljs-keyword\\\"\u003Etypeof\u003C\u002Fspan\u003E data !== \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;string&#x27;\u003C\u002Fspan\u003E) {\\n                payload = \u003Cspan class=\\\"hljs-built_in\\\"\u003EJSON\u003C\u002Fspan\u003E.stringify(data);\\n            }\\n\\n            \u003Cspan class=\\\"hljs-built_in\\\"\u003Ewindow\u003C\u002Fspan\u003E.localStorage.setItem(key, payload);\\n        }\\n    },\\n    \u003Cspan class=\\\"hljs-attr\\\"\u003Eremove\u003C\u002Fspan\u003E: (key: \u003Cspan class=\\\"hljs-built_in\\\"\u003Estring\u003C\u002Fspan\u003E): \u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-params\\\"\u003Evoid\u003C\u002Fspan\u003E =&gt;\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-built_in\\\"\u003Ewindow\u003C\u002Fspan\u003E.localStorage.removeItem(key)\\n};\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cp\u003E其中使用了\u003Ccode\u003Eutils\u002Ftools.ts\u003C\u002Fcode\u003E，所有创建\u003Ccode\u003Eutils\u002Ftools.ts\u003C\u002Fcode\u003E文件\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-ts\\\"\u003E\u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 判断是否未定义\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eexport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E isUndef = (v: unknown): \u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-params\\\"\u003Eboolean\u003C\u002Fspan\u003E =&gt;\u003C\u002Fspan\u003E v === \u003Cspan class=\\\"hljs-literal\\\"\u003Eundefined\u003C\u002Fspan\u003E || v === \u003Cspan class=\\\"hljs-literal\\\"\u003Enull\u003C\u002Fspan\u003E;\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cp\u003E然后将\u003Ccode\u003EAuthRoute\u003C\u002Fcode\u003E组件通过\u003Ccode\u003Erouter\u002Findex.ts\u003C\u002Fcode\u003E导出\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-ts\\\"\u003E\u003Cspan class=\\\"hljs-builtin-name\\\"\u003Eexport\u003C\u002Fspan\u003E { BrowserRouter } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;react-router-dom&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-builtin-name\\\"\u003Eexport\u003C\u002Fspan\u003E {\u003Cspan class=\\\"hljs-built_in\\\"\u003E default \u003C\u002Fspan\u003Eas routes } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;.\u002Froutes&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-builtin-name\\\"\u003Eexport\u003C\u002Fspan\u003E {\u003Cspan class=\\\"hljs-built_in\\\"\u003E default \u003C\u002Fspan\u003Eas AuthRoute } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;.\u002FAuthRoute&#x27;\u003C\u002Fspan\u003E;\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cp\u003E然后在\u003Ccode\u003EApp.tsx\u003C\u002Fcode\u003E中使用\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-tsx\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E React, { Suspense } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;react&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Etype\u003C\u002Fspan\u003E { ReactElement } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;react&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E { renderRoutes } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;react-router-config&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E { routes, AuthRoute } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;@\u002Frouter&#x27;\u003C\u002Fspan\u003E;\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E App = (): \u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-params\\\"\u003EReactElement\u003C\u002Fspan\u003E =&gt;\u003C\u002Fspan\u003E {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E (\\n        \u003Cspan class=\\\"xml\\\"\u003E\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003ESuspense\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003Efallback\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E{\u003C\u002Fspan\u003E&lt;\u003Cspan class=\\\"hljs-attr\\\"\u003Ediv\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003Eloading...\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Ediv\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E}&gt;\\n            \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003EAuthRoute\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E{renderRoutes(routes)}\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003EAuthRoute\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n        \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003ESuspense\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E\\n    );\\n};\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eexport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Edefault\u003C\u002Fspan\u003E App;\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch2 id=\\\"组件库-antd\\\"\u003E组件库 Antd\u003C\u002Fh2\u003E\\n\u003Ch3 id=\\\"安装-1\\\"\u003E安装\u003C\u002Fh3\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-bash\\\"\u003Eyarn \u003Cspan class=\\\"hljs-builtin-name\\\"\u003Eadd\u003C\u002Fspan\u003E antd\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cp\u003E在定制\u003Ccode\u003EAntd\u003C\u002Fcode\u003E主题时准备使用\u003Ccode\u003Eless\u003C\u002Fcode\u003E变量定制，所以还需要安装\u003Ccode\u003Eless\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-bash\\\"\u003Eyarn \u003Cspan class=\\\"hljs-builtin-name\\\"\u003Eadd\u003C\u002Fspan\u003E -D less\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch3 id=\\\"使用-1\\\"\u003E使用\u003C\u002Fh3\u003E\\n\u003Cp\u003E创建\u003Ccode\u003Eantd\u002Findex.ts\u003C\u002Fcode\u003E文件，用于引入项目所需的组件，其实可以在需要的地方引入，但是统一地方引入为了方便管理\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-ts\\\"\u003E\u003Cspan class=\\\"hljs-builtin-name\\\"\u003Eexport\u003C\u002Fspan\u003E { Spin } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;antd&#x27;\u003C\u002Fspan\u003E;\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cp\u003E创建\u003Ccode\u003Eantd\u002Ftheme.less\u003C\u002Fcode\u003E文件，用于主题定制\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-less\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003E@import\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;~antd\u002Flib\u002Fstyle\u002Fthemes\u002Fdefault.less&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003E@import\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;~antd\u002Fdist\u002Fantd.less&#x27;\u003C\u002Fspan\u003E;\\n\\n\u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 通过less变量定制主题色\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F @primary-color: #1890ff; \u002F\u002F 全局主色\u003C\u002Fspan\u003E\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cp\u003E为了使用\u003Ccode\u003E~\u003C\u002Fcode\u003E引入\u003Ccode\u003EAntd\u003C\u002Fcode\u003E样式需要添加别名,以及解决引入\u003Ccode\u003EAntd\u003C\u002Fcode\u003E样式报错，还需要添加\u003Ccode\u003Eless\u003C\u002Fcode\u003E配置\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-ts\\\"\u003Eimport { defineConfig } from \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;vite&#x27;\u003C\u002Fspan\u003E;\\nimport reactRefresh from \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;@vitejs\u002Fplugin-react-refresh&#x27;\u003C\u002Fspan\u003E;\\n\\n\u003Cspan class=\\\"hljs-regexp\\\"\u003E\u002F\u002F\u003C\u002Fspan\u003E https:\u003Cspan class=\\\"hljs-regexp\\\"\u003E\u002F\u002F\u003C\u002Fspan\u003Evitejs.dev\u003Cspan class=\\\"hljs-regexp\\\"\u003E\u002Fconfig\u002F\u003C\u002Fspan\u003E\\nexport default defineConfig({\\n    plugins: [reactRefresh()],\\n    resolve: {\\n        alias: [\\n            \u003Cspan class=\\\"hljs-regexp\\\"\u003E\u002F\u002F\u003C\u002Fspan\u003E 处理通过\u003Cspan class=\\\"hljs-string\\\"\u003E&quot;~&quot;\u003C\u002Fspan\u003E引入Antd问题\\n            { find: \u003Cspan class=\\\"hljs-regexp\\\"\u003E\u002F^~\u002F\u003C\u002Fspan\u003E, replacement: \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;&#x27;\u003C\u002Fspan\u003E },\\n            { find: \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;@&#x27;\u003C\u002Fspan\u003E, replacement: \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;\u002Fsrc&#x27;\u003C\u002Fspan\u003E }\\n        ]\\n    },\\n    \u003Cspan class=\\\"hljs-regexp\\\"\u003E\u002F\u002F\u003C\u002Fspan\u003E 处理引入Antd样式报错问题\\n    css: {\\n        preprocessorOptions: {\\n            less: {\\n                javascriptEnabled: true\\n            }\\n        }\\n    }\\n});\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cp\u003E然后创建\u003Ccode\u003Eassets\u002Fstyles\u002Fapp.less\u003C\u002Fcode\u003E文件,用于引入全局的样式\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-less\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003E@import\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;..\u002F..\u002Fantd\u002Ftheme&#x27;\u003C\u002Fspan\u003E;\\n\\n\u003Cspan class=\\\"hljs-selector-class\\\"\u003E.page-loading\u003C\u002Fspan\u003E {\\n    \u003Cspan class=\\\"hljs-attribute\\\"\u003Edisplay\u003C\u002Fspan\u003E: flex;\\n    \u003Cspan class=\\\"hljs-attribute\\\"\u003Ez-index\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-number\\\"\u003E9999\u003C\u002Fspan\u003E;\\n    \u003Cspan class=\\\"hljs-attribute\\\"\u003Ealign-items\u003C\u002Fspan\u003E: center;\\n    \u003Cspan class=\\\"hljs-attribute\\\"\u003Ejustify-content\u003C\u002Fspan\u003E: center;\\n    \u003Cspan class=\\\"hljs-attribute\\\"\u003Ewidth\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-number\\\"\u003E100vw\u003C\u002Fspan\u003E;\\n    \u003Cspan class=\\\"hljs-attribute\\\"\u003Eheight\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-number\\\"\u003E100vh\u003C\u002Fspan\u003E;\\n    \u003Cspan class=\\\"hljs-attribute\\\"\u003Ebackground-color\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-built_in\\\"\u003Ergba\u003C\u002Fspan\u003E(\u003Cspan class=\\\"hljs-number\\\"\u003E255\u003C\u002Fspan\u003E, \u003Cspan class=\\\"hljs-number\\\"\u003E255\u003C\u002Fspan\u003E, \u003Cspan class=\\\"hljs-number\\\"\u003E255\u003C\u002Fspan\u003E, \u003Cspan class=\\\"hljs-number\\\"\u003E0.8\u003C\u002Fspan\u003E);\\n}\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cp\u003E在\u003Ccode\u003EApp.tsx\u003C\u002Fcode\u003E引入样式\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-tsx\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E React, { Suspense } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;react&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Etype\u003C\u002Fspan\u003E { ReactElement } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;react&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E { renderRoutes } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;react-router-config&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E { routes, AuthRoute } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;@\u002Frouter&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;@\u002Fassets\u002Fstyles\u002Fapp.less&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E { Spin } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;@\u002Fantd&#x27;\u003C\u002Fspan\u003E;\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E App = (): \u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-params\\\"\u003EReactElement\u003C\u002Fspan\u003E =&gt;\u003C\u002Fspan\u003E {\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E Loading = \u003Cspan class=\\\"hljs-function\\\"\u003E() =&gt;\u003C\u002Fspan\u003E {\\n        \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E (\\n            \u003Cspan class=\\\"xml\\\"\u003E\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003Ediv\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003EclassName\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E&quot;page-loading&quot;\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n                \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003ESpin\u003C\u002Fspan\u003E \u002F&gt;\u003C\u002Fspan\u003E\\n            \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003Ediv\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E\\n        );\\n    };\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E (\\n        \u003Cspan class=\\\"xml\\\"\u003E\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003ESuspense\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003Efallback\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E{\u003C\u002Fspan\u003E&lt;\u003Cspan class=\\\"hljs-attr\\\"\u003ELoading\u003C\u002Fspan\u003E \u002F&gt;\u003C\u002Fspan\u003E}&gt;\\n            \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003EAuthRoute\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E{renderRoutes(routes)}\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003EAuthRoute\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n        \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003ESuspense\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E\\n    );\\n};\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eexport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Edefault\u003C\u002Fspan\u003E App;\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cp\u003E创建文件\u003Ccode\u003Esrc\u002Fantd\u002Findex.ts\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003Cp\u003E国际化默认是英文，在\u003Ccode\u003Emain.tsx\u003C\u002Fcode\u003E中引入中文并配置\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-tsx\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E React \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;react&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E ReactDOM \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;react-dom&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E App \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;@\u002FApp&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E { BrowserRouter } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;@\u002Frouter&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E zhCN \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;antd\u002Flib\u002Flocale\u002Fzh_CN&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E { ConfigProvider } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;@\u002Fantd&#x27;\u003C\u002Fspan\u003E;\\n\\nReactDOM.render(\\n    \u003Cspan class=\\\"xml\\\"\u003E\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003EConfigProvider\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003Elocale\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E{zhCN}\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n        \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003EBrowserRouter\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n            \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003EApp\u003C\u002Fspan\u003E \u002F&gt;\u003C\u002Fspan\u003E\\n        \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003EBrowserRouter\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n    \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003EConfigProvider\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E,\\n    \u003Cspan class=\\\"hljs-built_in\\\"\u003Edocument\u003C\u002Fspan\u003E.getElementById(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;root&#x27;\u003C\u002Fspan\u003E)\\n);\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch2 id=\\\"添加-axios\\\"\u003E添加 Axios\u003C\u002Fh2\u003E\\n\u003Ch3 id=\\\"安装-2\\\"\u003E安装\u003C\u002Fh3\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-bash\\\"\u003Eyarn \u003Cspan class=\\\"hljs-builtin-name\\\"\u003Eadd\u003C\u002Fspan\u003E axios\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cp\u003E请求数据时需要加上进度条，所以需要安装\u003Ccode\u003Enprogress\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-bash\\\"\u003Eyarn \u003Cspan class=\\\"hljs-builtin-name\\\"\u003Eadd\u003C\u002Fspan\u003E nprogress\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-bash\\\"\u003Eyarn \u003Cspan class=\\\"hljs-keyword\\\"\u003Eadd\u003C\u002Fspan\u003E -D \u003Cspan class=\\\"hljs-title\\\"\u003E@types\u003C\u002Fspan\u003E\u002Fnprogress\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch3 id=\\\"封装\\\"\u003E封装\u003C\u002Fh3\u003E\\n\u003Cp\u003E\u003Ccode\u003Eapi\u002Faxios.ts\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-ts\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E axios \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;axios&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-built_in\\\"\u003Etype\u003C\u002Fspan\u003E { AxiosRequestConfig, AxiosResponse, AxiosInstance } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;axios&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E storage, { TOKEN, USER_INFO } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;@\u002Futils\u002Fstorage&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E { message } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;@\u002Fantd&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E { isUndef } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;@\u002Futils\u002Ftools&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E NProgress \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;nprogress&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;nprogress\u002Fnprogress.css&#x27;\u003C\u002Fspan\u003E;\\n\\nNProgress.configure({ \u003Cspan class=\\\"hljs-name\\\"\u003EshowSpinner\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-literal\\\"\u003Efalse\u003C\u002Fspan\u003E });\\n\\nconst \u003Cspan class=\\\"hljs-name\\\"\u003Einstance\u003C\u002Fspan\u003E: AxiosInstance = axios.create({\\n    \u003Cspan class=\\\"hljs-name\\\"\u003EbaseURL\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E.meta.env.VITE_BASE_URL as \u003Cspan class=\\\"hljs-built_in\\\"\u003Estring\u003C\u002Fspan\u003E\\n});\\n\\ninstance.interceptors.request.use(\\n    \u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-params\\\"\u003E(config: AxiosRequestConfig)\u003C\u002Fspan\u003E =&gt;\u003C\u002Fspan\u003E {\\n        NProgress.start();\\n        const token = storage.get(TOKEN);\\n        !isUndef(token) &amp;&amp; (config.headers[\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;token&#x27;\u003C\u002Fspan\u003E] = token);\\n\\n        \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E config;\\n    },\\n    \u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-params\\\"\u003E(\u003Cspan class=\\\"hljs-built_in\\\"\u003Eerror\u003C\u002Fspan\u003E)\u003C\u002Fspan\u003E =&gt;\u003C\u002Fspan\u003E {\\n        \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E Promise.reject(\u003Cspan class=\\\"hljs-built_in\\\"\u003Eerror\u003C\u002Fspan\u003E);\\n    }\\n);\\n\\ninstance.interceptors.response.use(\\n    \u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-params\\\"\u003E(response: AxiosResponse)\u003C\u002Fspan\u003E =&gt;\u003C\u002Fspan\u003E {\\n        \u003Cspan class=\\\"hljs-keyword\\\"\u003Eif\u003C\u002Fspan\u003E (response?.data?.code === \u003Cspan class=\\\"hljs-number\\\"\u003E0\u003C\u002Fspan\u003E) {\\n            message.\u003Cspan class=\\\"hljs-built_in\\\"\u003Eerror\u003C\u002Fspan\u003E(response.data.msg);\\n            \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E Promise.reject(response.data.msg);\\n        }\\n\\n        \u003Cspan class=\\\"hljs-keyword\\\"\u003Eif\u003C\u002Fspan\u003E (response?.data?.code === \u003Cspan class=\\\"hljs-number\\\"\u003E401\u003C\u002Fspan\u003E || response?.data?.code === \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;401&#x27;\u003C\u002Fspan\u003E) {\\n            storage.remove(TOKEN);\\n            storage.remove(USER_INFO);\\n            \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E Promise.reject(response.data);\\n        }\\n        NProgress.done();\\n\\n        \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E response.data;\\n    },\\n    async (\u003Cspan class=\\\"hljs-built_in\\\"\u003Eerror\u003C\u002Fspan\u003E) =&gt; {\\n        NProgress.done();\\n\\n        \u003Cspan class=\\\"hljs-keyword\\\"\u003Eif\u003C\u002Fspan\u003E (\u003Cspan class=\\\"hljs-built_in\\\"\u003Eerror\u003C\u002Fspan\u003E.response) {\\n            \u003Cspan class=\\\"hljs-keyword\\\"\u003Eif\u003C\u002Fspan\u003E (\u003Cspan class=\\\"hljs-built_in\\\"\u003Eerror\u003C\u002Fspan\u003E.response.status === \u003Cspan class=\\\"hljs-number\\\"\u003E401\u003C\u002Fspan\u003E || \u003Cspan class=\\\"hljs-built_in\\\"\u003Eerror\u003C\u002Fspan\u003E?.data?.code === \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;401&#x27;\u003C\u002Fspan\u003E) {\\n                storage.remove(TOKEN);\\n                storage.remove(USER_INFO);\\n            }\\n\\n            \u003Cspan class=\\\"hljs-keyword\\\"\u003Eif\u003C\u002Fspan\u003E (\u003Cspan class=\\\"hljs-built_in\\\"\u003Eerror\u003C\u002Fspan\u003E.response.status === \u003Cspan class=\\\"hljs-number\\\"\u003E404\u003C\u002Fspan\u003E) {\\n                message.\u003Cspan class=\\\"hljs-built_in\\\"\u003Eerror\u003C\u002Fspan\u003E(`未找到接口：${\u003Cspan class=\\\"hljs-built_in\\\"\u003Eerror\u003C\u002Fspan\u003E.response.config.url}`);\\n            }\\n\\n            \u003Cspan class=\\\"hljs-keyword\\\"\u003Eif\u003C\u002Fspan\u003E (\u003Cspan class=\\\"hljs-built_in\\\"\u003Eerror\u003C\u002Fspan\u003E.response.status === \u003Cspan class=\\\"hljs-number\\\"\u003E500\u003C\u002Fspan\u003E) {\\n                message.\u003Cspan class=\\\"hljs-built_in\\\"\u003Eerror\u003C\u002Fspan\u003E(`接口：${\u003Cspan class=\\\"hljs-built_in\\\"\u003Eerror\u003C\u002Fspan\u003E.response.config.url}在服务端发生未知错误`);\\n            }\\n\\n            \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E Promise.reject(\u003Cspan class=\\\"hljs-built_in\\\"\u003Eerror\u003C\u002Fspan\u003E.response.data);\\n        } \u003Cspan class=\\\"hljs-keyword\\\"\u003Eelse\u003C\u002Fspan\u003E {\\n            \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E Promise.reject(\u003Cspan class=\\\"hljs-built_in\\\"\u003Eerror\u003C\u002Fspan\u003E);\\n        }\\n    }\\n);\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eexport\u003C\u002Fspan\u003E default instance;\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch2 id=\\\"添加mock\\\"\u003E添加\u003Ccode\u003EMock\u003C\u002Fcode\u003E\u003C\u002Fh2\u003E\\n\u003Ch3 id=\\\"安装-3\\\"\u003E安装\u003C\u002Fh3\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-bash\\\"\u003Eyarn \u003Cspan class=\\\"hljs-keyword\\\"\u003Eadd\u003C\u002Fspan\u003E -D mockjs \u003Cspan class=\\\"hljs-title\\\"\u003E@types\u003C\u002Fspan\u003E\u002Fmockjs\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cp\u003E创建文件\u003Ccode\u003Esrc\u002Fmocks\u002Findex.ts\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-ts\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E Mock \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;mockjs&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E user \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;.\u002Fmodules\u002Fuser&#x27;\u003C\u002Fspan\u003E;\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E mockStart = (): \u003Cspan class=\\\"hljs-literal\\\"\u003Evoid\u003C\u002Fspan\u003E =&gt; {\\n    Mock.setup({\\n        timeout: \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;200-3000&#x27;\u003C\u002Fspan\u003E\\n    });\\n\\n    user();\\n};\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eexport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Edefault\u003C\u002Fspan\u003E mockStart;\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cp\u003E在\u003Ccode\u003Emocks\u003C\u002Fcode\u003E目录下添加\u003Ccode\u003Emodules\u003C\u002Fcode\u003E目录作为每个模块的请求\u003C\u002Fp\u003E\\n\u003Cp\u003E\u003Ccode\u003Emocks\u002Fmodules\u002Fuser.ts\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-ts\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E Mock \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;mockjs&#x27;\u003C\u002Fspan\u003E;\\n\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eexport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Edefault\u003C\u002Fspan\u003E (): \u003Cspan class=\\\"hljs-function\\\"\u003E\u003Cspan class=\\\"hljs-params\\\"\u003Evoid\u003C\u002Fspan\u003E =&gt;\u003C\u002Fspan\u003E {\\n    Mock.mock(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;\u002Fapi\u002Flogin&#x27;\u003C\u002Fspan\u003E, \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;post&#x27;\u003C\u002Fspan\u003E, \u003Cspan class=\\\"hljs-function\\\"\u003E(\u003Cspan class=\\\"hljs-params\\\"\u003E{ body }: \u003Cspan class=\\\"hljs-built_in\\\"\u003Eany\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E) =&gt;\u003C\u002Fspan\u003E {\\n        \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E { username, password } = \u003Cspan class=\\\"hljs-built_in\\\"\u003EJSON\u003C\u002Fspan\u003E.parse(body);\\n\\n        \u003Cspan class=\\\"hljs-keyword\\\"\u003Eif\u003C\u002Fspan\u003E (username === \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;admin&#x27;\u003C\u002Fspan\u003E &amp;&amp; password === \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;123456&#x27;\u003C\u002Fspan\u003E) {\\n            \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E {\\n                \u003Cspan class=\\\"hljs-attr\\\"\u003Ecode\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-number\\\"\u003E1\u003C\u002Fspan\u003E,\\n                \u003Cspan class=\\\"hljs-attr\\\"\u003Edata\u003C\u002Fspan\u003E: {\\n                    \u003Cspan class=\\\"hljs-attr\\\"\u003Eid\u003C\u002Fspan\u003E: Mock.Random.id(),\\n                    \u003Cspan class=\\\"hljs-attr\\\"\u003Ename\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;admin&#x27;\u003C\u002Fspan\u003E,\\n                    \u003Cspan class=\\\"hljs-attr\\\"\u003Eavatar\u003C\u002Fspan\u003E: Mock.Random.image(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;600x600&#x27;\u003C\u002Fspan\u003E, \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;#50B347&#x27;\u003C\u002Fspan\u003E, \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;A&#x27;\u003C\u002Fspan\u003E),\\n                    \u003Cspan class=\\\"hljs-attr\\\"\u003Etoken\u003C\u002Fspan\u003E: Mock.Random.guid()\\n                }\\n            };\\n        } \u003Cspan class=\\\"hljs-keyword\\\"\u003Eelse\u003C\u002Fspan\u003E {\\n            \u003Cspan class=\\\"hljs-keyword\\\"\u003Ereturn\u003C\u002Fspan\u003E {\\n                \u003Cspan class=\\\"hljs-attr\\\"\u003Ecode\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-number\\\"\u003E0\u003C\u002Fspan\u003E,\\n                \u003Cspan class=\\\"hljs-attr\\\"\u003Emsg\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;账号或密码错误&#x27;\u003C\u002Fspan\u003E\\n            };\\n        }\\n    });\\n};\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cp\u003E在\u003Ccode\u003Emain.tsx\u003C\u002Fcode\u003E下添加代码，仅当开发环境才会启动\u003Ccode\u003Emock\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-tsx\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E React \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;react&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E ReactDOM \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;react-dom&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E App \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;@\u002FApp&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E { BrowserRouter } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;@\u002Frouter&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E mockStart \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;@\u002Fmocks&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E zhCN \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;antd\u002Flib\u002Flocale\u002Fzh_CN&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E { ConfigProvider } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;@\u002Fantd&#x27;\u003C\u002Fspan\u003E;\\n\\n\u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 开发环境才启动mock\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E.meta.env.DEV &amp;&amp; mockStart();\\n\\nReactDOM.render(\\n    \u003Cspan class=\\\"xml\\\"\u003E\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003EConfigProvider\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003Elocale\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E{zhCN}\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n        \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003EBrowserRouter\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n            \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003EApp\u003C\u002Fspan\u003E \u002F&gt;\u003C\u002Fspan\u003E\\n        \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003EBrowserRouter\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n    \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003EConfigProvider\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E,\\n    \u003Cspan class=\\\"hljs-built_in\\\"\u003Edocument\u003C\u002Fspan\u003E.getElementById(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;root&#x27;\u003C\u002Fspan\u003E)\\n);\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch2 id=\\\"状态管理\\\"\u003E状态管理\u003C\u002Fh2\u003E\\n\u003Ch3 id=\\\"安装-4\\\"\u003E安装\u003C\u002Fh3\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-bash\\\"\u003Eyarn \u003Cspan class=\\\"hljs-builtin-name\\\"\u003Eadd\u003C\u002Fspan\u003E recoil\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cp\u003E在\u003Ccode\u003Emain.tsx\u003C\u002Fcode\u003E引入\u003Ccode\u003ERecoilRoot\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-tsx\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E React \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;react&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E ReactDOM \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;react-dom&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E App \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;@\u002FApp&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E { BrowserRouter } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;@\u002Frouter&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E mockStart \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;@\u002Fmocks&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E { RecoilRoot } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;recoil&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E zhCN \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;antd\u002Flib\u002Flocale\u002Fzh_CN&#x27;\u003C\u002Fspan\u003E;\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E { ConfigProvider } \u003Cspan class=\\\"hljs-keyword\\\"\u003Efrom\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;@\u002Fantd&#x27;\u003C\u002Fspan\u003E;\\n\\n\u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 开发环境才启动mock\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E.meta.env.DEV &amp;&amp; mockStart();\\n\\nReactDOM.render(\\n    \u003Cspan class=\\\"xml\\\"\u003E\u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003EConfigProvider\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-attr\\\"\u003Elocale\u003C\u002Fspan\u003E=\u003Cspan class=\\\"hljs-string\\\"\u003E{zhCN}\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n        \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003ERecoilRoot\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n            \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003EBrowserRouter\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n                \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u003Cspan class=\\\"hljs-name\\\"\u003EApp\u003C\u002Fspan\u003E \u002F&gt;\u003C\u002Fspan\u003E\\n            \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003EBrowserRouter\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n        \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003ERecoilRoot\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\\n    \u003Cspan class=\\\"hljs-tag\\\"\u003E&lt;\u002F\u003Cspan class=\\\"hljs-name\\\"\u003EConfigProvider\u003C\u002Fspan\u003E&gt;\u003C\u002Fspan\u003E\u003C\u002Fspan\u003E,\\n    \u003Cspan class=\\\"hljs-built_in\\\"\u003Edocument\u003C\u002Fspan\u003E.getElementById(\u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;root&#x27;\u003C\u002Fspan\u003E)\\n);\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cp\u003E创建文件\u003Ccode\u003Esrc\u002Fstore\u002Fapp.ts\u003C\u002Fcode\u003E，用于放置应用全局状态，如果需要划分模块，在\u003Ccode\u003Esrc\u002Fstore\u002Fmodules\u003C\u002Fcode\u003E下创建相应模块既可\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"language-ts\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Eimport\u003C\u002Fspan\u003E { atom, atomFamily } from \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;recoil&#x27;\u003C\u002Fspan\u003E;\\n\\n\u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 菜单是否折叠\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eexport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E collapsedAtom = atom({\\n    key: \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;collapsedAtom&#x27;\u003C\u002Fspan\u003E,\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Edefault\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-keyword\\\"\u003Efalse\u003C\u002Fspan\u003E\\n});\\n\u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 当前路径\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eexport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E activePathAtom = atomFamily({\\n    key: \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;activePathAtom&#x27;\u003C\u002Fspan\u003E,\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Edefault\u003C\u002Fspan\u003E: (path: string) =&gt; path\\n});\\n\u003Cspan class=\\\"hljs-comment\\\"\u003E\u002F\u002F 是否为深色模式\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-keyword\\\"\u003Eexport\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Econst\u003C\u002Fspan\u003E isDarkModeAtom = atom({\\n    key: \u003Cspan class=\\\"hljs-string\\\"\u003E&#x27;isDarkModeAtom&#x27;\u003C\u002Fspan\u003E,\\n    \u003Cspan class=\\\"hljs-keyword\\\"\u003Edefault\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-keyword\\\"\u003Efalse\u003C\u002Fspan\u003E\\n});\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch2 id=\\\"其他\\\"\u003E其他\u003C\u002Fh2\u003E\\n\u003Cul\u003E\\n\u003Cli\u003E所有目录及文件使用短横线命名法\u003C\u002Fli\u003E\\n\u003Cli\u003E所有的\u003Ccode\u003ECSS\u003C\u002Fcode\u003E样式集\u003Ccode\u003Eclass\u003C\u002Fcode\u003E使用\u003Ccode\u003EBEM命名法\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E私有自定义组件，应在当前目录下的\u003Ccode\u003E_components\u003C\u002Fcode\u003E下创建，超过 3 个以上用到的应提取到通用组件目录下\u003Ccode\u003Ecomponents\u003C\u002Fcode\u003E\u003C\u002Fli\u003E\\n\u003Cli\u003E所有的\u003Ccode\u003Ejs\u003C\u002Fcode\u003E导出函数应使用\u003Ccode\u003EJSDoc\u003C\u002Fcode\u003E注释\u003C\u002Fli\u003E\\n\u003C\u002Ful\u003E\\n\"}"}</script>
+</div>
+	</body>
+</html>
